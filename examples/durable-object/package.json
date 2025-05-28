@@ -11,5 +11,8 @@
   "devDependencies": {
     "typescript": "^5.5.2",
     "wrangler": "^4.17.0"
+  },
+  "dependencies": {
+    "admindo": "workspace:*"
   }
 }
