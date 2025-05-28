@@ -1,0 +1,35 @@
+{
+  "name": "admindo-plugin-dorm",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Durable Objects ORM plugin for AdminDo dashboard",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "build": "echo 'No build step needed for pure web components'"
+  },
+  "keywords": [
+    "admindo",
+    "plugin",
+    "dorm",
+    "orm",
+    "durable-objects",
+    "web-components",
+    "esm"
+  ],
+  "authors": [
+    {
+      "name": "Ben Allfree",
+      "url": "https://x.com/benallfree"
+    }
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "admindo": "^0.0.1"
+  },
+  "files": [
+    "src"
+  ]
+}
