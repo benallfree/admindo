@@ -23,6 +23,7 @@ admindo separates frontend and backend. Frontend compoents are pure HTML compone
 ## Available Plugins
 
 - [about](./plugins/about) - Author credits
-- [dofs](./plugins/dofs) - Durable Objects File System GUI
+- [better-auth](./plugins/better-auth) - Enhanced authentication functionality
+- [dofs-browser](./plugins/dofs-browser) - Durable Objects File System GUI
 - [dterm](./plugins/dterm) - Durable Objects File System terminal
 - [dorm](./plugins/dorm) - Durable Objects ORM
