@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "admindo": "0.0.1",
+    "admindo-kitchen-sink": "0.0.1",
+    "admindo-plugin-credits": "0.0.1"
+  },
+  "changesets": []
+}
