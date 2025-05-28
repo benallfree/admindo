@@ -2,7 +2,7 @@
   "name": "admindo-plugin-about",
   "version": "0.0.1",
   "type": "module",
-  "description": "About plugin for AdminDo dashboard",
+  "description": "Author credits plugin for AdminDo dashboard",
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js"
