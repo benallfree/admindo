@@ -1,0 +1,28 @@
+{
+  "name": "admindo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./plugins/credits": "./plugins/credits/index.js"
+  },
+  "scripts": {
+    "dev": "serve -s"
+  },
+  "keywords": [
+    "admin",
+    "dashboard",
+    "spa",
+    "web-components",
+    "pluggable",
+    "esm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "admindo-plugin-credits",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Credits plugin for AdminDo dashboard",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "build": "echo 'No build step needed for pure web components'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "admindo",
+    "plugin",
+    "credits",
+    "web-components",
+    "esm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "admindo": "^1.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
