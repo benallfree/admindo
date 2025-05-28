@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Credits plugin for AdminDo dashboard",
-  "module": "index.js",
+  "module": "src/index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./src/index.js"
   },
   "scripts": {
     "build": "echo 'No build step needed for pure web components'"
@@ -26,5 +26,8 @@
   "license": "MIT",
   "peerDependencies": {
     "admindo": "^0.0.1"
-  }
+  },
+  "files": [
+    "src"
+  ]
 }
