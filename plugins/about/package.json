@@ -1,8 +1,8 @@
 {
-  "name": "admindo-plugin-credits",
-  "version": "1.0.0",
+  "name": "admindo-plugin-about",
+  "version": "0.0.1",
   "type": "module",
-  "description": "Credits plugin for AdminDo dashboard",
+  "description": "About plugin for AdminDo dashboard",
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js"
@@ -13,7 +13,7 @@
   "keywords": [
     "admindo",
     "plugin",
-    "credits",
+    "about",
     "web-components",
     "esm"
   ],

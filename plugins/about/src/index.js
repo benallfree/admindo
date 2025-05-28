@@ -1,10 +1,10 @@
 /**
- * AdminDo Credits Plugin
- * A web component plugin that displays credits information
+ * AdminDo About Plugin
+ * A web component plugin that displays about information
  */
 
-// Credits main component
-class CreditsComponent extends HTMLElement {
+// About main component
+class AboutComponent extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -22,7 +22,7 @@ class CreditsComponent extends HTMLElement {
           max-width: 800px;
         }
         
-        .credits-container {
+        .about-container {
           background: white;
           padding: 2rem;
           border-radius: 12px;
@@ -30,7 +30,7 @@ class CreditsComponent extends HTMLElement {
           margin-top: 1rem;
         }
         
-        .credits-header {
+        .about-header {
           font-size: 1.5rem;
           font-weight: 600;
           margin-bottom: 1.5rem;
@@ -118,9 +118,8 @@ class CreditsComponent extends HTMLElement {
         }
       </style>
       
-      <div class="credits-container">
-        <h2 class="credits-header">Credits</h2>
-        
+      <div class="about-container">
+        <h2 class="about-header">About</h2>
         <div class="team-section">
           <h3 class="team-title">AdminDo Contributors</h3>
           
@@ -152,27 +151,18 @@ class CreditsComponent extends HTMLElement {
         <div class="description">
           <p>AdminDo is a zero-dependency admin dashboard built with pure HTML, CSS, and JavaScript.</p>
           <p>Features web components and a pluggable architecture for maximum flexibility and extensibility.</p>
-        </div>
+        </div> 
+       
+          
         
-        <div class="tech-stack">
-          <div class="tech-title">Built with:</div>
-          <div class="tech-list">
-            <span class="tech-tag">HTML5</span>
-            <span class="tech-tag">CSS3</span>
-            <span class="tech-tag">Vanilla JavaScript</span>
-            <span class="tech-tag">Web Components</span>
-            <span class="tech-tag">Custom Elements</span>
-            <span class="tech-tag">Shadow DOM</span>
-            <span class="tech-tag">ES Modules</span>
-          </div>
-        </div>
+       
       </div>
     `
   }
 }
 
-// Credits icon component
-class CreditsIconComponent extends HTMLElement {
+// About icon component
+class AboutIconComponent extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -196,28 +186,31 @@ class CreditsIconComponent extends HTMLElement {
 }
 
 // Register web components
-if (!customElements.get('admindo-plugin-credits')) {
-  customElements.define('admindo-plugin-credits', CreditsComponent)
+if (!customElements.get('admindo-plugin-about')) {
+  customElements.define('admindo-plugin-about', AboutComponent)
 }
 
-if (!customElements.get('admindo-plugin-credits-icon')) {
-  customElements.define('admindo-plugin-credits-icon', CreditsIconComponent)
+if (!customElements.get('admindo-plugin-about-icon')) {
+  customElements.define('admindo-plugin-about-icon', AboutIconComponent)
 }
 
 // Plugin configuration
-const creditsPlugin = {
-  name: 'credits',
-  slug: 'credits',
-  title: 'Credits',
-  description: 'View credits and information about AdminDo',
-  version: '1.0.0',
+const aboutPlugin = {
+  name: 'about',
+  slug: 'about',
+  title: 'About',
+  description: 'About AdminDo',
+  version: '0.0.1',
   icon: '👥',
   color: '#34C759',
   components: {
-    panel: CreditsComponent,
-    icon: CreditsIconComponent,
+    panel: AboutComponent,
+    icon: AboutIconComponent,
   },
 }
 
 // Export as ES module
-export default creditsPlugin
+export default aboutPlugin
+
+// Auto-register plugin if AdminDo is available
+window.AdminDo?.registerPlugin?.(aboutPlugin)
