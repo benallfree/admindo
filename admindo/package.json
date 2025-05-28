@@ -1,0 +1,25 @@
+{
+  "name": "admindo",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": [
+    "admin",
+    "dashboard",
+    "spa",
+    "web-components",
+    "pluggable",
+    "esm"
+  ],
+  "authors": [
+    {
+      "name": "Ben Allfree",
+      "url": "https://x.com/benallfree"
+    }
+  ],
+  "license": "MIT"
+}

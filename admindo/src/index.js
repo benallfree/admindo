@@ -376,7 +376,7 @@ class AdminDoComponent extends HTMLElement {
   async loadDefaultPlugins() {
     // Load credits plugin
     try {
-      const creditsModule = await import('../plugins/credits/index.js')
+      const creditsModule = await import('../../plugins/credits/index.js')
       this.registerPlugin(creditsModule.default)
     } catch (error) {
       console.warn('Credits plugin not found, skipping:', error.message)
