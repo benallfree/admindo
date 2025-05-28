@@ -60,9 +60,6 @@ class AdminDoComponent extends HTMLElement {
   async init() {
     // Apply styles
     this.attachStylesheet()
-
-    // Load default plugins
-    await this.loadDefaultPlugins()
   }
 
   connectedCallback() {
@@ -371,16 +368,6 @@ class AdminDoComponent extends HTMLElement {
           </main>
       </div>
     `
-  }
-
-  async loadDefaultPlugins() {
-    // Load credits plugin
-    try {
-      const creditsModule = await import('../../plugins/credits/index.js')
-      this.registerPlugin(creditsModule.default)
-    } catch (error) {
-      console.warn('Credits plugin not found, skipping:', error.message)
-    }
   }
 }
 
