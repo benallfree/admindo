@@ -12,6 +12,7 @@
     "admindo-basic": "0.0.1"
   },
   "changesets": [
+    "crazy-peas-guess",
     "metal-bats-wear"
   ]
 }
