@@ -1,0 +1,5 @@
+---
+'admindo': patch
+---
+
+Initial release
