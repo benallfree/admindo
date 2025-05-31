@@ -3,20 +3,16 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "durable-object-starter",
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "admindo-durable-object-example",
   "main": "src/index.ts",
-  "compatibility_date": "2025-05-28",
+  "compatibility_date": "2025-05-04",
   "migrations": [
     {
       "new_sqlite_classes": ["MyDurableObject"],
       "tag": "v1"
     }
   ],
-  "assets": {
-    "directory": "./public",
-    "not_found_handling": "single-page-application"
-  },
   "durable_objects": {
     "bindings": [
       {
@@ -55,7 +51,12 @@
    * Static Assets
    * https://developers.cloudflare.com/workers/static-assets/binding/
    */
-  // "assets": { "directory": "./public/", "binding": "ASSETS" },
+  // "assets": {
+  //   "directory": "./public/",
+  //   "binding": "ASSETS",
+  //   "not_found_handling": "single-page-application",
+  //   "run_worker_first": true,
+  // },
 
   /**
    * Service Bindings (communicate between multiple Workers)

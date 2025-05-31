@@ -1,24 +1,38 @@
-export { MyDurableObject } from './MyDurableObject'
+import { admindo, AdminDOPlugin } from 'admindo/hono'
+import { DurableObject } from 'cloudflare:workers'
+import { Fs } from 'dofs'
+import { dofs } from 'dofs/hono'
+import { Hono } from 'hono'
 
-export default {
-  /**
-   * This is the standard fetch handler for a Cloudflare Worker
-   *
-   * @param request - The request submitted to the Worker from the client
-   * @param env - The interface to reference bindings declared in wrangler.jsonc
-   * @param ctx - The execution context of the Worker
-   * @returns The response to be sent back to the client
-   */
-  async fetch(request, env, ctx): Promise<Response> {
-    // Create a `DurableObjectId` for an instance of the `MyDurableObject`
-    // class named "foo". Requests from all Workers to the instance named
-    // "foo" will go to a single globally unique Durable Object instance.
-    const id: DurableObjectId = env.MY_DURABLE_OBJECT.idFromName('foo')
+const dofsPlugin: AdminDOPlugin = {
+  slug: 'dofs',
+  create: (cfg) => dofs() as any,
+}
 
-    // Create a stub to open a communication channel with the Durable
-    // Object instance.
-    const stub = env.MY_DURABLE_OBJECT.get(id)
+export class MyDurableObject extends DurableObject<Env> {
+  private fs: Fs
 
-    return stub.fetch(request)
-  },
-} satisfies ExportedHandler<Env>
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env)
+    this.fs = new Fs(ctx, env, { chunkSize: 4 * 1024 })
+  }
+
+  public getFs() {
+    return this.fs
+  }
+}
+
+const app = new Hono<{ Bindings: Env }>()
+
+// Mount the API middleware
+app.route(
+  '/admin',
+  admindo({
+    dos: {
+      MY_DURABLE_OBJECT: 'My Durable Object',
+    },
+    plugins: [dofsPlugin],
+  }) as any
+)
+
+export default app

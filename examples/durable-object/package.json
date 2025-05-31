@@ -1,18 +1,22 @@
 {
-  "name": "admindo-kitchen-sink",
-  "version": "0.0.0",
+  "name": "admindo-durable-object-example",
+  "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
+    "dev": "vite dev",
+    "build": "vite build",
+    "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
   "devDependencies": {
-    "typescript": "^5.5.2",
-    "wrangler": "^4.17.0"
+    "@cloudflare/vite-plugin": "^1.2.2",
+    "hono": "^4.7.8",
+    "vite": "^6.3.5",
+    "admindo": "workspace:*",
+    "admindo-plugin-about": "workspace:*"
   },
   "dependencies": {
-    "admindo": "workspace:*"
+    "dofs": "^0.0.1"
   }
 }
