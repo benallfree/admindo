@@ -1,9 +1,9 @@
 import { AdminDORouter } from './AdminDORouter'
-import { PluginConfig } from './types'
+import { Plugin } from './types'
 
 // AdminDO main component
 export class AdminDOComponent extends HTMLElement {
-  private plugins: Map<string, PluginConfig>
+  private plugins: Map<string, Plugin>
   private router: AdminDORouter
 
   constructor() {
@@ -62,7 +62,7 @@ export class AdminDOComponent extends HTMLElement {
     }
   }
 
-  registerPlugin(plugin: PluginConfig): void {
+  registerPlugin(plugin: Plugin): void {
     this.plugins.set(plugin.name, plugin)
 
     // Register route for plugin
@@ -74,7 +74,7 @@ export class AdminDOComponent extends HTMLElement {
     this.addPluginView(plugin)
   }
 
-  private addPluginToGrid(plugin: PluginConfig): void {
+  private addPluginToGrid(plugin: Plugin): void {
     const grid = this.querySelector('#plugin-grid')
     if (!grid) return
 
@@ -97,7 +97,7 @@ export class AdminDOComponent extends HTMLElement {
     grid.appendChild(tile)
   }
 
-  private addPluginToNav(plugin: PluginConfig): void {
+  private addPluginToNav(plugin: Plugin): void {
     const nav = this.querySelector('#sidebar-nav')
     if (!nav) return
 
@@ -117,7 +117,7 @@ export class AdminDOComponent extends HTMLElement {
     }
   }
 
-  private addPluginView(plugin: PluginConfig): void {
+  private addPluginView(plugin: Plugin): void {
     const pluginViews = this.querySelector('#plugin-views')
     if (!pluginViews) return
 
@@ -344,11 +344,11 @@ interface AdminDOAPI {
   version: string
   component: typeof AdminDOComponent
   create(targetElement: string | Element): AdminDOComponent | null
-  registerPlugin(pluginConfig: PluginConfig): boolean
+  registerPlugin(pluginConfig: Plugin): boolean
 }
 // Export for ES modules
 export default AdminDOComponent
-export type { AdminDOAPI, PluginConfig }
+export type { AdminDOAPI, Plugin as PluginConfig }
 // Make available globally for non-module usage
 
 declare global {
@@ -381,7 +381,7 @@ window.AdminDO = {
   },
 
   // Plugin registration helper
-  registerPlugin(pluginConfig: PluginConfig): boolean {
+  registerPlugin(pluginConfig: Plugin): boolean {
     const adminDoElement = document.querySelector('admin-do') as AdminDOComponent
     if (adminDoElement && typeof adminDoElement.registerPlugin === 'function') {
       adminDoElement.registerPlugin(pluginConfig)

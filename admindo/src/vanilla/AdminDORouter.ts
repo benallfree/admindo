@@ -1,10 +1,10 @@
 import { AdminDOComponent } from './AdminDOComponent'
-import { PluginConfig, RouteState } from './types'
+import { Plugin, RouteState } from './types'
 
 // Simple Router for AdminDO
 export class AdminDORouter {
   private component: AdminDOComponent
-  private routes: Map<string, PluginConfig>
+  private routes: Map<string, Plugin>
   private currentRoute: string | null
   private root: string
 
@@ -21,7 +21,7 @@ export class AdminDORouter {
   }
 
   // Register a route
-  addRoute(path: string, plugin: PluginConfig): void {
+  addRoute(path: string, plugin: Plugin): void {
     this.routes.set(path, plugin)
   }
 
