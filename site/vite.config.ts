@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   publicDir: 'public',
   plugins: [
     cloudflare(),
@@ -11,12 +11,14 @@ export default defineConfig({
       name: 'rewrite-unpkg',
       // Transform any imported file that contains unpkg URLs
       transform(code, id) {
-        if (code.includes('https://unpkg.com/admindo')) {
+        if (mode === 'development' && code.includes('https://unpkg.com/admindo')) {
           return code.replaceAll('https://unpkg.com/admindo', '/@admindo')
         }
         return null
       },
       configureServer(server) {
+        if (mode !== 'development') return
+
         server.middlewares.use('/@admindo/vanilla', (req, res, next) => {
           const filePath = resolve(__dirname, '../admindo/dist/vanilla.mjs')
           const content = readFileSync(filePath, 'utf-8')
@@ -35,4 +37,4 @@ export default defineConfig({
       },
     },
   ],
-})
+}))
