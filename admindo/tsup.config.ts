@@ -8,7 +8,7 @@ export default defineConfig({
   },
   format: ['esm'],
   dts: true,
-  external: ['cloudflare:workers'],
+  external: [],
   outDir: 'dist',
   clean: true,
   bundle: true,

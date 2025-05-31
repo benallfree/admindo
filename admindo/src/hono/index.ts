@@ -1,13 +1,15 @@
-/// <reference types="./worker-configuration.d.ts" />
-
 import { Hono } from 'hono'
 
-// Extend the context type to include our fs property
-export type AdminDOContext = {}
+declare namespace Cloudflare {
+  interface Env {}
+}
 
-export type AdminDOPlugin = {
+// Extend the context type to include our fs property
+export type Context = {}
+
+export type Plugin = {
   slug: string
-  create: (config: AdminDOConfig<any>) => Hono<{ Bindings: any }>
+  create: (config: Config<any>) => Hono<{ Bindings: any }>
 }
 
 export type Instance = {
@@ -15,7 +17,7 @@ export type Instance = {
   name: string
 }
 
-export type AdminDOConfig<TEnv extends Cloudflare.Env> = {
+export type Config<TEnv extends Cloudflare.Env> = {
   dos: Partial<
     Record<
       keyof TEnv,
@@ -25,11 +27,11 @@ export type AdminDOConfig<TEnv extends Cloudflare.Env> = {
       }
     >
   >
-  plugins: AdminDOPlugin[]
+  plugins: Plugin[]
 }
 
-export const admindo = <TEnv extends Cloudflare.Env>(config: AdminDOConfig<TEnv>) => {
-  const api = new Hono<{ Bindings: TEnv } & AdminDOContext>()
+export const admindo = <TEnv extends Cloudflare.Env>(config: Config<TEnv>) => {
+  const api = new Hono<{ Bindings: TEnv } & Context>()
 
   api.get('/*', (c) => {
     return c.html(`
