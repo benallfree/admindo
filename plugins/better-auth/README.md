@@ -1,6 +1,6 @@
-# AdminDo Better Auth Plugin
+# AdminDO Better Auth Plugin
 
-An ES module plugin for [AdminDo](../../README.md) that provides enhanced authentication functionality.
+An ES module plugin for [AdminDO](../../README.md) that provides enhanced authentication functionality.
 
 ## Installation
 

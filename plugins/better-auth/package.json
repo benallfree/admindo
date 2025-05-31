@@ -2,7 +2,7 @@
   "name": "admindo-plugin-better-auth",
   "version": "0.0.1",
   "type": "module",
-  "description": "Better authentication plugin for AdminDo dashboard",
+  "description": "Better authentication plugin for AdminDO dashboard",
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js"

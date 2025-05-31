@@ -1,5 +1,5 @@
 /**
- * AdminDo DORM Plugin
+ * AdminDO DORM Plugin
  * A web component plugin that provides a Durable Objects ORM interface
  */
 
@@ -362,5 +362,5 @@ const dormPlugin = {
 // Export as ES module
 export default dormPlugin
 
-// Auto-register plugin if AdminDo is available
-window.AdminDo?.registerPlugin?.(dormPlugin)
+// Auto-register plugin if AdminDO is available
+window.AdminDO?.registerPlugin?.(dormPlugin)

@@ -2,7 +2,7 @@
   "name": "admindo-plugin-dorm",
   "version": "0.0.1",
   "type": "module",
-  "description": "Durable Objects ORM plugin for AdminDo dashboard",
+  "description": "Durable Objects ORM plugin for AdminDO dashboard",
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js"

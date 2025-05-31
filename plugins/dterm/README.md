@@ -1,6 +1,6 @@
-# AdminDo DTerm Plugin
+# AdminDO DTerm Plugin
 
-An ES module plugin for [AdminDo](../../README.md) that provides a Durable Objects File System terminal.
+An ES module plugin for [AdminDO](../../README.md) that provides a Durable Objects File System terminal.
 
 ## Installation
 

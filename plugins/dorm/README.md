@@ -1,6 +1,6 @@
-# AdminDo DORM Plugin
+# AdminDO DORM Plugin
 
-An ES module plugin for [AdminDo](../../README.md) that provides a Durable Objects ORM interface.
+An ES module plugin for [AdminDO](../../README.md) that provides a Durable Objects ORM interface.
 
 ## Installation
 

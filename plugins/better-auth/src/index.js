@@ -1,5 +1,5 @@
 /**
- * AdminDo Better Auth Plugin
+ * AdminDO Better Auth Plugin
  * A web component plugin that provides enhanced authentication functionality
  */
 
@@ -391,5 +391,5 @@ const betterAuthPlugin = {
 // Export as ES module
 export default betterAuthPlugin
 
-// Auto-register plugin if AdminDo is available
-window.AdminDo?.registerPlugin?.(betterAuthPlugin)
+// Auto-register plugin if AdminDO is available
+window.AdminDO?.registerPlugin?.(betterAuthPlugin)

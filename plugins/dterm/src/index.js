@@ -1,5 +1,5 @@
 /**
- * AdminDo DTerm Plugin
+ * AdminDO DTerm Plugin
  * A web component plugin that provides a Durable Objects File System terminal
  */
 
@@ -251,5 +251,5 @@ const dtermPlugin = {
 // Export as ES module
 export default dtermPlugin
 
-// Auto-register plugin if AdminDo is available
-window.AdminDo?.registerPlugin?.(dtermPlugin)
+// Auto-register plugin if AdminDO is available
+window.AdminDO?.registerPlugin?.(dtermPlugin)

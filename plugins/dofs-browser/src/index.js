@@ -1,5 +1,5 @@
 /**
- * AdminDo DOFS Browser Plugin
+ * AdminDO DOFS Browser Plugin
  * A web component plugin that provides a Durable Objects File System GUI
  */
 
@@ -232,5 +232,5 @@ const dofsBrowserPlugin = {
 // Export as ES module
 export default dofsBrowserPlugin
 
-// Auto-register plugin if AdminDo is available
-window.AdminDo?.registerPlugin?.(dofsBrowserPlugin)
+// Auto-register plugin if AdminDO is available
+window.AdminDO?.registerPlugin?.(dofsBrowserPlugin)
