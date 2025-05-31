@@ -10,13 +10,18 @@ export type AdminDOPlugin = {
   create: (config: AdminDOConfig<any>) => Hono<{ Bindings: any }>
 }
 
+export type Instance = {
+  slug: string
+  name: string
+}
+
 export type AdminDOConfig<TEnv extends Cloudflare.Env> = {
   dos: Partial<
     Record<
       keyof TEnv,
       {
         name: string
-        getInstanceIds: (page?: number) => Promise<string[]>
+        getInstances: (page?: number) => Promise<Instance[]>
       }
     >
   >

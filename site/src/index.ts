@@ -31,8 +31,8 @@ app.route(
     dos: {
       MY_DURABLE_OBJECT: {
         name: 'My Durable Object',
-        async getInstanceIds(page = 1) {
-          return ['demo']
+        async getInstances(page = 1) {
+          return [{ slug: 'demo', name: 'Demo Instance' }]
         },
       },
     },
