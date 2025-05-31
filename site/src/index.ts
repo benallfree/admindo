@@ -1,13 +1,8 @@
-import { admindo, AdminDOPlugin } from 'admindo/hono'
+import { dofs } from 'admindo-plugin-dofs'
+import { admindo } from 'admindo/hono'
 import { DurableObject } from 'cloudflare:workers'
 import { Fs } from 'dofs'
-import { dofs } from 'dofs/hono'
 import { Hono } from 'hono'
-
-const dofsPlugin: AdminDOPlugin = {
-  slug: 'dofs',
-  create: (cfg) => dofs() as any,
-}
 
 export class MyDurableObject extends DurableObject<Env> {
   private fs: Fs
@@ -36,7 +31,7 @@ app.route(
         },
       },
     },
-    plugins: [dofsPlugin],
+    plugins: [dofs],
   })
 )
 

@@ -42,7 +42,7 @@
       "dependencies": {
         "dofs": "^0.0.1",
       },
-      "peerDependencies": {
+      "devDependencies": {
         "admindo": "workspace:*",
       },
     },
@@ -68,6 +68,7 @@
         "@cloudflare/vite-plugin": "^1.2.2",
         "admindo": "workspace:*",
         "admindo-plugin-about": "workspace:*",
+        "admindo-plugin-dofs": "workspace:*",
         "hono": "^4.7.8",
         "vite": "^6.3.5",
       },
