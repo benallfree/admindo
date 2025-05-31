@@ -6,11 +6,24 @@
   "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "serve": "^14.2.4"
   },
   "workspaces": [
     "admindo",
     "plugins/*",
     "examples/*"
-  ]
+  ],
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ],
+    "printWidth": 140,
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "es5",
+    "useTabs": false,
+    "tabWidth": 2
+  }
 }
