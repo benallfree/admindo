@@ -1,5 +1,6 @@
 {
-  "name": "admindo-demo-empty",
+  "name": "admindo-basic",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
