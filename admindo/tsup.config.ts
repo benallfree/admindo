@@ -10,6 +10,7 @@ export default defineConfig({
   external: ['cloudflare:workers'],
   outDir: 'dist',
   clean: true,
+  bundle: true,
   outExtension({ format }) {
     console.log('format', format)
     return {
