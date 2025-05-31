@@ -1,0 +1,17 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "admindo": "0.0.1",
+    "admindo-plugin-about": "0.0.1",
+    "admindo-plugin-better-auth": "0.0.1",
+    "admindo-plugin-dofs-browser": "0.0.1",
+    "admindo-plugin-dorm": "0.0.1",
+    "admindo-plugin-dterm": "0.0.1",
+    "admindo-site": "0.0.1",
+    "admindo-basic": "0.0.1"
+  },
+  "changesets": [
+    "metal-bats-wear"
+  ]
+}
