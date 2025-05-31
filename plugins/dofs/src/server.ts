@@ -1,7 +1,7 @@
-import { AdminDOPlugin } from 'admindo/hono'
-import { dofs } from 'dofs/hono'
+import { Plugin } from 'admindo/hono'
+import { dofs as honoDofs } from 'dofs/hono'
 
-const dofsPlugin: AdminDOPlugin = {
+export const dofs: Plugin = {
   slug: 'dofs',
-  create: (cfg) => dofs() as any,
+  create: (cfg) => honoDofs() as any,
 }

@@ -5,9 +5,13 @@
   "description": "Durable Objects File System API plugin for AdminDO dashboard",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
     }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "keywords": [
     "admindo",
@@ -27,5 +31,11 @@
   "license": "MIT",
   "files": [
     "src"
-  ]
+  ],
+  "dependencies": {
+    "dofs": "^0.0.1"
+  },
+  "devDependencies": {
+    "admindo": "workspace:*"
+  }
 }

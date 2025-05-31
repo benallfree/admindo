@@ -39,6 +39,12 @@
     "plugins/dofs": {
       "name": "admindo-plugin-dofs",
       "version": "0.0.1-rc.0",
+      "dependencies": {
+        "dofs": "^0.0.1",
+      },
+      "peerDependencies": {
+        "admindo": "workspace:*",
+      },
     },
     "plugins/dofs-browser": {
       "name": "admindo-plugin-dofs-browser",
