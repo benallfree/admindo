@@ -27,7 +27,7 @@ export const admindo = <TEnv extends Cloudflare.Env>(config: AdminDOConfig<TEnv>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
     <body>
-      <admin-do />
+      <admin-do root="/admin" />
       <script type="module">
         import 'https://unpkg.com/admindo/vanilla'
         import 'https://unpkg.com/admindo-plugin-about'
