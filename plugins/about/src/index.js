@@ -1,5 +1,5 @@
 /**
- * AdminDo About Plugin
+ * AdminDO About Plugin
  * A web component plugin that displays about information
  */
 
@@ -121,7 +121,7 @@ class AboutComponent extends HTMLElement {
       <div class="about-container">
         <h2 class="about-header">About</h2>
         <div class="team-section">
-          <h3 class="team-title">AdminDo Contributors</h3>
+          <h3 class="team-title">AdminDO Contributors</h3>
           
           <div class="team-member">
             <div class="member-avatar">👤</div>
@@ -149,7 +149,7 @@ class AboutComponent extends HTMLElement {
         </div>
         
         <div class="description">
-          <p>AdminDo is a zero-dependency admin dashboard built with pure HTML, CSS, and JavaScript.</p>
+          <p>AdminDO is a zero-dependency admin dashboard built with pure HTML, CSS, and JavaScript.</p>
           <p>Features web components and a pluggable architecture for maximum flexibility and extensibility.</p>
         </div> 
        
@@ -199,7 +199,7 @@ const aboutPlugin = {
   name: 'about',
   slug: 'about',
   title: 'About',
-  description: 'About AdminDo',
+  description: 'About AdminDO',
   version: '0.0.1',
   icon: '👥',
   color: '#34C759',
@@ -212,5 +212,5 @@ const aboutPlugin = {
 // Export as ES module
 export default aboutPlugin
 
-// Auto-register plugin if AdminDo is available
-window.AdminDo?.registerPlugin?.(aboutPlugin)
+// Auto-register plugin if AdminDO is available
+window.AdminDO?.registerPlugin?.(aboutPlugin)

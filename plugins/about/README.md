@@ -1,6 +1,6 @@
-# AdminDo Credits Plugin
+# AdminDO Credits Plugin
 
-An ES module plugin for [AdminDo](../../README.md) that displays credits and team information.
+An ES module plugin for [AdminDO](../../README.md) that displays credits and team information.
 
 ## Installation
 
