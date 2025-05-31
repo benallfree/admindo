@@ -7,5 +7,13 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": [
+    "admindo-basic",
+    "admindo-site",
+    "admindo-plugin-about",
+    "admindo-plugin-dterm",
+    "admindo-plugin-dorm",
+    "admindo-plugin-better-auth",
+    "admindo-plugin-dofs-browser"
+  ]
 }
