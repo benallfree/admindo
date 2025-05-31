@@ -6,11 +6,13 @@ export class AdminDORouter {
   private component: AdminDOComponent
   private routes: Map<string, PluginConfig>
   private currentRoute: string | null
+  private root: string
 
-  constructor(adminDoComponent: AdminDOComponent) {
+  constructor(adminDoComponent: AdminDOComponent, root: string = '') {
     this.component = adminDoComponent
     this.routes = new Map()
     this.currentRoute = null
+    this.root = root.endsWith('/') ? root.slice(0, -1) : root // Remove trailing slash
 
     // Listen for browser navigation
     window.addEventListener('popstate', (e: PopStateEvent) => {
@@ -25,8 +27,9 @@ export class AdminDORouter {
 
   // Navigate to a route
   navigate(path: string, updateHistory: boolean = true): void {
+    const fullPath = this.getFullPath(path)
     if (updateHistory) {
-      history.pushState({ path } as RouteState, '', path)
+      history.pushState({ path: fullPath } as RouteState, '', fullPath)
     }
     this.currentRoute = path
     this.component.switchView(path)
@@ -34,18 +37,36 @@ export class AdminDORouter {
 
   // Handle route changes (back/forward, refresh)
   handleRouteChange(): void {
-    const path = window.location.pathname
-    this.currentRoute = path
-    this.component.switchView(path)
+    const fullPath = window.location.pathname
+    const relativePath = this.getRelativePath(fullPath)
+    this.currentRoute = relativePath
+    this.component.switchView(relativePath)
   }
 
   // Get current route
   getCurrentRoute(): string {
-    return window.location.pathname
+    return this.getRelativePath(window.location.pathname)
   }
 
   // Initialize router with current URL
   init(): void {
     this.handleRouteChange()
+  }
+
+  // Convert relative path to full path with root prefix
+  private getFullPath(path: string): string {
+    if (!this.root) return path
+    if (path === '/') return this.root || '/'
+    return `${this.root}${path}`
+  }
+
+  // Convert full path to relative path by removing root prefix
+  private getRelativePath(fullPath: string): string {
+    if (!this.root) return fullPath
+    if (fullPath === this.root) return '/'
+    if (fullPath.startsWith(`${this.root}/`)) {
+      return fullPath.substring(this.root.length)
+    }
+    return fullPath
   }
 }

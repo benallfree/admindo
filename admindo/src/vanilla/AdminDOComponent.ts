@@ -9,7 +9,10 @@ export class AdminDOComponent extends HTMLElement {
   constructor() {
     super()
     this.plugins = new Map()
-    this.router = new AdminDORouter(this)
+
+    // Get root prefix from attribute, defaulting to empty string
+    const root = this.getAttribute('root') || ''
+    this.router = new AdminDORouter(this, root)
     this.init()
   }
 
