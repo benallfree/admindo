@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
           res.setHeader('Content-Type', 'application/javascript')
           res.end(content)
         })
-        const plugins = ['about', 'dofs-browser', 'dterm', 'dorm', 'better-auth']
+        const plugins = ['about', 'dofs-browser', 'dterm', 'dorm', 'auth']
         for (const plugin of plugins) {
           server.middlewares.use(`/@admindo-plugin-${plugin}`, (req, res, next) => {
             const filePath = resolve(__dirname, `../plugins/${plugin}/src/index.js`)

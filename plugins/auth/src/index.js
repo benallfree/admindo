@@ -1,10 +1,9 @@
 /**
- * AdminDO Better Auth Plugin
+ * AdminDO Auth Plugin
  * A web component plugin that provides enhanced authentication functionality
  */
 
-// Better Auth main component
-class BetterAuthComponent extends HTMLElement {
+class AuthComponent extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -260,7 +259,7 @@ class BetterAuthComponent extends HTMLElement {
       <div class="auth-container">
         <div class="auth-header">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            🔐 Better Auth
+            🔐 Auth
           </div>
         </div>
         
@@ -340,8 +339,7 @@ class BetterAuthComponent extends HTMLElement {
   }
 }
 
-// Better Auth icon component
-class BetterAuthIconComponent extends HTMLElement {
+class AuthIconComponent extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -365,26 +363,26 @@ class BetterAuthIconComponent extends HTMLElement {
 }
 
 // Register web components
-if (!customElements.get('admindo-plugin-better-auth')) {
-  customElements.define('admindo-plugin-better-auth', BetterAuthComponent)
+if (!customElements.get('admindo-plugin-auth')) {
+  customElements.define('admindo-plugin-auth', AuthComponent)
 }
 
-if (!customElements.get('admindo-plugin-better-auth-icon')) {
-  customElements.define('admindo-plugin-better-auth-icon', BetterAuthIconComponent)
+if (!customElements.get('admindo-plugin-auth-icon')) {
+  customElements.define('admindo-plugin-auth-icon', AuthIconComponent)
 }
 
 // Plugin configuration
 const betterAuthPlugin = {
-  name: 'better-auth',
-  slug: 'better-auth',
+  name: 'auth',
+  slug: 'auth',
   title: 'Auth',
-  description: 'Better authentication',
+  description: 'Superuser authentication',
   version: '0.0.1',
   icon: '🔐',
   color: '#FF3B30',
   components: {
-    panel: BetterAuthComponent,
-    icon: BetterAuthIconComponent,
+    panel: AuthComponent,
+    icon: AuthIconComponent,
   },
 }
 

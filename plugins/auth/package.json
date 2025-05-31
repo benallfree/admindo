@@ -1,8 +1,8 @@
 {
-  "name": "admindo-plugin-better-auth",
+  "name": "admindo-plugin-auth",
   "version": "0.0.1-rc.0",
   "type": "module",
-  "description": "Better authentication plugin for AdminDO dashboard",
+  "description": "Superuser authentication plugin for AdminDO dashboard",
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js"
