@@ -1,5 +1,5 @@
-<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Definitions for gradient -->
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- <rect width="400" height="400" fill="#ff0000" /> -->
   <defs>
     <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#ea6b17;stop-opacity:1" />
@@ -7,7 +7,7 @@
     </linearGradient>
   </defs>
 
-  <g transform="translate(0, -40) scale(1)">
+  <g transform="translate(6, 35) scale(1)">
     <!-- Bigger cloud shape (scaled up from original) -->
     <g transform="translate(0, 0) scale(4.8)">
       <path d="M60,30 A20,20 0 0,0 40,10 A15,15 0 0,0 25,15 A10,10 0 0,0 15,10 A10,10 0 0,0 5,20 A15,15 0 0,0 0,30 H60 Z" fill="url(#cloudGradient)" />

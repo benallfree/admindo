@@ -12,6 +12,7 @@
   },
   "workspaces": [
     "admindo",
+    "site",
     "plugins/*",
     "examples/*"
   ],

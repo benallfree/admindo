@@ -27,20 +27,6 @@
         "vite": "^6.3.5",
       },
     },
-    "examples/durable-object": {
-      "name": "admindo-durable-object-example",
-      "version": "0.0.1",
-      "dependencies": {
-        "dofs": "^0.0.1",
-      },
-      "devDependencies": {
-        "@cloudflare/vite-plugin": "^1.2.2",
-        "admindo": "workspace:*",
-        "admindo-plugin-about": "workspace:*",
-        "hono": "^4.7.8",
-        "vite": "^6.3.5",
-      },
-    },
     "plugins/about": {
       "name": "admindo-plugin-about",
       "version": "0.0.1",
@@ -74,6 +60,20 @@
       "version": "0.0.1",
       "peerDependencies": {
         "admindo": "^0.0.1",
+      },
+    },
+    "site": {
+      "name": "admindo-durable-object-example",
+      "version": "0.0.1",
+      "dependencies": {
+        "dofs": "^0.0.1",
+      },
+      "devDependencies": {
+        "@cloudflare/vite-plugin": "^1.2.2",
+        "admindo": "workspace:*",
+        "admindo-plugin-about": "workspace:*",
+        "hono": "^4.7.8",
+        "vite": "^6.3.5",
       },
     },
   },
@@ -310,7 +310,7 @@
 
     "admindo-demo-empty": ["admindo-demo-empty@workspace:examples/basic"],
 
-    "admindo-durable-object-example": ["admindo-durable-object-example@workspace:examples/durable-object"],
+    "admindo-durable-object-example": ["admindo-durable-object-example@workspace:site"],
 
     "admindo-plugin-about": ["admindo-plugin-about@workspace:plugins/about"],
 

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdminDO - Durable Object Management</title>
+    <link rel="icon" href="/admindo.svg" type="image/svg+xml" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 300px;
+        height: auto;
+        margin: 0 auto 1rem auto;
+        display: block;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+      }
+
+      .hero {
+        text-align: center;
+        padding: 4rem 0;
+        color: white;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        margin-bottom: 2.5rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(45deg, #ea6b17, #d06f23);
+        color: white;
+        text-decoration: none;
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 50px;
+        box-shadow: 0 8px 25px rgba(234, 107, 23, 0.3);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(234, 107, 23, 0.4);
+        background: linear-gradient(45deg, #f5751a, #d66e26);
+      }
+
+      .features {
+        background: white;
+        padding: 6rem 0;
+        margin-top: 4rem;
+      }
+
+      .features h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #333;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+        margin-top: 2rem;
+      }
+
+      .feature {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 15px;
+        background: #f8f9fa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+      }
+
+      .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .feature h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .feature p {
+        color: #666;
+        font-size: 1rem;
+      }
+
+      footer {
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 2rem 0;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.1rem;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .container {
+          padding: 0 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <img src="/admindo.svg" alt="AdminDO Logo" class="logo" />
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>AdminDO</h1>
+          <p>
+            The ultimate management interface for Cloudflare Durable Objects. Powerful, intuitive, and built for modern cloud-native
+            applications.
+          </p>
+          <a href="/admin" class="cta-button">Try the Demo ></a>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="container">
+          <h2>Why Choose AdminDO?</h2>
+          <div class="features-grid">
+            <div class="feature">
+              <span class="feature-icon">🔧</span>
+              <h3>Pluggable Architecture</h3>
+              <p>Extend functionality with custom plugins. Build exactly what you need with our flexible plugin system.</p>
+            </div>
+
+            <div class="feature">
+              <span class="feature-icon">💻</span>
+              <h3>Web and CLI Support</h3>
+              <p>Access your Durable Objects through our intuitive web interface or powerful command-line tools.</p>
+            </div>
+
+            <div class="feature">
+              <span class="feature-icon">☁️</span>
+              <h3>Cloudflare Native</h3>
+              <p>Built specifically for Cloudflare Workers and Durable Objects. Seamless integration with your edge infrastructure.</p>
+            </div>
+
+            <div class="feature">
+              <span class="feature-icon">🗄️</span>
+              <h3>Multi-Namespace Management</h3>
+              <p>Manage multiple Durable Object namespaces and instances from a single, unified interface.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 AdminDO. Built for the edge.</p>
+      </div>
+    </footer>
+  </body>
+</html>

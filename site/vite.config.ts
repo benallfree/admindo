@@ -4,6 +4,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  publicDir: 'public',
   plugins: [
     cloudflare(),
     {
@@ -17,7 +18,7 @@ export default defineConfig({
       },
       configureServer(server) {
         server.middlewares.use('/@admindo/vanilla', (req, res, next) => {
-          const filePath = resolve(__dirname, '../../admindo/dist/vanilla.mjs')
+          const filePath = resolve(__dirname, '../admindo/dist/vanilla.mjs')
           const content = readFileSync(filePath, 'utf-8')
           res.setHeader('Content-Type', 'application/javascript')
           res.end(content)
@@ -25,7 +26,7 @@ export default defineConfig({
         const plugins = ['about', 'dofs-browser', 'dterm', 'dorm', 'better-auth']
         for (const plugin of plugins) {
           server.middlewares.use(`/@admindo-plugin-${plugin}`, (req, res, next) => {
-            const filePath = resolve(__dirname, `../../plugins/${plugin}/src/index.js`)
+            const filePath = resolve(__dirname, `../plugins/${plugin}/src/index.js`)
             const content = readFileSync(filePath, 'utf-8')
             res.setHeader('Content-Type', 'application/javascript')
             res.end(content)
