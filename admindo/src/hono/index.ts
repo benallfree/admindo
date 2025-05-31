@@ -18,7 +18,7 @@ export type AdminDOConfig<TEnv extends Cloudflare.Env> = {
 export const admindo = <TEnv extends Cloudflare.Env>(config: AdminDOConfig<TEnv>) => {
   const api = new Hono<{ Bindings: TEnv } & AdminDOContext>()
 
-  api.get('/', (c) => {
+  api.get('/*', (c) => {
     return c.html(`
       <!doctype html>
   <html lang="en">
