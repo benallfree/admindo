@@ -1,68 +1,24 @@
-/**
- * AdminDo - Main Entry Point
- * Zero-dependency admin dashboard with pluggable architecture
- */
+import { AdminDORouter } from './AdminDORouter'
+import { PluginConfig } from './types'
 
-// Simple Router for AdminDo
-class AdminDoRouter {
-  constructor(adminDoComponent) {
-    this.component = adminDoComponent
-    this.routes = new Map()
-    this.currentRoute = null
+// AdminDO main component
+export class AdminDOComponent extends HTMLElement {
+  private plugins: Map<string, PluginConfig>
+  private router: AdminDORouter
 
-    // Listen for browser navigation
-    window.addEventListener('popstate', (e) => {
-      this.handleRouteChange()
-    })
-  }
-
-  // Register a route
-  addRoute(path, plugin) {
-    this.routes.set(path, plugin)
-  }
-
-  // Navigate to a route
-  navigate(path, updateHistory = true) {
-    if (updateHistory) {
-      history.pushState({ path }, '', path)
-    }
-    this.currentRoute = path
-    this.component.switchView(path)
-  }
-
-  // Handle route changes (back/forward, refresh)
-  handleRouteChange() {
-    const path = window.location.pathname
-    this.currentRoute = path
-    this.component.switchView(path)
-  }
-
-  // Get current route
-  getCurrentRoute() {
-    return window.location.pathname
-  }
-
-  // Initialize router with current URL
-  init() {
-    this.handleRouteChange()
-  }
-}
-
-// AdminDo main component
-class AdminDoComponent extends HTMLElement {
   constructor() {
     super()
     this.plugins = new Map()
-    this.router = new AdminDoRouter(this)
+    this.router = new AdminDORouter(this)
     this.init()
   }
 
-  async init() {
+  async init(): Promise<void> {
     // Apply styles
     this.attachStylesheet()
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render()
     this.attachEventListeners()
 
@@ -72,9 +28,9 @@ class AdminDoComponent extends HTMLElement {
     }, 0)
   }
 
-  switchView(route) {
+  switchView(route: string): void {
     // Handle different route formats
-    let viewName
+    let viewName: string
     if (route === '/' || route === '') {
       viewName = 'dashboard'
     } else {
@@ -83,7 +39,7 @@ class AdminDoComponent extends HTMLElement {
     }
 
     // Update active nav
-    this.querySelectorAll('.nav-link').forEach((link) => {
+    this.querySelectorAll('.nav-link').forEach((link: Element) => {
       link.classList.remove('active')
     })
 
@@ -93,7 +49,7 @@ class AdminDoComponent extends HTMLElement {
     }
 
     // Update active content
-    this.querySelectorAll('.plugin-content').forEach((content) => {
+    this.querySelectorAll('.plugin-content').forEach((content: Element) => {
       content.classList.remove('active')
     })
 
@@ -103,7 +59,7 @@ class AdminDoComponent extends HTMLElement {
     }
   }
 
-  registerPlugin(plugin) {
+  registerPlugin(plugin: PluginConfig): void {
     this.plugins.set(plugin.name, plugin)
 
     // Register route for plugin
@@ -115,8 +71,10 @@ class AdminDoComponent extends HTMLElement {
     this.addPluginView(plugin)
   }
 
-  addPluginToGrid(plugin) {
+  private addPluginToGrid(plugin: PluginConfig): void {
     const grid = this.querySelector('#plugin-grid')
+    if (!grid) return
+
     const tile = document.createElement('div')
     tile.className = 'plugin-tile'
     tile.innerHTML = `
@@ -136,8 +94,10 @@ class AdminDoComponent extends HTMLElement {
     grid.appendChild(tile)
   }
 
-  addPluginToNav(plugin) {
+  private addPluginToNav(plugin: PluginConfig): void {
     const nav = this.querySelector('#sidebar-nav')
+    if (!nav) return
+
     const li = document.createElement('li')
     const viewName = plugin.slug || plugin.name
     li.innerHTML = `<a href="#" class="nav-link" data-view="${viewName}">${plugin.title}</a>`
@@ -145,15 +105,19 @@ class AdminDoComponent extends HTMLElement {
 
     // Add event listener to new nav item
     const newLink = li.querySelector('.nav-link')
-    newLink.addEventListener('click', (e) => {
-      e.preventDefault()
-      const route = `/${plugin.slug || plugin.name}`
-      this.router.navigate(route)
-    })
+    if (newLink) {
+      newLink.addEventListener('click', (e: Event) => {
+        e.preventDefault()
+        const route = `/${plugin.slug || plugin.name}`
+        this.router.navigate(route)
+      })
+    }
   }
 
-  addPluginView(plugin) {
+  private addPluginView(plugin: PluginConfig): void {
     const pluginViews = this.querySelector('#plugin-views')
+    if (!pluginViews) return
+
     const view = document.createElement('div')
     const viewName = plugin.slug || plugin.name
     view.id = `${viewName}-view`
@@ -165,18 +129,18 @@ class AdminDoComponent extends HTMLElement {
     pluginViews.appendChild(view)
   }
 
-  attachEventListeners() {
+  private attachEventListeners(): void {
     // Dashboard nav link
     const dashboardLink = this.querySelector('[data-view="dashboard"]')
     if (dashboardLink) {
-      dashboardLink.addEventListener('click', (e) => {
+      dashboardLink.addEventListener('click', (e: Event) => {
         e.preventDefault()
         this.router.navigate('/')
       })
     }
   }
 
-  attachStylesheet() {
+  private attachStylesheet(): void {
     if (!document.getElementById('admindo-styles')) {
       const style = document.createElement('style')
       style.id = 'admindo-styles'
@@ -320,7 +284,7 @@ class AdminDoComponent extends HTMLElement {
     }
   }
 
-  render() {
+  private render(): void {
     this.innerHTML = `
       <div class="admin-header">
           <div class="admin-header-content">
@@ -346,7 +310,7 @@ class AdminDoComponent extends HTMLElement {
                       </g>
                   </svg>
               </div>
-              <h1 class="admin-title">AdminDo Dashboard</h1>
+              <h1 class="admin-title">AdminDO Dashboard</h1>
           </div>
       </div>
       <div class="admin-container">
@@ -359,7 +323,7 @@ class AdminDoComponent extends HTMLElement {
           </aside>
           <main class="admin-content">
               <div id="dashboard-view" class="plugin-content active">
-                  <h2>Welcome to AdminDo</h2>
+                  <h2>Welcome to AdminDO</h2>
                   <p>A zero-dependency admin dashboard with pluggable architecture.</p>
                   <div class="plugin-grid" id="plugin-grid">
                   </div>
@@ -370,42 +334,57 @@ class AdminDoComponent extends HTMLElement {
     `
   }
 }
-
 // Register the component
-customElements.define('admin-do', AdminDoComponent)
-
+customElements.define('admin-do', AdminDOComponent)
+// AdminDO API interface
+interface AdminDOAPI {
+  version: string
+  component: typeof AdminDOComponent
+  create(targetElement: string | Element): AdminDOComponent | null
+  registerPlugin(pluginConfig: PluginConfig): boolean
+}
 // Export for ES modules
-export default AdminDoComponent
-
+export default AdminDOComponent
+export type { AdminDOAPI, PluginConfig }
 // Make available globally for non-module usage
-window.AdminDo = {
-  version: '1.0.0',
-  component: AdminDoComponent,
 
-  // Utility function to create a new AdminDo instance
-  create(targetElement) {
+declare global {
+  interface Window {
+    AdminDO: AdminDOAPI
+  }
+}
+window.AdminDO = {
+  version: '1.0.0',
+  component: AdminDOComponent,
+
+  // Utility function to create a new AdminDO instance
+  create(targetElement: string | Element): AdminDOComponent | null {
+    let element: Element | null
+
     if (typeof targetElement === 'string') {
-      targetElement = document.querySelector(targetElement)
+      element = document.querySelector(targetElement)
+    } else {
+      element = targetElement
     }
 
-    if (!targetElement) {
-      console.error('AdminDo: Target element not found')
+    if (!element) {
+      console.error('AdminDO: Target element not found')
       return null
     }
 
-    const adminDoElement = document.createElement('admin-do')
-    targetElement.appendChild(adminDoElement)
+    const adminDoElement = document.createElement('admin-do') as AdminDOComponent
+    element.appendChild(adminDoElement)
     return adminDoElement
   },
 
   // Plugin registration helper
-  registerPlugin(pluginConfig) {
-    const adminDoElement = document.querySelector('admin-do')
+  registerPlugin(pluginConfig: PluginConfig): boolean {
+    const adminDoElement = document.querySelector('admin-do') as AdminDOComponent
     if (adminDoElement && typeof adminDoElement.registerPlugin === 'function') {
       adminDoElement.registerPlugin(pluginConfig)
       return true
     } else {
-      console.warn('AdminDo: Main component not found. Plugin will be registered when component is available.')
+      console.warn('AdminDO: Main component not found. Plugin will be registered when component is available.')
       return false
     }
   },

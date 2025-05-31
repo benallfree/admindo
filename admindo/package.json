@@ -3,9 +3,19 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
-  "module": "index.js",
   "exports": {
-    ".": "./index.js"
+    "./vanilla": {
+      "import": "./dist/vanilla.mjs",
+      "types": "./dist/vanilla.d.ts"
+    },
+    "./hono": {
+      "import": "./dist/hono.mjs",
+      "types": "./dist/hono.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "keywords": [
     "admin",
@@ -21,5 +31,12 @@
       "url": "https://x.com/benallfree"
     }
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4.7.10"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
 }
