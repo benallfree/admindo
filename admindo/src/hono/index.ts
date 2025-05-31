@@ -11,7 +11,15 @@ export type AdminDOPlugin = {
 }
 
 export type AdminDOConfig<TEnv extends Cloudflare.Env> = {
-  dos: Record<keyof TEnv, string>
+  dos: Partial<
+    Record<
+      keyof TEnv,
+      {
+        name: string
+        getInstanceIds: (page?: number) => Promise<string[]>
+      }
+    >
+  >
   plugins: AdminDOPlugin[]
 }
 
@@ -30,10 +38,10 @@ export const admindo = <TEnv extends Cloudflare.Env>(config: AdminDOConfig<TEnv>
       <admin-do root="/admin" />
       <script type="module">
         import 'https://unpkg.com/admindo/vanilla'
+        import 'https://unpkg.com/admindo-plugin-auth'
         import 'https://unpkg.com/admindo-plugin-about'
         import 'https://unpkg.com/admindo-plugin-dterm'
         import 'https://unpkg.com/admindo-plugin-dorm'
-        import 'https://unpkg.com/admindo-plugin-better-auth'
         import 'https://unpkg.com/admindo-plugin-dofs-browser'
       </script>
     </body>

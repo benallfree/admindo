@@ -29,10 +29,15 @@ app.route(
   '/admin',
   admindo({
     dos: {
-      MY_DURABLE_OBJECT: 'My Durable Object',
+      MY_DURABLE_OBJECT: {
+        name: 'My Durable Object',
+        async getInstanceIds(page = 1) {
+          return ['demo']
+        },
+      },
     },
     plugins: [dofsPlugin],
-  }) as any
+  })
 )
 
 export default app
