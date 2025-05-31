@@ -3,6 +3,9 @@
   "version": "0.0.1-rc.0",
   "type": "module",
   "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./vanilla": {
       "import": "./dist/vanilla.mjs",
@@ -32,7 +35,7 @@
     }
   ],
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "hono": "^4.7.10"
   },
   "devDependencies": {
