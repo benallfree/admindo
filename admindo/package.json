@@ -1,6 +1,6 @@
 {
   "name": "admindo",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "type": "module",
   "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
   "files": [
@@ -8,10 +8,12 @@
   ],
   "exports": {
     "./vanilla": {
+      "default": "./dist/vanilla.mjs",
       "import": "./dist/vanilla.mjs",
       "types": "./dist/vanilla.d.ts"
     },
     "./hono": {
+      "default": "./dist/hono.mjs",
       "import": "./dist/hono.mjs",
       "types": "./dist/hono.d.ts"
     }
