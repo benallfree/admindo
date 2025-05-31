@@ -8,14 +8,14 @@
   ],
   "exports": {
     "./vanilla": {
-      "default": "./dist/vanilla.mjs",
       "import": "./dist/vanilla.mjs",
-      "types": "./dist/vanilla.d.ts"
+      "types": "./dist/vanilla.d.ts",
+      "default": "./dist/vanilla.mjs"
     },
     "./hono": {
-      "default": "./dist/hono.mjs",
       "import": "./dist/hono.mjs",
-      "types": "./dist/hono.d.ts"
+      "types": "./dist/hono.d.ts",
+      "default": "./dist/hono.mjs"
     }
   },
   "scripts": {
