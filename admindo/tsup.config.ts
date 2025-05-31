@@ -1,3 +1,4 @@
+import { copyFileSync } from 'fs'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
@@ -18,7 +19,7 @@ export default defineConfig({
     }
   },
   onSuccess: async () => {
-    // console.log('Copying README.md to root')
-    // copyFileSync('README.md', '../../README.md')
+    console.log('Copying README.md to root')
+    copyFileSync('README.md', '../README.md')
   },
 })
