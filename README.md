@@ -1,6 +1,6 @@
 # admindo
 
-![AdminDO Logo](./admindo/admindo.svg)
+![AdminDO Logo](https://raw.githubusercontent.com/benallfree/admindo/refs/heads/main/site/admindo.svg)
 
 Admin dashboard for Cloudflare Durable Objects.
 
