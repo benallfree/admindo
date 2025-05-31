@@ -31,6 +31,10 @@ export const admindo = <TEnv extends Cloudflare.Env>(config: AdminDOConfig<TEnv>
       <script type="module">
         import 'https://unpkg.com/admindo/vanilla'
         import 'https://unpkg.com/admindo-plugin-about'
+        import 'https://unpkg.com/admindo-plugin-dterm'
+        import 'https://unpkg.com/admindo-plugin-dorm'
+        import 'https://unpkg.com/admindo-plugin-better-auth'
+        import 'https://unpkg.com/admindo-plugin-dofs-browser'
       </script>
     </body>
   </html>
