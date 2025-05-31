@@ -26,9 +26,6 @@
     }
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "admindo": "^0.0.1"
-  },
   "files": [
     "src"
   ]

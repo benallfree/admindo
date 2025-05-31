@@ -25,10 +25,6 @@
     }
   ],
   "license": "MIT",
-  "devDependencies": {
-    "admindo": "workspace:*",
-    "@types/bun": "latest"
-  },
   "files": [
     "src"
   ]

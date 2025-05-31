@@ -12,58 +12,48 @@
     },
     "admindo": {
       "name": "admindo",
-      "version": "0.0.1",
-      "dependencies": {
-        "hono": "^4.7.10",
-      },
+      "version": "0.0.1-rc.2",
       "devDependencies": {
         "tsup": "^8.5.0",
         "typescript": "^5.8.3",
       },
+      "peerDependencies": {
+        "hono": "^4.7.10",
+      },
     },
     "examples/basic": {
-      "name": "admindo-demo-empty",
+      "name": "admindo-basic",
+      "version": "0.0.1",
       "devDependencies": {
         "vite": "^6.3.5",
       },
     },
     "plugins/about": {
       "name": "admindo-plugin-about",
-      "version": "0.0.1",
-      "peerDependencies": {
-        "admindo": "^0.0.1",
-      },
+      "version": "0.0.1-rc.0",
     },
-    "plugins/better-auth": {
-      "name": "admindo-plugin-better-auth",
-      "version": "0.0.1",
-      "peerDependencies": {
-        "admindo": "^0.0.1",
-      },
+    "plugins/auth": {
+      "name": "admindo-plugin-auth",
+      "version": "0.0.1-rc.0",
+    },
+    "plugins/dofs": {
+      "name": "admindo-plugin-dofs",
+      "version": "0.0.1-rc.0",
     },
     "plugins/dofs-browser": {
       "name": "admindo-plugin-dofs-browser",
-      "version": "0.0.1",
-      "peerDependencies": {
-        "admindo": "^0.0.1",
-      },
+      "version": "0.0.1-rc.0",
     },
     "plugins/dorm": {
       "name": "admindo-plugin-dorm",
-      "version": "0.0.1",
-      "peerDependencies": {
-        "admindo": "^0.0.1",
-      },
+      "version": "0.0.1-rc.0",
     },
     "plugins/dterm": {
       "name": "admindo-plugin-dterm",
-      "version": "0.0.1",
-      "peerDependencies": {
-        "admindo": "^0.0.1",
-      },
+      "version": "0.0.1-rc.0",
     },
     "site": {
-      "name": "admindo-durable-object-example",
+      "name": "admindo-site",
       "version": "0.0.1",
       "dependencies": {
         "dofs": "^0.0.1",
@@ -308,19 +298,21 @@
 
     "admindo": ["admindo@workspace:admindo"],
 
-    "admindo-demo-empty": ["admindo-demo-empty@workspace:examples/basic"],
-
-    "admindo-durable-object-example": ["admindo-durable-object-example@workspace:site"],
+    "admindo-basic": ["admindo-basic@workspace:examples/basic"],
 
     "admindo-plugin-about": ["admindo-plugin-about@workspace:plugins/about"],
 
-    "admindo-plugin-better-auth": ["admindo-plugin-better-auth@workspace:plugins/better-auth"],
+    "admindo-plugin-auth": ["admindo-plugin-auth@workspace:plugins/auth"],
+
+    "admindo-plugin-dofs": ["admindo-plugin-dofs@workspace:plugins/dofs"],
 
     "admindo-plugin-dofs-browser": ["admindo-plugin-dofs-browser@workspace:plugins/dofs-browser"],
 
     "admindo-plugin-dorm": ["admindo-plugin-dorm@workspace:plugins/dorm"],
 
     "admindo-plugin-dterm": ["admindo-plugin-dterm@workspace:plugins/dterm"],
+
+    "admindo-site": ["admindo-site@workspace:site"],
 
     "ajv": ["ajv@8.12.0", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "json-schema-traverse": "^1.0.0", "require-from-string": "^2.0.2", "uri-js": "^4.2.2" } }, "sha512-sRu1kpcO9yLtYxBKvqfTeh9KzZEwO3STyX1HT+4CaDzC6HpTGYhIhPIzj9XuKU7KYDwnaeh5hcOwjy1QuJzBPA=="],
 
