@@ -1,3 +1,4 @@
+import { version } from '../../package.json'
 import { AdminDORouter } from './AdminDORouter'
 import { Plugin } from './types'
 
@@ -357,7 +358,7 @@ declare global {
   }
 }
 window.AdminDO = {
-  version: '1.0.0',
+  version,
   component: AdminDOComponent,
 
   // Utility function to create a new AdminDO instance
