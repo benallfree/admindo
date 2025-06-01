@@ -1,26 +1,38 @@
+import type { Plugin } from 'admindo/vanilla'
+
 /**
  * AdminDO Auth Plugin
  * A web component plugin that provides enhanced authentication functionality
  */
 
+interface User {
+  name: string
+  email: string
+}
+
+interface GlobalAdminDO {
+  registerPlugin?: (plugin: Plugin) => void
+}
+
 class AuthComponent extends HTMLElement {
+  private isAuthenticated: boolean = false
+  private currentUser: User | null = null
+
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
-    this.isAuthenticated = false
-    this.currentUser = null
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render()
     this.setupEventListeners()
     this.checkAuthStatus()
   }
 
-  setupEventListeners() {
-    const loginBtn = this.shadowRoot.querySelector('.login-btn')
-    const logoutBtn = this.shadowRoot.querySelector('.logout-btn')
-    const loginForm = this.shadowRoot.querySelector('.login-form')
+  private setupEventListeners(): void {
+    const loginBtn = this.shadowRoot?.querySelector('.login-btn') as HTMLButtonElement
+    const logoutBtn = this.shadowRoot?.querySelector('.logout-btn') as HTMLButtonElement
+    const loginForm = this.shadowRoot?.querySelector('.login-form') as HTMLFormElement
 
     if (loginBtn) {
       loginBtn.addEventListener('click', () => this.showLoginForm())
@@ -35,7 +47,7 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  checkAuthStatus() {
+  private checkAuthStatus(): void {
     // Simulate checking authentication status
     const token = localStorage.getItem('auth-token')
     if (token) {
@@ -45,25 +57,26 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  showLoginForm() {
-    const loginModal = this.shadowRoot.querySelector('.login-modal')
+  private showLoginForm(): void {
+    const loginModal = this.shadowRoot?.querySelector('.login-modal') as HTMLElement
     if (loginModal) {
       loginModal.style.display = 'flex'
     }
   }
 
-  hideLoginForm() {
-    const loginModal = this.shadowRoot.querySelector('.login-modal')
+  private hideLoginForm(): void {
+    const loginModal = this.shadowRoot?.querySelector('.login-modal') as HTMLElement
     if (loginModal) {
       loginModal.style.display = 'none'
     }
   }
 
-  handleLogin(e) {
+  private handleLogin(e: Event): void {
     e.preventDefault()
-    const formData = new FormData(e.target)
-    const email = formData.get('email')
-    const password = formData.get('password')
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
 
     // Simulate authentication
     if (email && password) {
@@ -75,14 +88,16 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  logout() {
+  private logout(): void {
     this.isAuthenticated = false
     this.currentUser = null
     localStorage.removeItem('auth-token')
     this.render()
   }
 
-  render() {
+  private render(): void {
+    if (!this.shadowRoot) return
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -345,11 +360,13 @@ class AuthIconComponent extends HTMLElement {
     this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render()
   }
 
-  render() {
+  private render(): void {
+    if (!this.shadowRoot) return
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -372,12 +389,11 @@ if (!customElements.get('admindo-plugin-auth-icon')) {
 }
 
 // Plugin configuration
-const betterAuthPlugin = {
+const betterAuthPlugin: Plugin = {
   name: 'auth',
   slug: 'auth',
   title: 'Auth',
   description: 'Superuser authentication',
-  version: '0.0.1',
   icon: '🔐',
   color: '#FF3B30',
   components: {
