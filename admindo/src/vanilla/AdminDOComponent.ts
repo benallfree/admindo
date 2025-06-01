@@ -1,6 +1,7 @@
 import { version } from '../../package.json'
 import { AdminDORouter } from './AdminDORouter'
 import { PluginManager } from './PluginManager'
+import { ViewManager } from './ViewManager'
 import { attachAdminDOStyles } from './styles'
 import { getAdminDOTemplate } from './template'
 import { Plugin } from './types'
@@ -9,6 +10,7 @@ import { Plugin } from './types'
 export class AdminDOComponent extends HTMLElement {
   private pluginManager?: PluginManager
   private router: AdminDORouter
+  private viewManager?: ViewManager
 
   constructor() {
     super()
@@ -28,7 +30,8 @@ export class AdminDOComponent extends HTMLElement {
     this.render()
     this.attachEventListeners()
 
-    // Initialize plugin manager after rendering
+    // Initialize managers after rendering
+    this.viewManager = new ViewManager(this)
     this.pluginManager = new PluginManager(this, this.router)
 
     // Initialize router after rendering
@@ -38,34 +41,7 @@ export class AdminDOComponent extends HTMLElement {
   }
 
   switchView(route: string): void {
-    // Handle different route formats
-    let viewName: string
-    if (route === '/' || route === '') {
-      viewName = 'dashboard'
-    } else {
-      // Remove leading slash and use as view name
-      viewName = route.startsWith('/') ? route.substring(1) : route
-    }
-
-    // Update active nav
-    this.querySelectorAll('.nav-link').forEach((link: Element) => {
-      link.classList.remove('active')
-    })
-
-    const targetNav = this.querySelector(`[data-view="${viewName}"]`)
-    if (targetNav) {
-      targetNav.classList.add('active')
-    }
-
-    // Update active content
-    this.querySelectorAll('.plugin-content').forEach((content: Element) => {
-      content.classList.remove('active')
-    })
-
-    const targetView = this.querySelector(`#${viewName}-view`)
-    if (targetView) {
-      targetView.classList.add('active')
-    }
+    this.viewManager?.switchView(route)
   }
 
   registerPlugin(plugin: Plugin): void {
