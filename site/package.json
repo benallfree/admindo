@@ -15,7 +15,7 @@
     "vite": "^6.3.5",
     "admindo": "workspace:*",
     "admindo-plugin-about": "workspace:*",
-    "admindo-plugin-dofs": "workspace:*"
+    "vite-plugin-unpkg": "^0.0.2"
   },
   "dependencies": {
     "dofs": "^0.0.1"
