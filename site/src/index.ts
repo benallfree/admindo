@@ -1,3 +1,4 @@
+import { auth } from 'admindo-plugin-auth/server'
 import { dofs } from 'admindo-plugin-dofs'
 import { admindo } from 'admindo/hono'
 import { DurableObject } from 'cloudflare:workers'
@@ -31,7 +32,7 @@ app.route(
         },
       },
     },
-    plugins: [dofs],
+    plugins: [auth, dofs],
   })
 )
 
