@@ -145,8 +145,8 @@ export class AdminDOComponent extends HTMLElement {
     }
   }
 
-  private render(): void {
-    this.innerHTML = `
+  private getTemplate(): string {
+    return `
       <div class="admin-header">
           <div class="admin-header-content">
               <div class="admin-logo">
@@ -193,6 +193,10 @@ export class AdminDOComponent extends HTMLElement {
           </main>
       </div>
     `
+  }
+
+  private render(): void {
+    this.innerHTML = this.getTemplate()
   }
 }
 // Register the component
