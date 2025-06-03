@@ -1652,16 +1652,53 @@ window.AdminDO = {
       apiUrl = `/api${apiPath}`
     }
 
-    // Automatically add auth token if available
-    const token = localStorage.getItem('admindo-auth-token')
-    if (token && !options.headers?.Authorization && !options.headers?.authorization) {
-      options.headers = {
-        ...options.headers,
-        Authorization: `Bearer ${token}`,
+    // Parse current route to extract namespace and instanceId
+    const currentRoute = window.location.pathname
+    const routeParts = currentRoute.replace(/^\//, '').split('/')
+
+    // Check if we're on a namespace/instanceId route (/:namespace/:instanceId or /:namespace/:instanceId/:plugin)
+    let namespace = null
+    let instanceId = null
+
+    if (routeParts.length >= 2 && routeParts[0] && routeParts[1]) {
+      // Remove root prefix if it exists to get the actual route
+      let effectiveRoute = currentRoute
+      if (adminDoElement && adminDoElement.root) {
+        const root = adminDoElement.root
+        if (currentRoute.startsWith(root)) {
+          effectiveRoute = currentRoute.substring(root.length) || '/'
+        }
+      }
+
+      const effectiveParts = effectiveRoute.replace(/^\//, '').split('/')
+      if (effectiveParts.length >= 2 && effectiveParts[0] && effectiveParts[1]) {
+        namespace = effectiveParts[0]
+        instanceId = effectiveParts[1]
       }
     }
 
-    return fetch(apiUrl, options)
+    // Initialize headers
+    const headers = { ...options.headers }
+
+    // Automatically add auth token if available
+    const token = localStorage.getItem('admindo-auth-token')
+    if (token && !headers.Authorization && !headers.authorization) {
+      headers.Authorization = `Bearer ${token}`
+    }
+
+    // Add namespace and instanceId headers if we're on that route
+    if (namespace && instanceId) {
+      headers['X-AdminDO-Namespace'] = namespace
+      headers['X-AdminDO-InstanceId'] = instanceId
+    }
+
+    // Update options with headers
+    const updatedOptions = {
+      ...options,
+      headers,
+    }
+
+    return fetch(apiUrl, updatedOptions)
   },
 }
 
