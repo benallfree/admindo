@@ -161,11 +161,6 @@ class AboutComponent extends HTMLElement {
   }
 }
 
-// Register web components
-if (!customElements.get('admindo-plugin-about')) {
-  customElements.define('admindo-plugin-about', AboutComponent)
-}
-
 // Plugin configuration
 const aboutPlugin = {
   slug: 'about',
@@ -174,9 +169,7 @@ const aboutPlugin = {
   version: '0.0.1',
   icon: '👥',
   color: '#34C759',
-  components: {
-    panel: AboutComponent,
-  },
+  render: AboutComponent,
 }
 
 // Auto-register plugin if AdminDO is available

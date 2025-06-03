@@ -16,11 +16,8 @@ export interface Plugin {
   icon?: string
   /** Optional color for the plugin icon background */
   color?: string
-  /** Plugin components */
-  components: {
-    /** The main panel component class */
-    panel: typeof HTMLElement
-  }
+  /** Plugin render component */
+  render: typeof HTMLElement
 }
 
 /**

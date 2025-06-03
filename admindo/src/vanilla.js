@@ -474,9 +474,9 @@ class PluginManager {
     view.id = `${viewName}-view`
     view.className = 'plugin-content'
 
-    // Use standardized naming: all plugins have a 'panel' component
-    const componentName = `admindo-plugin-${plugin.slug}`
-    view.innerHTML = `<${componentName}></${componentName}>`
+    // Directly instantiate the plugin render component
+    const componentInstance = new plugin.render()
+    view.appendChild(componentInstance)
     pluginViews.appendChild(view)
   }
 }
