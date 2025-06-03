@@ -24,6 +24,7 @@ import { Hono } from 'hono'
 
 /**
  * @typedef {Object} AdminDOConfig
+ * @property {boolean} demo - Whether to enable demo mode
  * @property {DurableObjectConfig} dos - Array of Durable Object configurations that will be registered with AdminDO
  * @property {Plugin[]} plugins - Array of plugin configurations that will be registered with AdminDO
  */
@@ -271,7 +272,6 @@ function authMiddleware(c, next) {
 /**
  * Creates an AdminDO instance integrated with Hono
  * @param {AdminDOConfig} config - Configuration object for AdminDO
- * @param {Plugin[]} config.plugins - Array of plugin configurations
  * @returns {Hono} Hono app instance configured with AdminDO routes and middleware
  */
 export function admindo(config) {
@@ -300,6 +300,11 @@ export function admindo(config) {
 
   // Serve the AdminDO dashboard on all other routes
   api.get('/*', (c) => {
+    // Generate demo credentials if demo mode is enabled
+    const demoAttr = config.demo
+      ? ` demo='{"username": "${c.env?.ADMINDO_SUPERUSER_USERNAME || 'admin'}", "password": "${c.env?.ADMINDO_SUPERUSER_PASSWORD || 'password'}"}'`
+      : ''
+
     return c.html(`
       <!doctype html>
   <html lang="en">
@@ -309,7 +314,7 @@ export function admindo(config) {
       <title>AdminDO Dashboard</title>
     </head>
     <body>
-      <admin-do root="/admin" />
+      <admin-do root="/admin"${demoAttr} />
       <script type="module">
         import 'https://unpkg.com/admindo'
         import 'https://unpkg.com/admindo-plugin-about'

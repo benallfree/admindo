@@ -509,6 +509,18 @@ class AdminDOComponent extends HTMLElement {
     // Get root prefix from attribute, defaulting to empty string
     const root = this.getAttribute('root') || ''
     this.root = root.endsWith('/') ? root.slice(0, -1) : root // Remove trailing slash
+
+    // Get demo credentials from attribute if demo mode is enabled
+    const demoAttr = this.getAttribute('demo')
+    this.demoCredentials = null
+    if (demoAttr) {
+      try {
+        this.demoCredentials = JSON.parse(demoAttr)
+      } catch (error) {
+        console.warn('AdminDO: Invalid demo attribute format', error)
+      }
+    }
+
     this.router = new AdminDORouter(this, root)
     /** @type {ViewManager|undefined} */
     this.viewManager = undefined
@@ -692,6 +704,21 @@ class AdminDOComponent extends HTMLElement {
    * @returns {string} Login screen HTML
    */
   renderLoginScreen() {
+    const demoSection = this.demoCredentials
+      ? `
+      <div class="demo-section">
+        <div class="demo-badge">DEMO MODE</div>
+        <div class="demo-credentials">
+          <div class="demo-label">Demo Credentials:</div>
+          <div class="demo-creds">
+            <strong>Username:</strong> ${this.demoCredentials.username}<br>
+            <strong>Password:</strong> ${this.demoCredentials.password}
+          </div>
+        </div>
+      </div>
+    `
+      : ''
+
     return `
       <style>
         .login-overlay {
@@ -715,6 +742,45 @@ class AdminDOComponent extends HTMLElement {
           border: 1px solid #e5e5e7;
           min-width: 400px;
           text-align: center;
+        }
+        
+        .demo-section {
+          background: #e3f2fd;
+          border: 1px solid #2196f3;
+          border-radius: 8px;
+          padding: 1rem;
+          margin-bottom: 2rem;
+          text-align: center;
+        }
+        
+        .demo-badge {
+          background: #2196f3;
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          display: inline-block;
+          margin-bottom: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .demo-label {
+          font-weight: 600;
+          color: #1976d2;
+          margin-bottom: 0.5rem;
+          font-size: 0.9rem;
+        }
+        
+        .demo-creds {
+          font-family: monospace;
+          background: #f8f9fa;
+          padding: 0.75rem;
+          border-radius: 4px;
+          font-size: 0.85rem;
+          line-height: 1.4;
+          color: #333;
         }
         
         .logo {
@@ -799,6 +865,7 @@ class AdminDOComponent extends HTMLElement {
       
       <div class="login-overlay">
         <div class="login-container">
+          ${demoSection}
           <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 160">
               <defs>
@@ -853,6 +920,14 @@ class AdminDOComponent extends HTMLElement {
       setTimeout(() => {
         const loginForm = this.querySelector('#loginForm')
         if (loginForm) {
+          // Pre-fill demo credentials if demo mode is enabled
+          if (this.demoCredentials) {
+            const usernameField = this.querySelector('#username')
+            const passwordField = this.querySelector('#password')
+            if (usernameField) usernameField.value = this.demoCredentials.username
+            if (passwordField) passwordField.value = this.demoCredentials.password
+          }
+
           loginForm.addEventListener('submit', async (e) => {
             e.preventDefault()
 
