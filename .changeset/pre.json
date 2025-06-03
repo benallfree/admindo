@@ -3,14 +3,14 @@
   "tag": "rc",
   "initialVersions": {
     "admindo": "0.0.1",
-    "admindo-plugin-about": "0.0.1",
-    "admindo-plugin-better-auth": "0.0.1",
-    "admindo-plugin-dofs-browser": "0.0.1",
-    "admindo-plugin-dorm": "0.0.1",
-    "admindo-plugin-dterm": "0.0.1",
+    "admindo-plugin-about": "0.0.2",
+    "admindo-plugin-better-auth": "0.0.2",
+    "admindo-plugin-dofs-browser": "0.0.2",
+    "admindo-plugin-dorm": "0.0.2",
+    "admindo-plugin-dterm": "0.0.2",
     "admindo-site": "0.0.1",
     "admindo-basic": "0.0.1",
-    "admindo-plugin-dofs": "0.0.1-rc.0"
+    "admindo-plugin-dofs": "0.0.2"
   },
   "changesets": [
     "common-turtles-hope",
@@ -23,6 +23,7 @@
     "lucky-boxes-clap",
     "metal-bats-wear",
     "old-cycles-relate",
+    "poor-queens-enter",
     "pretty-cameras-sleep",
     "public-oranges-invent",
     "thirty-pans-rhyme"

@@ -1,5 +1,11 @@
 # admindo-plugin-dofs
 
+## 0.0.2-rc.1
+
+### Patch Changes
+
+- Release tag buster
+
 ## 0.0.1-rc.3
 
 ### Patch Changes
