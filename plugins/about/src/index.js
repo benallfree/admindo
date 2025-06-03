@@ -161,37 +161,9 @@ class AboutComponent extends HTMLElement {
   }
 }
 
-// About icon component
-class AboutIconComponent extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-  }
-
-  connectedCallback() {
-    this.render()
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: inline-block;
-          font-size: inherit;
-        }
-      </style>
-      👥
-    `
-  }
-}
-
 // Register web components
 if (!customElements.get('admindo-plugin-about')) {
   customElements.define('admindo-plugin-about', AboutComponent)
-}
-
-if (!customElements.get('admindo-plugin-about-icon')) {
-  customElements.define('admindo-plugin-about-icon', AboutIconComponent)
 }
 
 // Plugin configuration
@@ -204,7 +176,6 @@ const aboutPlugin = {
   color: '#34C759',
   components: {
     panel: AboutComponent,
-    icon: AboutIconComponent,
   },
 }
 

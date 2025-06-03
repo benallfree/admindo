@@ -200,37 +200,9 @@ class DtermComponent extends HTMLElement {
   }
 }
 
-// DTerm icon component
-class DtermIconComponent extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-  }
-
-  connectedCallback() {
-    this.render()
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: inline-block;
-          font-size: inherit;
-        }
-      </style>
-      💻
-    `
-  }
-}
-
 // Register web components
 if (!customElements.get('admindo-plugin-dterm')) {
   customElements.define('admindo-plugin-dterm', DtermComponent)
-}
-
-if (!customElements.get('admindo-plugin-dterm-icon')) {
-  customElements.define('admindo-plugin-dterm-icon', DtermIconComponent)
 }
 
 // Plugin configuration
@@ -243,7 +215,6 @@ const dtermPlugin = {
   color: '#00FF00',
   components: {
     panel: DtermComponent,
-    icon: DtermIconComponent,
   },
 }
 

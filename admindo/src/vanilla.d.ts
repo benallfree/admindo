@@ -20,8 +20,6 @@ export interface Plugin {
   components: {
     /** The main panel component class */
     panel: typeof HTMLElement
-    /** The icon component class */
-    icon: typeof HTMLElement
   }
 }
 

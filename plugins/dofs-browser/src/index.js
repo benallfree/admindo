@@ -181,37 +181,9 @@ class DofsBrowserComponent extends HTMLElement {
   }
 }
 
-// DOFS Browser icon component
-class DofsBrowserIconComponent extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-  }
-
-  connectedCallback() {
-    this.render()
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: inline-block;
-          font-size: inherit;
-        }
-      </style>
-      📁
-    `
-  }
-}
-
 // Register web components
 if (!customElements.get('admindo-plugin-dofs-browser')) {
   customElements.define('admindo-plugin-dofs-browser', DofsBrowserComponent)
-}
-
-if (!customElements.get('admindo-plugin-dofs-browser-icon')) {
-  customElements.define('admindo-plugin-dofs-browser-icon', DofsBrowserIconComponent)
 }
 
 // Plugin configuration
@@ -224,7 +196,6 @@ const dofsBrowserPlugin = {
   color: '#FF9500',
   components: {
     panel: DofsBrowserComponent,
-    icon: DofsBrowserIconComponent,
   },
 }
 

@@ -311,37 +311,9 @@ class DormComponent extends HTMLElement {
   }
 }
 
-// DORM icon component
-class DormIconComponent extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-  }
-
-  connectedCallback() {
-    this.render()
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: inline-block;
-          font-size: inherit;
-        }
-      </style>
-      🗃️
-    `
-  }
-}
-
 // Register web components
 if (!customElements.get('admindo-plugin-dorm')) {
   customElements.define('admindo-plugin-dorm', DormComponent)
-}
-
-if (!customElements.get('admindo-plugin-dorm-icon')) {
-  customElements.define('admindo-plugin-dorm-icon', DormIconComponent)
 }
 
 // Plugin configuration
@@ -354,7 +326,6 @@ const dormPlugin = {
   color: '#5856D6',
   components: {
     panel: DormComponent,
-    icon: DormIconComponent,
   },
 }
 
