@@ -1,7 +1,4 @@
-/**
- * AdminDO DOFS Plugin - Server Side
- * Durable Objects File System API plugin for AdminDO dashboard
- */
+import { dofs as honoDofs } from 'dofs/hono'
 
 /**
  * @typedef {Object} Plugin
@@ -28,16 +25,4 @@ function createDofsApp(cfg) {
 export const dofs = {
   slug: 'dofs',
   create: createDofsApp,
-}
-
-// Export for CommonJS (if using module system)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { dofs }
-  module.exports.dofs = dofs
-  module.exports.createDofsApp = createDofsApp
-}
-
-// Make available globally
-if (typeof globalThis !== 'undefined') {
-  globalThis.dofsPlugin = dofs
 }
