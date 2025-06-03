@@ -24,6 +24,8 @@ export interface Plugin {
   scope?: 'global' | 'instance'
   /** Function that creates a Hono app instance for the plugin */
   create: (config: any) => Hono
+  /** Function that checks if the plugin is compatible with the given DO stub */
+  isCompatible: (stub: DurableObjectStub) => Promise<boolean>
 }
 
 /**

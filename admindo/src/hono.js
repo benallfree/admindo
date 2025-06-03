@@ -1,4 +1,6 @@
-import { Hono } from 'hono'
+/// <reference path="./hono.d.ts" />
+
+import { Context, Hono } from 'hono'
 
 /**
  * Simple JWT-like token generation and verification
@@ -48,7 +50,6 @@ class SimpleAuth {
 
 /**
  * Create AdminDO core auth routes
- * @param {Object} c - Hono context (for environment variables)
  * @returns {Hono} Hono app instance with auth routes
  */
 function createAuthRoutes() {
@@ -208,7 +209,7 @@ function createAuthRoutes() {
 
 /**
  * Authentication middleware for protected routes
- * @param {Object} c - Hono context
+ * @param {Context} c - Hono context
  * @param {Function} next - Next middleware function
  * @returns {Response|Promise<void>} Response if unauthorized, otherwise continues
  */
@@ -242,11 +243,64 @@ function authMiddleware(c, next) {
 
 /**
  * Creates an AdminDO instance integrated with Hono
- * @param {AdminDOConfig} config - Configuration object for AdminDO
+ * @param {import('./hono').AdminDOConfig} config - Configuration object for AdminDO
  * @returns {Hono} Hono app instance configured with AdminDO routes and middleware
  */
 export function admindo(config) {
   const api = new Hono()
+
+  // Add authentication middleware for all other API routes
+  api.use('/api/*', async (c, next) => {
+    const path = c.req.path
+
+    // Skip auth middleware for AdminDO auth routes
+    if (path.startsWith('/api/admindo/auth/')) {
+      return next()
+    }
+
+    // Apply auth middleware for all other API routes
+    return authMiddleware(c, next)
+  })
+
+  // Add DO context middleware for plugin routes
+  api.use('/api/*', async (c, next) => {
+    // Check for namespace and instanceId headers
+    const namespace = c.req.header('X-AdminDO-Namespace')
+    const instanceId = c.req.header('X-AdminDO-InstanceId')
+
+    if (namespace && instanceId) {
+      // Look up the DOS configuration for this namespace
+      const dosConfig = config.dos?.[namespace]
+      if (!dosConfig) {
+        return c.json({ error: 'Access denied: DOS namespace not configured' }, 403)
+      }
+
+      const instances = await dosConfig.getInstances()
+
+      if (!instances.find((instance) => instance.slug === instanceId)) {
+        return c.json({ error: 'Access denied: Instance ID not configured' }, 403)
+      }
+
+      if (!c.env[namespace]) {
+        return c.json({ error: 'Access denied: DOS namespace not found' }, 403)
+      }
+
+      try {
+        // Get the DO stub for this instance
+        const doId = c.env[namespace].idFromName(instanceId)
+        const doStub = c.env[namespace].get(doId)
+
+        // Add to context for plugins to use
+        c.set('stub', doStub)
+        c.set('namespace', namespace)
+        c.set('instanceId', instanceId)
+      } catch (error) {
+        console.error(`Failed to get DO stub for ${namespace}/${instanceId}:`, error)
+      }
+    }
+
+    return next()
+  })
 
   // Register AdminDO core auth routes under /api/admindo/auth
   api.route('/api/admindo/auth', createAuthRoutes())
@@ -285,57 +339,41 @@ export function admindo(config) {
     }
   })
 
-  // Add authentication middleware for all other API routes
-  api.use('/api/*', async (c, next) => {
-    const path = c.req.path
+  // Check plugin compatibility with a specific DO instance
+  api.get('/api/admindo/compat', async (c) => {
+    try {
+      const compatiblePlugins = {}
 
-    // Skip auth middleware for AdminDO auth routes
-    if (path.startsWith('/api/admindo/auth/')) {
-      return next()
-    }
+      const doStub = c.get('stub')
 
-    // Apply auth middleware for all other API routes
-    return authMiddleware(c, next)
-  })
-
-  // Add DO context middleware for plugin routes
-  api.use('/api/*', async (c, next) => {
-    const path = c.req.path
-
-    // Skip DO middleware for AdminDO core routes
-    if (path.startsWith('/api/admindo/')) {
-      return next()
-    }
-
-    // Check for namespace and instanceId headers
-    const namespace = c.req.header('X-AdminDO-Namespace')
-    const instanceId = c.req.header('X-AdminDO-InstanceId')
-
-    if (namespace && instanceId) {
-      // Look up the DOS configuration for this namespace
-      const dosConfig = config.dos?.[namespace]
-
-      if (dosConfig && dosConfig.binding) {
+      // Check each plugin's compatibility
+      for (const plugin of config.plugins.filter((plugin) => plugin.scope === 'instance')) {
         try {
-          // Get the DO stub for this instance
-          const doId = dosConfig.binding.idFromName(instanceId)
-          const doStub = dosConfig.binding.get(doId)
-
-          // Add to context for plugins to use
-          c.set('stub', doStub)
-          c.set('namespace', namespace)
-          c.set('instanceId', instanceId)
+          compatiblePlugins[plugin.slug] = await plugin.isCompatible(doStub)
         } catch (error) {
-          console.error(`Failed to get DO stub for ${namespace}/${instanceId}:`, error)
+          console.error(`Error checking compatibility for plugin ${plugin.slug}:`, error)
+          compatiblePlugins[plugin.slug] = false
         }
       }
-    }
 
-    return next()
+      return c.json(compatiblePlugins)
+    } catch (error) {
+      console.error(`Failed to check compatibility for ${namespace}/${instanceId}:`, error)
+      return c.json({ error: 'Failed to check plugin compatibility' }, 500)
+    }
   })
 
   // Register plugin routes under /api/ prefix (now protected by middleware)
   for (const plugin of config.plugins) {
+    api.use(`/api/${plugin.slug}/*`, async (c, next) => {
+      const stub = c.get('stub')
+      const isCompatible = await plugin.isCompatible(stub)
+      if (!isCompatible) {
+        return c.json({ error: 'Access denied: Plugin not compatible with this instance' }, 403)
+      }
+      return next()
+    })
+
     api.route(`/api/${plugin.slug}`, plugin.create(config))
   }
 

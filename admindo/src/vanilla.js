@@ -493,23 +493,123 @@ class ViewManager {
     this.updateInstanceTitle(namespace, instanceId)
     this.renderPluginTabs(plugin)
 
-    // Auto-select first plugin if none specified
-    if (!plugin) {
-      const adminComponent = this.container.closest('admin-do')
-      if (adminComponent && adminComponent.pluginManager) {
-        const instancePlugins = Array.from(adminComponent.pluginManager.getInstancePlugins().values())
-        if (instancePlugins.length > 0) {
-          const firstPlugin = instancePlugins[0]
-          // Navigate to the first plugin without updating history to avoid infinite redirects
-          adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, false)
-          return
-        }
-      }
-    }
+    // Load compatible plugins and update tabs
+    this.loadCompatiblePlugins(namespace, instanceId, plugin)
 
     if (plugin) {
       this.showPluginContent(plugin)
     }
+  }
+
+  /**
+   * Load compatible plugins for the current instance
+   * @param {string} namespace - The namespace
+   * @param {string} instanceId - The instance ID
+   * @param {string|null} activePlugin - The active plugin slug
+   * @returns {Promise<void>}
+   */
+  async loadCompatiblePlugins(namespace, instanceId, activePlugin = null) {
+    const adminComponent = this.container.closest('admin-do')
+    if (!adminComponent) return
+
+    try {
+      // Use the fetch helper which will automatically add the namespace/instanceId headers
+      const response = await window.AdminDO.fetch('/admindo/compat')
+
+      if (response.ok) {
+        const data = await response.json()
+        const compatiblePlugins = data.compatiblePlugins || []
+
+        // Update tabs with compatible plugins
+        this.renderCompatiblePluginTabs(compatiblePlugins, activePlugin)
+
+        // If no active plugin specified, auto-select the first compatible one
+        if (!activePlugin && compatiblePlugins.length > 0) {
+          const firstPlugin = compatiblePlugins[0]
+          adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, false)
+          return
+        }
+
+        // If current plugin is not compatible, redirect to first compatible one
+        if (activePlugin && !compatiblePlugins.find((p) => p.slug === activePlugin)) {
+          if (compatiblePlugins.length > 0) {
+            const firstPlugin = compatiblePlugins[0]
+            adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, true)
+          }
+        }
+      } else {
+        console.error('Failed to load compatible plugins:', response.statusText)
+        // Fallback to showing all instance plugins
+        this.renderPluginTabs(activePlugin)
+      }
+    } catch (error) {
+      console.error('Failed to load compatible plugins:', error)
+      // Fallback to showing all instance plugins
+      this.renderPluginTabs(activePlugin)
+    }
+  }
+
+  /**
+   * Render plugin tabs for compatible plugins
+   * @param {Array} compatiblePlugins - Array of compatible plugin objects
+   * @param {string|null} activePlugin - The active plugin slug
+   * @returns {void}
+   */
+  renderCompatiblePluginTabs(compatiblePlugins, activePlugin = null) {
+    const tabsContainer = this.container.querySelector('#plugin-tabs')
+    if (!tabsContainer) return
+
+    tabsContainer.innerHTML = ''
+
+    const adminComponent = this.container.closest('admin-do')
+    if (!adminComponent) return
+
+    for (const pluginInfo of compatiblePlugins) {
+      const tab = document.createElement('a')
+      tab.className = 'plugin-tab'
+      tab.href = '#'
+      tab.dataset.plugin = pluginInfo.slug
+
+      if (activePlugin === pluginInfo.slug) {
+        tab.classList.add('active')
+      }
+
+      tab.innerHTML = `
+        <span class="plugin-tab-icon">${pluginInfo.icon || '📦'}</span>
+        <span>${pluginInfo.title}</span>
+      `
+
+      tab.addEventListener('click', (e) => {
+        e.preventDefault()
+        adminComponent.router.navigate(`/${this.currentNamespace}/${this.currentInstanceId}/${pluginInfo.slug}`)
+      })
+
+      tabsContainer.appendChild(tab)
+    }
+
+    // Show message if no compatible plugins
+    if (compatiblePlugins.length === 0) {
+      const noPluginsMessage = document.createElement('div')
+      noPluginsMessage.className = 'no-plugins-message'
+      noPluginsMessage.style.padding = '1rem'
+      noPluginsMessage.style.color = '#6e6e73'
+      noPluginsMessage.style.fontStyle = 'italic'
+      noPluginsMessage.textContent = 'No compatible plugins found for this instance'
+      tabsContainer.appendChild(noPluginsMessage)
+    }
+  }
+
+  /**
+   * Render plugin tabs for the current instance (fallback method)
+   * @param {string|null} activePlugin - The active plugin slug
+   * @returns {void}
+   */
+  renderPluginTabs(activePlugin = null) {
+    const tabsContainer = this.container.querySelector('#plugin-tabs')
+    if (!tabsContainer) return
+
+    // Show loading state while compatibility is being checked
+    tabsContainer.innerHTML = '<div style="padding: 1rem; color: #6e6e73; font-style: italic;">Loading compatible plugins...</div>'
   }
 
   /**
@@ -548,48 +648,6 @@ class ViewManager {
     const titleElement = this.container.querySelector('#instance-title')
     if (titleElement) {
       titleElement.textContent = `${namespace} - ${instanceId}`
-    }
-  }
-
-  /**
-   * Render plugin tabs for the current instance
-   * @param {string|null} activePlugin - The active plugin slug
-   * @returns {void}
-   */
-  renderPluginTabs(activePlugin = null) {
-    const tabsContainer = this.container.querySelector('#plugin-tabs')
-    if (!tabsContainer) return
-
-    tabsContainer.innerHTML = ''
-
-    // Get plugins from the component
-    const adminComponent = this.container.closest('admin-do')
-    if (!adminComponent || !adminComponent.pluginManager) return
-
-    // Only show instance-scoped plugins as tabs
-    const instancePlugins = Array.from(adminComponent.pluginManager.getInstancePlugins().values())
-
-    for (const plugin of instancePlugins) {
-      const tab = document.createElement('a')
-      tab.className = 'plugin-tab'
-      tab.href = '#'
-      tab.dataset.plugin = plugin.slug
-
-      if (activePlugin === plugin.slug) {
-        tab.classList.add('active')
-      }
-
-      tab.innerHTML = `
-        <span class="plugin-tab-icon">${plugin.icon || '📦'}</span>
-        <span>${plugin.title}</span>
-      `
-
-      tab.addEventListener('click', (e) => {
-        e.preventDefault()
-        adminComponent.router.navigate(`/${this.currentNamespace}/${this.currentInstanceId}/${plugin.slug}`)
-      })
-
-      tabsContainer.appendChild(tab)
     }
   }
 
