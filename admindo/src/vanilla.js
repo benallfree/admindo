@@ -508,12 +508,27 @@ class AdminDOComponent extends HTMLElement {
 
     // Get root prefix from attribute, defaulting to empty string
     const root = this.getAttribute('root') || ''
+    this.root = root.endsWith('/') ? root.slice(0, -1) : root // Remove trailing slash
     this.router = new AdminDORouter(this, root)
     /** @type {ViewManager|undefined} */
     this.viewManager = undefined
     /** @type {PluginManager|undefined} */
     this.pluginManager = undefined
+    /** @type {boolean} */
+    this.isAuthenticated = false
+    /** @type {Plugin[]} */
+    this.pendingPlugins = []
     this.init()
+  }
+
+  /**
+   * Get the full API URL with root prefix for AdminDO core APIs
+   * @param {string} path - The API path
+   * @returns {string} The full URL
+   */
+  getApiUrl(path) {
+    const apiPath = path.startsWith('/') ? path : `/${path}`
+    return `${this.root}/api${apiPath}`
   }
 
   /**
@@ -526,21 +541,109 @@ class AdminDOComponent extends HTMLElement {
   }
 
   /**
-   * Called when the element is connected to the DOM
+   * Check authentication status
+   * @returns {Promise<boolean>} Whether the user is authenticated
+   */
+  async checkAuthStatus() {
+    const token = localStorage.getItem('admindo-auth-token')
+    if (!token) {
+      return false
+    }
+
+    try {
+      const response = await fetch(this.getApiUrl('/admindo/auth/status'), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        return data.authenticated === true
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error)
+    }
+
+    return false
+  }
+
+  /**
+   * Handle login
+   * @param {string} username - Username
+   * @param {string} password - Password
+   * @returns {Promise<{success: boolean, message?: string}>} Login result
+   */
+  async handleLogin(username, password) {
+    try {
+      const response = await fetch(this.getApiUrl('/admindo/auth/login'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        localStorage.setItem('admindo-auth-token', data.token)
+        this.isAuthenticated = true
+        this.render()
+        this.initializeDashboard()
+        return { success: true }
+      } else {
+        return { success: false, message: data.message || 'Login failed' }
+      }
+    } catch (error) {
+      return { success: false, message: 'Login failed. Please try again.' }
+    }
+  }
+
+  /**
+   * Handle logout
    * @returns {void}
    */
-  connectedCallback() {
+  handleLogout() {
+    localStorage.removeItem('admindo-auth-token')
+    this.isAuthenticated = false
     this.render()
+  }
+
+  /**
+   * Initialize dashboard after authentication
+   * @returns {void}
+   */
+  initializeDashboard() {
     this.attachEventListeners()
 
     // Initialize managers after rendering
     this.viewManager = new ViewManager(this)
     this.pluginManager = new PluginManager(this, this.router)
 
+    // Register any pending plugins that were waiting for authentication
+    for (const plugin of this.pendingPlugins) {
+      this.pluginManager.registerPlugin(plugin)
+    }
+    this.pendingPlugins = []
+
     // Initialize router after rendering
     setTimeout(() => {
       this.router.init()
     }, 0)
+  }
+
+  /**
+   * Called when the element is connected to the DOM
+   * @returns {void}
+   */
+  async connectedCallback() {
+    this.isAuthenticated = await this.checkAuthStatus()
+    this.render()
+
+    if (this.isAuthenticated) {
+      this.initializeDashboard()
+    }
   }
 
   /**
@@ -561,7 +664,11 @@ class AdminDOComponent extends HTMLElement {
    */
   registerPlugin(plugin) {
     if (this.pluginManager) {
+      // Component is ready, register immediately
       this.pluginManager.registerPlugin(plugin)
+    } else {
+      // Component not ready yet, store for later
+      this.pendingPlugins.push(plugin)
     }
   }
 
@@ -581,11 +688,199 @@ class AdminDOComponent extends HTMLElement {
   }
 
   /**
+   * Render the login screen
+   * @returns {string} Login screen HTML
+   */
+  renderLoginScreen() {
+    return `
+      <style>
+        .login-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: #f5f5f7;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .login-container {
+          background: white;
+          padding: 3rem;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e5e7;
+          min-width: 400px;
+          text-align: center;
+        }
+        
+        .logo {
+          margin-bottom: 2rem;
+        }
+        
+        .logo svg {
+          width: 80px;
+          height: 80px;
+        }
+        
+        .login-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        
+        .login-subtitle {
+          color: #6e6e73;
+          margin-bottom: 2rem;
+        }
+        
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .form-group {
+          text-align: left;
+        }
+        
+        .form-label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: #1d1d1f;
+        }
+        
+        .form-input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #e5e5e7;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          box-sizing: border-box;
+        }
+        
+        .form-input:focus {
+          outline: none;
+          border-color: #007AFF;
+        }
+        
+        .login-btn {
+          background: #007AFF;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          font-weight: 500;
+          margin-top: 1rem;
+        }
+        
+        .login-btn:hover {
+          background: #0056b3;
+        }
+        
+        .login-btn:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+        }
+        
+        .error-message {
+          color: #dc3545;
+          font-size: 0.8rem;
+          margin-top: 0.5rem;
+          display: none;
+        }
+      </style>
+      
+      <div class="login-overlay">
+        <div class="login-container">
+          <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 160">
+              <defs>
+                <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ea6b17;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#d06f23;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <g transform="translate(30, 30) scale(4.8)">
+                <path d="M60,30 A20,20 0 0,0 40,10 A15,15 0 0,0 25,15 A10,10 0 0,0 15,10 A10,10 0 0,0 5,20 A15,15 0 0,0 0,30 H60 Z" fill="url(#cloudGradient)" />
+              </g>
+              <g transform="translate(120, 10) scale(1.78)">
+                <g transform="translate(-40, 20) scale(2)">
+                  <circle cx="40" cy="25" r="8" fill="#d8e4e4" opacity="0.8" />
+                  <path d="M40,21 V29 M36,25 H44 M37.2,21.8 L42.8,28.2 M37.2,28.2 L42.8,21.8" stroke="#2F80ED" stroke-width="1.5" />
+                </g>
+              </g>
+            </svg>
+          </div>
+          
+          <h1 class="login-title">AdminDO Dashboard</h1>
+          <p class="login-subtitle">Please log in to continue</p>
+          
+          <form class="login-form" id="loginForm">
+            <div class="form-group">
+              <label class="form-label" for="username">Username</label>
+              <input class="form-input" type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="password">Password</label>
+              <input class="form-input" type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            <div class="error-message" id="errorMessage"></div>
+          </form>
+        </div>
+      </div>
+    `
+  }
+
+  /**
    * Render the component's HTML
    * @returns {void}
    */
   render() {
-    this.innerHTML = getAdminDOTemplate()
+    if (!this.isAuthenticated) {
+      this.innerHTML = this.renderLoginScreen()
+
+      // Setup login form handler
+      setTimeout(() => {
+        const loginForm = this.querySelector('#loginForm')
+        if (loginForm) {
+          loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const loginBtn = this.querySelector('#loginBtn')
+            const errorMessage = this.querySelector('#errorMessage')
+            const username = this.querySelector('#username').value
+            const password = this.querySelector('#password').value
+
+            if (loginBtn && errorMessage) {
+              loginBtn.disabled = true
+              loginBtn.textContent = 'Logging in...'
+              errorMessage.style.display = 'none'
+
+              const result = await this.handleLogin(username, password)
+
+              if (!result.success) {
+                errorMessage.textContent = result.message || 'Login failed'
+                errorMessage.style.display = 'block'
+                loginBtn.disabled = false
+                loginBtn.textContent = 'Login'
+              }
+            }
+          })
+        }
+      }, 0)
+    } else {
+      this.innerHTML = getAdminDOTemplate()
+    }
   }
 }
 
@@ -598,6 +893,7 @@ customElements.define('admin-do', AdminDOComponent)
  * @property {typeof AdminDOComponent} component - The AdminDOComponent class
  * @property {function(string|Element): AdminDOComponent|null} create - Create a new AdminDO instance
  * @property {function(Plugin): boolean} registerPlugin - Register a plugin globally
+ * @property {function(string, RequestInit=): Promise<Response>} fetch - Fetch helper with automatic root prefix and auth
  */
 
 // Make available globally for non-module usage
@@ -644,6 +940,39 @@ window.AdminDO = {
       console.warn('AdminDO: Main component not found. Plugin will be registered when component is available.')
       return false
     }
+  },
+
+  /**
+   * Fetch helper that automatically uses the correct root prefix and API structure
+   * @param {string} path - API path (e.g., '/admindo/auth/login' or '/pluginname/endpoint')
+   * @param {RequestInit} [options] - Fetch options
+   * @returns {Promise<Response>} Fetch promise
+   */
+  fetch(path, options = {}) {
+    const adminDoElement = document.querySelector('admin-do')
+    let apiUrl
+
+    if (adminDoElement && adminDoElement.root !== undefined) {
+      // Use the main component's root prefix
+      const root = adminDoElement.root || ''
+      const apiPath = path.startsWith('/') ? path : `/${path}`
+      apiUrl = `${root}/api${apiPath}`
+    } else {
+      // Fallback if main component not found
+      const apiPath = path.startsWith('/') ? path : `/${path}`
+      apiUrl = `/api${apiPath}`
+    }
+
+    // Automatically add auth token if available
+    const token = localStorage.getItem('admindo-auth-token')
+    if (token && !options.headers?.Authorization && !options.headers?.authorization) {
+      options.headers = {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      }
+    }
+
+    return fetch(apiUrl, options)
   },
 }
 

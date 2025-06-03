@@ -1,0 +1,5 @@
+---
+'admindo': patch
+---
+
+Core auth
