@@ -1,5 +1,11 @@
 # admindo-plugin-dofs
 
+## 0.0.3
+
+### Patch Changes
+
+- Register custom elements in plugins
+
 ## 0.0.2
 
 ### Patch Changes
