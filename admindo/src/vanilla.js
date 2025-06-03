@@ -3,23 +3,6 @@
  * Zero-dependency admin dashboard with pluggable architecture
  */
 
-/**
- * @typedef {Object} Plugin
- * @property {string} title - The display title of the plugin
- * @property {string} description - A description of what the plugin does
- * @property {string} slug - The unique slug identifier for the plugin (used for routing and component naming)
- * @property {string} [icon] - Optional icon for the plugin (emoji or HTML)
- * @property {string} [color] - Optional color for the plugin icon background
- * @property {Object} components - Plugin components
- * @property {typeof HTMLElement} components.panel - The main panel component class
- * @property {typeof HTMLElement} components.icon - The icon component class
- */
-
-/**
- * @typedef {Object} RouteState
- * @property {string} path - The current route path
- */
-
 // Version constant
 const version = '0.0.1-rc.3'
 
@@ -961,17 +944,7 @@ class AdminDOComponent extends HTMLElement {
 // Register the component
 customElements.define('admin-do', AdminDOComponent)
 
-/**
- * @typedef {Object} AdminDOAPI
- * @property {string} version - The AdminDO version
- * @property {typeof AdminDOComponent} component - The AdminDOComponent class
- * @property {function(string|Element): AdminDOComponent|null} create - Create a new AdminDO instance
- * @property {function(Plugin): boolean} registerPlugin - Register a plugin globally
- * @property {function(string, RequestInit=): Promise<Response>} fetch - Fetch helper with automatic root prefix and auth
- */
-
 // Make available globally for non-module usage
-/** @type {AdminDOAPI} */
 window.AdminDO = {
   version,
   component: AdminDOComponent,

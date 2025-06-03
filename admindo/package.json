@@ -9,12 +9,12 @@
   "exports": {
     ".": {
       "import": "./src/vanilla.js",
-      "types": "./src/vanilla.js",
+      "types": "./src/vanilla.d.ts",
       "default": "./src/vanilla.js"
     },
     "./hono": {
       "import": "./src/hono.js",
-      "types": "./src/hono.js",
+      "types": "./src/hono.d.ts",
       "default": "./src/hono.js"
     }
   },

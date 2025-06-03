@@ -1,35 +1,6 @@
 import { Hono } from 'hono'
 
 /**
- * @typedef {Object} Instance
- * @property {string} slug - The unique slug identifier for the instance
- * @property {string} name - The display name of the instance
- */
-
-/**
- * @typedef {Object} Plugin
- * @property {string} slug - The unique slug identifier for the plugin
- * @property {function(Object): Object} create - Function that creates a Hono app instance for the plugin
- */
-
-/**
- * @typedef {Object} DurableObjectConfigItem
- * @property {string} name - The name of the Durable Object
- * @property {function(number=): Promise<Instance[]>} getInstances - Function to get instances, optionally paginated
- */
-
-/**
- * @typedef {Record<string, DurableObjectConfigItem>} DurableObjectConfig
- */
-
-/**
- * @typedef {Object} AdminDOConfig
- * @property {boolean} demo - Whether to enable demo mode
- * @property {DurableObjectConfig} dos - Array of Durable Object configurations that will be registered with AdminDO
- * @property {Plugin[]} plugins - Array of plugin configurations that will be registered with AdminDO
- */
-
-/**
  * Simple JWT-like token generation and verification
  */
 class SimpleAuth {
