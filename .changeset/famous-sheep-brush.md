@@ -1,5 +1,0 @@
----
-'admindo': patch
----
-
-Core auth

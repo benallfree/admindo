@@ -1,5 +1,13 @@
 # admindo-plugin-dorm
 
+## 0.0.2
+
+### Patch Changes
+
+- 8e5dd04: Release tag buster
+- 64e684c: Remove Typescript
+- 1c9cebc: Refactoring
+
 ## 0.0.2-rc.1
 
 ### Patch Changes

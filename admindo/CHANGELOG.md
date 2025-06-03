@@ -1,5 +1,22 @@
 # admindo
 
+## 0.0.1
+
+### Patch Changes
+
+- fded106: Add dist files
+- db1b02a: Add version to admindo
+- 64e684c: Core auth
+- b297bde: Add default export scripts
+- a9eb987: Update durable objects provider API
+- 7de35f6: Move default exports in package.json
+- 210126a: Readme logo fix
+- cdc7afa: Initial release
+- c33e52f: Package fix
+- 297154b: Demo mode
+- 64e684c: Remove Typescript
+- 1c9cebc: Refactoring
+
 ## 0.0.1-rc.6
 
 ### Patch Changes

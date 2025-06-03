@@ -1,6 +1,6 @@
 {
   "name": "admindo-plugin-dterm",
-  "version": "0.0.2-rc.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Durable Objects File System terminal plugin for AdminDO dashboard",
   "module": "src/index.js",
