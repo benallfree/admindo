@@ -475,7 +475,7 @@ class PluginManager {
     view.className = 'plugin-content'
 
     // Directly instantiate the plugin render component
-    const componentInstance = new plugin.render()
+    const componentInstance = plugin.render()
     view.appendChild(componentInstance)
     pluginViews.appendChild(view)
   }

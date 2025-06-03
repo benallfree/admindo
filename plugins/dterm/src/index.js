@@ -200,6 +200,9 @@ class DtermComponent extends HTMLElement {
   }
 }
 
+// Register the custom element
+customElements.define('admindo-dterm', DtermComponent)
+
 // Plugin configuration
 /**
  * @type {import('admindo').Plugin}
@@ -211,7 +214,7 @@ const dtermPlugin = {
   version: '0.0.1',
   icon: '💻',
   color: '#00FF00',
-  render: DtermComponent,
+  render: () => document.createElement('admindo-dterm'),
 }
 
 // Auto-register plugin if AdminDO is available

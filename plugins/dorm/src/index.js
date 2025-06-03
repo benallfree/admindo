@@ -311,6 +311,9 @@ class DormComponent extends HTMLElement {
   }
 }
 
+// Register the custom element
+customElements.define('admindo-dorm', DormComponent)
+
 // Plugin configuration
 const dormPlugin = {
   slug: 'dorm',
@@ -319,7 +322,7 @@ const dormPlugin = {
   version: '0.0.1',
   icon: '🗃️',
   color: '#5856D6',
-  render: DormComponent,
+  render: () => document.createElement('admindo-dorm'),
 }
 
 // Auto-register plugin if AdminDO is available
