@@ -216,7 +216,6 @@ if (!customElements.get('admindo-plugin-dofs-browser-icon')) {
 
 // Plugin configuration
 const dofsBrowserPlugin = {
-  name: 'dofs-browser',
   slug: 'dofs-browser',
   title: 'File Browser',
   description: 'Durable Objects File System GUI',

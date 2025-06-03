@@ -235,7 +235,6 @@ if (!customElements.get('admindo-plugin-dterm-icon')) {
 
 // Plugin configuration
 const dtermPlugin = {
-  name: 'dterm',
   slug: 'dterm',
   title: 'Terminal',
   description: 'Durable Objects File System terminal',

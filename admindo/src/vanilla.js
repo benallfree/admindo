@@ -5,10 +5,9 @@
 
 /**
  * @typedef {Object} Plugin
- * @property {string} name - The unique name of the plugin
  * @property {string} title - The display title of the plugin
  * @property {string} description - A description of what the plugin does
- * @property {string} [slug] - Optional URL slug for the plugin (defaults to name)
+ * @property {string} slug - The unique slug identifier for the plugin (used for routing and component naming)
  * @property {string} [icon] - Optional icon for the plugin (emoji or HTML)
  * @property {string} [color] - Optional color for the plugin icon background
  * @property {Object} components - Plugin components
@@ -414,10 +413,10 @@ class PluginManager {
    * @returns {void}
    */
   registerPlugin(plugin) {
-    this.plugins.set(plugin.name, plugin)
+    this.plugins.set(plugin.slug, plugin)
 
     // Register route for plugin
-    const route = `/${plugin.slug || plugin.name}`
+    const route = `/${plugin.slug}`
     this.router.addRoute(route, plugin)
 
     this.addPluginToGrid(plugin)
@@ -446,7 +445,7 @@ class PluginManager {
 
     // Use router for navigation
     tile.addEventListener('click', () => {
-      const route = `/${plugin.slug || plugin.name}`
+      const route = `/${plugin.slug}`
       this.router.navigate(route)
     })
 
@@ -463,7 +462,7 @@ class PluginManager {
     if (!nav) return
 
     const li = document.createElement('li')
-    const viewName = plugin.slug || plugin.name
+    const viewName = plugin.slug
     li.innerHTML = `<a href="#" class="nav-link" data-view="${viewName}">${plugin.title}</a>`
     nav.appendChild(li)
 
@@ -472,7 +471,7 @@ class PluginManager {
     if (newLink) {
       newLink.addEventListener('click', (e) => {
         e.preventDefault()
-        const route = `/${plugin.slug || plugin.name}`
+        const route = `/${plugin.slug}`
         this.router.navigate(route)
       })
     }
@@ -488,12 +487,12 @@ class PluginManager {
     if (!pluginViews) return
 
     const view = document.createElement('div')
-    const viewName = plugin.slug || plugin.name
+    const viewName = plugin.slug
     view.id = `${viewName}-view`
     view.className = 'plugin-content'
 
     // Use standardized naming: all plugins have a 'panel' component
-    const componentName = `admindo-plugin-${plugin.name}`
+    const componentName = `admindo-plugin-${plugin.slug}`
     view.innerHTML = `<${componentName}></${componentName}>`
     pluginViews.appendChild(view)
   }

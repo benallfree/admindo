@@ -346,7 +346,6 @@ if (!customElements.get('admindo-plugin-dorm-icon')) {
 
 // Plugin configuration
 const dormPlugin = {
-  name: 'dorm',
   slug: 'dorm',
   title: 'ORM',
   description: 'Durable Objects ORM',

@@ -196,7 +196,6 @@ if (!customElements.get('admindo-plugin-about-icon')) {
 
 // Plugin configuration
 const aboutPlugin = {
-  name: 'about',
   slug: 'about',
   title: 'About',
   description: 'About AdminDO',
