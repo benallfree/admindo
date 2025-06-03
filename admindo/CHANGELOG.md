@@ -1,5 +1,11 @@
 # admindo
 
+## 0.0.1-rc.6
+
+### Patch Changes
+
+- Refactoring
+
 ## 0.0.1-rc.5
 
 ### Patch Changes
