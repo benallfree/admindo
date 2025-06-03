@@ -5,28 +5,25 @@
   "description": "Superuser authentication plugin for AdminDO dashboard",
   "exports": {
     ".": {
-      "types": "./dist/client.d.ts",
-      "import": "./dist/client.js",
-      "default": "./dist/client.js"
+      "import": "./src/client.js",
+      "default": "./src/client.js"
     },
     "./server": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.js",
-      "default": "./dist/server.js"
+      "import": "./src/server.js",
+      "default": "./src/server.js"
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "keywords": [
     "admindo",
     "plugin",
-    "better-auth",
     "authentication",
     "auth",
     "web-components",
-    "esm"
+    "esm",
+    "javascript"
   ],
   "authors": [
     {
@@ -36,12 +33,14 @@
   ],
   "license": "MIT",
   "files": [
-    "src"
+    "src",
+    "README.md",
+    "CHANGELOG.md"
   ],
+  "peerDependencies": {
+    "hono": "^4.7.11"
+  },
   "devDependencies": {
     "admindo": "workspace:*"
-  },
-  "dependencies": {
-    "hono": "^4.7.11"
   }
 }

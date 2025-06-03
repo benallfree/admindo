@@ -7,15 +7,15 @@
     "dist"
   ],
   "exports": {
-    "./vanilla": {
-      "import": "./dist/vanilla.mjs",
-      "types": "./dist/vanilla.d.ts",
-      "default": "./dist/vanilla.mjs"
+    ".": {
+      "import": "./src/vanilla.js",
+      "types": "./src/vanilla.js",
+      "default": "./src/vanilla.js"
     },
     "./hono": {
-      "import": "./dist/hono.mjs",
-      "types": "./dist/hono.d.ts",
-      "default": "./dist/hono.mjs"
+      "import": "./src/hono.js",
+      "types": "./src/hono.js",
+      "default": "./src/hono.js"
     }
   },
   "scripts": {

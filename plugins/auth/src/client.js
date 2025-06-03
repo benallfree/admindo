@@ -1,38 +1,58 @@
-import type { Plugin } from 'admindo/vanilla'
-
 /**
- * AdminDO Auth Plugin
+ * AdminDO Auth Plugin - Client Side
  * A web component plugin that provides enhanced authentication functionality
  */
 
-interface User {
-  name: string
-  email: string
-}
+/**
+ * @typedef {Object} User
+ * @property {string} name - The user's display name
+ * @property {string} email - The user's email address
+ */
 
-interface GlobalAdminDO {
-  registerPlugin?: (plugin: Plugin) => void
-}
+/**
+ * @typedef {Object} Plugin
+ * @property {string} name - The unique name of the plugin
+ * @property {string} title - The display title of the plugin
+ * @property {string} description - A description of what the plugin does
+ * @property {string} [slug] - Optional URL slug for the plugin (defaults to name)
+ * @property {string} [icon] - Optional icon for the plugin (emoji or HTML)
+ * @property {string} [color] - Optional color for the plugin icon background
+ * @property {Object} components - Plugin components
+ * @property {typeof HTMLElement} components.panel - The main panel component class
+ * @property {typeof HTMLElement} components.icon - The icon component class
+ */
 
+/**
+ * Main authentication component that provides login/logout functionality
+ */
 class AuthComponent extends HTMLElement {
-  private isAuthenticated: boolean = false
-  private currentUser: User | null = null
-
   constructor() {
     super()
+    /** @type {boolean} */
+    this.isAuthenticated = false
+    /** @type {User|null} */
+    this.currentUser = null
     this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback(): void {
+  /**
+   * Called when the element is connected to the DOM
+   * @returns {void}
+   */
+  connectedCallback() {
     this.render()
     this.setupEventListeners()
     this.checkAuthStatus()
   }
 
-  private setupEventListeners(): void {
-    const loginBtn = this.shadowRoot?.querySelector('.login-btn') as HTMLButtonElement
-    const logoutBtn = this.shadowRoot?.querySelector('.logout-btn') as HTMLButtonElement
-    const loginForm = this.shadowRoot?.querySelector('.login-form') as HTMLFormElement
+  /**
+   * Set up event listeners for authentication actions
+   * @returns {void}
+   */
+  setupEventListeners() {
+    const loginBtn = this.shadowRoot?.querySelector('.login-btn')
+    const logoutBtn = this.shadowRoot?.querySelector('.logout-btn')
+    const loginForm = this.shadowRoot?.querySelector('.login-form')
 
     if (loginBtn) {
       loginBtn.addEventListener('click', () => this.showLoginForm())
@@ -47,7 +67,11 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  private checkAuthStatus(): void {
+  /**
+   * Check if user is already authenticated from stored token
+   * @returns {void}
+   */
+  checkAuthStatus() {
     // Simulate checking authentication status
     const token = localStorage.getItem('auth-token')
     if (token) {
@@ -57,26 +81,39 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  private showLoginForm(): void {
-    const loginModal = this.shadowRoot?.querySelector('.login-modal') as HTMLElement
+  /**
+   * Show the login modal form
+   * @returns {void}
+   */
+  showLoginForm() {
+    const loginModal = this.shadowRoot?.querySelector('.login-modal')
     if (loginModal) {
       loginModal.style.display = 'flex'
     }
   }
 
-  private hideLoginForm(): void {
-    const loginModal = this.shadowRoot?.querySelector('.login-modal') as HTMLElement
+  /**
+   * Hide the login modal form
+   * @returns {void}
+   */
+  hideLoginForm() {
+    const loginModal = this.shadowRoot?.querySelector('.login-modal')
     if (loginModal) {
       loginModal.style.display = 'none'
     }
   }
 
-  private handleLogin(e: Event): void {
+  /**
+   * Handle login form submission
+   * @param {Event} e - The form submission event
+   * @returns {void}
+   */
+  handleLogin(e) {
     e.preventDefault()
-    const form = e.target as HTMLFormElement
+    const form = e.target
     const formData = new FormData(form)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    const email = formData.get('email')
+    const password = formData.get('password')
 
     // Simulate authentication
     if (email && password) {
@@ -88,14 +125,22 @@ class AuthComponent extends HTMLElement {
     }
   }
 
-  private logout(): void {
+  /**
+   * Log out the current user
+   * @returns {void}
+   */
+  logout() {
     this.isAuthenticated = false
     this.currentUser = null
     localStorage.removeItem('auth-token')
     this.render()
   }
 
-  private render(): void {
+  /**
+   * Render the component's HTML
+   * @returns {void}
+   */
+  render() {
     if (!this.shadowRoot) return
 
     this.shadowRoot.innerHTML = `
@@ -354,17 +399,28 @@ class AuthComponent extends HTMLElement {
   }
 }
 
+/**
+ * Simple icon component for the auth plugin
+ */
 class AuthIconComponent extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback(): void {
+  /**
+   * Called when the element is connected to the DOM
+   * @returns {void}
+   */
+  connectedCallback() {
     this.render()
   }
 
-  private render(): void {
+  /**
+   * Render the icon component
+   * @returns {void}
+   */
+  render() {
     if (!this.shadowRoot) return
 
     this.shadowRoot.innerHTML = `
@@ -388,8 +444,11 @@ if (!customElements.get('admindo-plugin-auth-icon')) {
   customElements.define('admindo-plugin-auth-icon', AuthIconComponent)
 }
 
-// Plugin configuration
-const betterAuthPlugin: Plugin = {
+/**
+ * Plugin configuration for AdminDO auth plugin
+ * @type {Plugin}
+ */
+const betterAuthPlugin = {
   name: 'auth',
   slug: 'auth',
   title: 'Auth',
@@ -402,8 +461,25 @@ const betterAuthPlugin: Plugin = {
   },
 }
 
-// Export as ES module
-export default betterAuthPlugin
+// Export for ES modules (if using module system)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = betterAuthPlugin
+  module.exports.betterAuthPlugin = betterAuthPlugin
+  module.exports.AuthComponent = AuthComponent
+  module.exports.AuthIconComponent = AuthIconComponent
+}
+
+// Export for ES6 modules (if using import/export)
+if (typeof window !== 'undefined') {
+  window.betterAuthPlugin = betterAuthPlugin
+  window.AuthComponent = AuthComponent
+  window.AuthIconComponent = AuthIconComponent
+}
 
 // Auto-register plugin if AdminDO is available
-window.AdminDO?.registerPlugin?.(betterAuthPlugin)
+if (typeof window !== 'undefined' && window.AdminDO?.registerPlugin) {
+  window.AdminDO.registerPlugin(betterAuthPlugin)
+}
+
+// Export as default
+export default betterAuthPlugin

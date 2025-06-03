@@ -5,22 +5,23 @@
   "description": "Durable Objects File System API plugin for AdminDO dashboard",
   "exports": {
     ".": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.js"
+      "import": "./src/server.js",
+      "default": "./src/server.js"
     }
   },
+  "main": "./src/server.js",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "keywords": [
     "admindo",
     "plugin",
-    "dofs-browser",
+    "dofs",
     "filesystem",
-    "gui",
-    "web-components",
-    "esm"
+    "api",
+    "durable-objects",
+    "esm",
+    "javascript"
   ],
   "authors": [
     {
@@ -30,9 +31,11 @@
   ],
   "license": "MIT",
   "files": [
-    "src"
+    "src",
+    "README.md",
+    "CHANGELOG.md"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "dofs": "^0.0.1"
   },
   "devDependencies": {

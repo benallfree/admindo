@@ -4,9 +4,9 @@
     "": {
       "name": "admindo",
       "devDependencies": {
-        "@changesets/cli": "latest",
-        "prettier": "latest",
-        "prettier-plugin-organize-imports": "latest",
+        "@changesets/cli": "^2.29.4",
+        "prettier": "^3.5.3",
+        "prettier-plugin-organize-imports": "^4.1.0",
       },
     },
     "admindo": {
@@ -34,21 +34,21 @@
     "plugins/auth": {
       "name": "admindo-plugin-auth",
       "version": "0.0.1-rc.1",
-      "dependencies": {
-        "hono": "^4.7.11",
-      },
       "devDependencies": {
         "admindo": "workspace:*",
+      },
+      "peerDependencies": {
+        "hono": "^4.7.11",
       },
     },
     "plugins/dofs": {
       "name": "admindo-plugin-dofs",
       "version": "0.0.1-rc.1",
-      "dependencies": {
-        "dofs": "^0.0.1",
-      },
       "devDependencies": {
         "admindo": "workspace:*",
+      },
+      "peerDependencies": {
+        "dofs": "^0.0.1",
       },
     },
     "plugins/dofs-browser": {
@@ -67,17 +67,17 @@
       "name": "admindo-site",
       "version": "0.0.1",
       "dependencies": {
-        "dofs": "^0.0.1",
+        "dofs": "latest",
       },
       "devDependencies": {
-        "@cloudflare/vite-plugin": "^1.3.1",
+        "@cloudflare/vite-plugin": "latest",
         "admindo": "workspace:*",
         "admindo-plugin-about": "workspace:*",
         "admindo-plugin-auth": "workspace:*",
         "admindo-plugin-dofs": "workspace:*",
-        "hono": "^4.7.11",
-        "vite": "^6.3.5",
-        "vite-plugin-unpkg": "^0.0.3",
+        "hono": "latest",
+        "vite": "latest",
+        "vite-plugin-unpkg": "latest",
       },
     },
   },
