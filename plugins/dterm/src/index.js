@@ -248,8 +248,5 @@ const dtermPlugin = {
   },
 }
 
-// Export as ES module
-export default dtermPlugin
-
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(dtermPlugin)

@@ -359,8 +359,5 @@ const dormPlugin = {
   },
 }
 
-// Export as ES module
-export default dormPlugin
-
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(dormPlugin)

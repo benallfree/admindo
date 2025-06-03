@@ -209,8 +209,5 @@ const aboutPlugin = {
   },
 }
 
-// Export as ES module
-export default aboutPlugin
-
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(aboutPlugin)

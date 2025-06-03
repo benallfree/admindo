@@ -229,8 +229,5 @@ const dofsBrowserPlugin = {
   },
 }
 
-// Export as ES module
-export default dofsBrowserPlugin
-
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(dofsBrowserPlugin)
