@@ -7,7 +7,7 @@ import { Hono } from 'hono'
 /**
  * Represents an instance of a Durable Object
  */
-export interface Instance {
+export interface DurableObjectInstance {
   /** The unique slug identifier for the instance */
   slug: string
   /** The display name of the instance */
@@ -21,7 +21,7 @@ export interface Plugin {
   /** The unique slug identifier for the plugin */
   slug: string
   /** Function that creates a Hono app instance for the plugin */
-  create: (config: any) => any
+  create: (config: any) => Hono
 }
 
 /**
@@ -31,7 +31,7 @@ export interface DurableObjectConfigItem {
   /** The name of the Durable Object */
   name: string
   /** Function to get instances, optionally paginated */
-  getInstances: (page?: number) => Promise<Instance[]>
+  getInstances: (page?: number) => Promise<DurableObjectInstance[]>
 }
 
 /**
