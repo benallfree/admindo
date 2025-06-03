@@ -13,13 +13,18 @@ import { Hono } from 'hono'
  */
 
 /**
- * @typedef {Object} DurableObjectConfig
+ * @typedef {Object} DurableObjectConfigItem
  * @property {string} name - The name of the Durable Object
  * @property {function(number=): Promise<Instance[]>} getInstances - Function to get instances, optionally paginated
  */
 
 /**
+ * @typedef {Record<string, DurableObjectConfigItem>} DurableObjectConfig
+ */
+
+/**
  * @typedef {Object} AdminDOConfig
+ * @property {DurableObjectConfig} dos - Array of Durable Object configurations that will be registered with AdminDO
  * @property {Plugin[]} plugins - Array of plugin configurations that will be registered with AdminDO
  */
 
