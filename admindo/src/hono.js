@@ -298,6 +298,42 @@ export function admindo(config) {
     return authMiddleware(c, next)
   })
 
+  // Add DO context middleware for plugin routes
+  api.use('/api/*', async (c, next) => {
+    const path = c.req.path
+
+    // Skip DO middleware for AdminDO core routes
+    if (path.startsWith('/api/admindo/')) {
+      return next()
+    }
+
+    // Check for namespace and instanceId headers
+    const namespace = c.req.header('X-AdminDO-Namespace')
+    const instanceId = c.req.header('X-AdminDO-InstanceId')
+
+    if (namespace && instanceId) {
+      // Look up the DOS configuration for this namespace
+      const dosConfig = config.dos?.[namespace]
+
+      if (dosConfig && dosConfig.binding) {
+        try {
+          // Get the DO stub for this instance
+          const doId = dosConfig.binding.idFromName(instanceId)
+          const doStub = dosConfig.binding.get(doId)
+
+          // Add to context for plugins to use
+          c.set('stub', doStub)
+          c.set('namespace', namespace)
+          c.set('instanceId', instanceId)
+        } catch (error) {
+          console.error(`Failed to get DO stub for ${namespace}/${instanceId}:`, error)
+        }
+      }
+    }
+
+    return next()
+  })
+
   // Register plugin routes under /api/ prefix (now protected by middleware)
   for (const plugin of config.plugins) {
     api.route(`/api/${plugin.slug}`, plugin.create(config))
