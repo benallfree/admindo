@@ -493,6 +493,20 @@ class ViewManager {
     this.updateInstanceTitle(namespace, instanceId)
     this.renderPluginTabs(plugin)
 
+    // Auto-select first plugin if none specified
+    if (!plugin) {
+      const adminComponent = this.container.closest('admin-do')
+      if (adminComponent && adminComponent.pluginManager) {
+        const instancePlugins = Array.from(adminComponent.pluginManager.getInstancePlugins().values())
+        if (instancePlugins.length > 0) {
+          const firstPlugin = instancePlugins[0]
+          // Navigate to the first plugin without updating history to avoid infinite redirects
+          adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, false)
+          return
+        }
+      }
+    }
+
     if (plugin) {
       this.showPluginContent(plugin)
     }
