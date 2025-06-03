@@ -170,6 +170,7 @@ const aboutPlugin = {
   title: 'About',
   description: 'About AdminDO',
   version: '0.0.1',
+  scope: 'global',
   icon: '👥',
   color: '#34C759',
   render: () => document.createElement('admindo-about'),

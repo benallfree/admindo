@@ -16,6 +16,8 @@ export interface Plugin {
   icon?: string
   /** Optional color for the plugin icon background */
   color?: string
+  /** Plugin scope - 'global' appears in sidebar, 'instance' appears only as tabs when viewing DO instances */
+  scope?: 'global' | 'instance'
   /** Plugin render component */
   render: typeof HTMLElement
 }
