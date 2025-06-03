@@ -1,10 +1,10 @@
 {
   "name": "admindo",
-  "version": "0.0.1-rc.4",
+  "version": "0.0.1-rc.5",
   "type": "module",
   "description": "Zero-dependency admin dashboard for Cloudflare Durable Objects",
   "files": [
-    "dist"
+    "src"
   ],
   "exports": {
     ".": {

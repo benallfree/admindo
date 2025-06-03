@@ -1,5 +1,11 @@
 # admindo
 
+## 0.0.1-rc.5
+
+### Patch Changes
+
+- Package fix
+
 ## 0.0.1-rc.4
 
 ### Patch Changes
