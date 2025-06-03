@@ -31,16 +31,6 @@
       "name": "admindo-plugin-about",
       "version": "0.0.1-rc.0",
     },
-    "plugins/auth": {
-      "name": "admindo-plugin-auth",
-      "version": "0.0.1-rc.1",
-      "devDependencies": {
-        "admindo": "workspace:*",
-      },
-      "peerDependencies": {
-        "hono": "^4.7.11",
-      },
-    },
     "plugins/dofs": {
       "name": "admindo-plugin-dofs",
       "version": "0.0.1-rc.1",
@@ -67,17 +57,16 @@
       "name": "admindo-site",
       "version": "0.0.1",
       "dependencies": {
-        "dofs": "latest",
+        "dofs": "^0.0.1",
       },
       "devDependencies": {
-        "@cloudflare/vite-plugin": "latest",
+        "@cloudflare/vite-plugin": "^1.3.1",
         "admindo": "workspace:*",
         "admindo-plugin-about": "workspace:*",
-        "admindo-plugin-auth": "workspace:*",
         "admindo-plugin-dofs": "workspace:*",
-        "hono": "latest",
-        "vite": "latest",
-        "vite-plugin-unpkg": "latest",
+        "hono": "^4.7.11",
+        "vite": "^6.3.5",
+        "vite-plugin-unpkg": "^0.0.3",
       },
     },
   },
@@ -311,8 +300,6 @@
     "admindo-basic": ["admindo-basic@workspace:examples/basic"],
 
     "admindo-plugin-about": ["admindo-plugin-about@workspace:plugins/about"],
-
-    "admindo-plugin-auth": ["admindo-plugin-auth@workspace:plugins/auth"],
 
     "admindo-plugin-dofs": ["admindo-plugin-dofs@workspace:plugins/dofs"],
 

@@ -1,5 +1,14 @@
 # admindo
 
+## 0.0.1-rc.4
+
+### Patch Changes
+
+- db1b02a: Add version to admindo
+- 64e684c: Core auth
+- Demo mode
+- 64e684c: Remove Typescript
+
 ## 0.0.1-rc.3
 
 ### Patch Changes

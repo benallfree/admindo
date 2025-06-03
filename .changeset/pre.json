@@ -10,17 +10,19 @@
     "admindo-plugin-dterm": "0.0.1",
     "admindo-site": "0.0.1",
     "admindo-basic": "0.0.1",
-    "admindo-plugin-auth": "0.0.1-rc.0",
     "admindo-plugin-dofs": "0.0.1-rc.0"
   },
   "changesets": [
     "common-turtles-hope",
     "crazy-peas-guess",
-    "cuddly-forks-shop",
+    "eleven-cougars-refuse",
+    "famous-sheep-brush",
     "green-hats-study",
     "itchy-tips-battle",
     "long-hounds-lose",
     "lucky-boxes-clap",
-    "metal-bats-wear"
+    "metal-bats-wear",
+    "pretty-cameras-sleep",
+    "public-oranges-invent"
   ]
 }

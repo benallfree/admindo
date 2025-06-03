@@ -13,7 +13,6 @@
     "@cloudflare/vite-plugin": "^1.3.1",
     "admindo": "workspace:*",
     "admindo-plugin-about": "workspace:*",
-    "admindo-plugin-auth": "workspace:*",
     "admindo-plugin-dofs": "workspace:*",
     "hono": "^4.7.11",
     "vite": "^6.3.5",

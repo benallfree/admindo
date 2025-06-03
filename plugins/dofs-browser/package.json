@@ -1,6 +1,6 @@
 {
   "name": "admindo-plugin-dofs-browser",
-  "version": "0.0.1-rc.0",
+  "version": "0.0.1-rc.1",
   "type": "module",
   "description": "Durable Objects File System GUI plugin for AdminDO dashboard",
   "module": "src/index.js",
