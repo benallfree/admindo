@@ -149,6 +149,163 @@ function attachAdminDOStyles() {
       .plugin-content.active {
         display: block;
       }
+      
+      .dos-section {
+        /* margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e5e7; */
+      }
+      
+      .dos-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+      }
+      
+      .dos-item {
+        margin-bottom: 0.5rem;
+      }
+      
+      .dos-namespace {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #1d1d1f;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      
+      .dos-namespace:hover {
+        background: #f5f5f7;
+      }
+      
+      .dos-instances {
+        margin-left: 1rem;
+        margin-top: 0.25rem;
+      }
+      
+      .dos-instance {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #6e6e73;
+        text-decoration: none;
+        font-size: 0.85rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .dos-instance:hover,
+      .dos-instance.active {
+        background: #007AFF;
+        color: white;
+      }
+      
+      .instance-header {
+        margin-bottom: 2rem;
+      }
+      
+      #instance-title {
+        margin-bottom: 1.5rem;
+      }
+      
+      .plugin-tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid #e5e5e7;
+        padding-bottom: 0.5rem;
+      }
+      
+      .plugin-tab {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: #f5f5f7;
+        border: 1px solid #e5e5e7;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: #6e6e73;
+        font-size: 0.9rem;
+      }
+      
+      .plugin-tab:hover {
+        background: #e5e5e7;
+      }
+      
+      .plugin-tab.active {
+        background: #007AFF;
+        color: white;
+        border-color: #007AFF;
+      }
+      
+      .plugin-tab-icon {
+        font-size: 1.2rem;
+      }
+      
+      .instance-content {
+        margin-top: 2rem;
+      }
+      
+      .dos-loading,
+      .dos-empty {
+        padding: 1rem;
+        text-align: center;
+        color: #6e6e73;
+        font-size: 0.85rem;
+      }
+      
+      .dos-loading {
+        font-style: italic;
+      }
+      
+      .dos-empty {
+        opacity: 0.7;
+      }
+      
+      .global-plugins-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e5e7;
+      }
+      
+      .global-plugins-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+      }
+      
+      .global-plugins-nav {
+        list-style: none;
+      }
+      
+      .global-plugins-nav li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .global-plugins-nav a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #6e6e73;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+      }
+      
+      .global-plugins-nav a:hover,
+      .global-plugins-nav a.active {
+        background: #f5f5f7;
+        color: #1d1d1f;
+      }
     `
     document.head.appendChild(style)
   }
@@ -190,9 +347,23 @@ function getAdminDOTemplate() {
     <div class="admin-container">
         <aside class="admin-sidebar">
             <nav>
+                <!--
                 <ul class="sidebar-nav" id="sidebar-nav">
                     <li><a href="#" class="nav-link active" data-view="dashboard">Dashboard</a></li>
                 </ul>
+                -->
+                <div class="dos-section" id="dos-section">
+                    <h3 class="dos-title">Durable Objects</h3>
+                    <div class="dos-list" id="dos-list">
+                        <!-- DOS and instances will be populated here -->
+                    </div>
+                </div>
+                <div class="global-plugins-section" id="global-plugins-section">
+                    <!-- <h3 class="global-plugins-title">Global Plugins</h3> -->
+                    <ul class="global-plugins-nav" id="global-plugins-nav">
+                        <!-- Global plugins will be populated here -->
+                    </ul>
+                </div>
             </nav>
         </aside>
         <main class="admin-content">
@@ -200,6 +371,17 @@ function getAdminDOTemplate() {
                 <h2>Welcome to AdminDO</h2>
                 <p>A zero-dependency admin dashboard with pluggable architecture.</p>
                 <div class="plugin-grid" id="plugin-grid">
+                </div>
+            </div>
+            <div id="instance-view" class="plugin-content">
+                <div class="instance-header">
+                    <h2 id="instance-title">Instance Details</h2>
+                    <div class="plugin-tabs" id="plugin-tabs">
+                        <!-- Plugin tabs will be populated here -->
+                    </div>
+                </div>
+                <div class="instance-content" id="instance-content">
+                    <!-- Plugin content will be populated here -->
                 </div>
             </div>
             <div id="plugin-views"></div>
@@ -217,6 +399,9 @@ class ViewManager {
    */
   constructor(container) {
     this.container = container
+    this.currentNamespace = null
+    this.currentInstanceId = null
+    this.currentPlugin = null
   }
 
   /**
@@ -225,53 +410,456 @@ class ViewManager {
    * @returns {void}
    */
   switchView(route) {
-    const viewName = this.normalizeRoute(route)
-    this.updateActiveNavigation(viewName)
-    this.updateActiveContent(viewName)
+    const routeInfo = this.parseRoute(route)
+
+    if (routeInfo.type === 'dashboard') {
+      this.showDashboard()
+    } else if (routeInfo.type === 'instance') {
+      this.showInstance(routeInfo.namespace, routeInfo.instanceId, routeInfo.plugin)
+    } else if (routeInfo.type === 'plugin') {
+      this.showPluginView(routeInfo.plugin)
+    }
+
+    this.updateActiveNavigation(routeInfo)
   }
 
   /**
-   * Normalize a route to a view name
-   * @param {string} route - The route to normalize
-   * @returns {string} The normalized view name
+   * Parse a route to extract its components
+   * @param {string} route - The route to parse
+   * @returns {Object} Parsed route information
    */
-  normalizeRoute(route) {
+  parseRoute(route) {
     if (route === '/' || route === '') {
-      return 'dashboard'
+      return { type: 'dashboard' }
     }
-    return route.startsWith('/') ? route.substring(1) : route
+
+    const parts = route.replace(/^\//, '').split('/')
+
+    if (parts.length >= 2) {
+      const namespace = parts[0]
+      const instanceId = parts[1]
+      const plugin = parts[2] || null
+
+      return {
+        type: 'instance',
+        namespace,
+        instanceId,
+        plugin,
+      }
+    } else if (parts.length === 1) {
+      return {
+        type: 'plugin',
+        plugin: parts[0],
+      }
+    }
+
+    return { type: 'dashboard' }
+  }
+
+  /**
+   * Show the dashboard view
+   * @returns {void}
+   */
+  showDashboard() {
+    this.hideAllViews()
+    const dashboardView = this.container.querySelector('#dashboard-view')
+    if (dashboardView) {
+      dashboardView.classList.add('active')
+    }
+    this.currentNamespace = null
+    this.currentInstanceId = null
+    this.currentPlugin = null
+  }
+
+  /**
+   * Show instance view with plugin tabs
+   * @param {string} namespace - The namespace
+   * @param {string} instanceId - The instance ID
+   * @param {string|null} plugin - The active plugin slug
+   * @returns {void}
+   */
+  showInstance(namespace, instanceId, plugin = null) {
+    this.hideAllViews()
+
+    const instanceView = this.container.querySelector('#instance-view')
+    if (instanceView) {
+      instanceView.classList.add('active')
+    }
+
+    this.currentNamespace = namespace
+    this.currentInstanceId = instanceId
+    this.currentPlugin = plugin
+
+    this.updateInstanceTitle(namespace, instanceId)
+    this.renderPluginTabs(plugin)
+
+    if (plugin) {
+      this.showPluginContent(plugin)
+    }
+  }
+
+  /**
+   * Show a standalone plugin view
+   * @param {string} pluginSlug - The plugin slug
+   * @returns {void}
+   */
+  showPluginView(pluginSlug) {
+    this.hideAllViews()
+    const pluginView = this.container.querySelector(`#${pluginSlug}-view`)
+    if (pluginView) {
+      pluginView.classList.add('active')
+    }
+    this.currentNamespace = null
+    this.currentInstanceId = null
+    this.currentPlugin = pluginSlug
+  }
+
+  /**
+   * Hide all views
+   * @returns {void}
+   */
+  hideAllViews() {
+    this.container.querySelectorAll('.plugin-content').forEach((content) => {
+      content.classList.remove('active')
+    })
+  }
+
+  /**
+   * Update instance title
+   * @param {string} namespace - The namespace
+   * @param {string} instanceId - The instance ID
+   * @returns {void}
+   */
+  updateInstanceTitle(namespace, instanceId) {
+    const titleElement = this.container.querySelector('#instance-title')
+    if (titleElement) {
+      titleElement.textContent = `${namespace} - ${instanceId}`
+    }
+  }
+
+  /**
+   * Render plugin tabs for the current instance
+   * @param {string|null} activePlugin - The active plugin slug
+   * @returns {void}
+   */
+  renderPluginTabs(activePlugin = null) {
+    const tabsContainer = this.container.querySelector('#plugin-tabs')
+    if (!tabsContainer) return
+
+    tabsContainer.innerHTML = ''
+
+    // Get plugins from the component
+    const adminComponent = this.container.closest('admin-do')
+    if (!adminComponent || !adminComponent.pluginManager) return
+
+    // Only show instance-scoped plugins as tabs
+    const instancePlugins = Array.from(adminComponent.pluginManager.getInstancePlugins().values())
+
+    for (const plugin of instancePlugins) {
+      const tab = document.createElement('a')
+      tab.className = 'plugin-tab'
+      tab.href = '#'
+      tab.dataset.plugin = plugin.slug
+
+      if (activePlugin === plugin.slug) {
+        tab.classList.add('active')
+      }
+
+      tab.innerHTML = `
+        <span class="plugin-tab-icon">${plugin.icon || '📦'}</span>
+        <span>${plugin.title}</span>
+      `
+
+      tab.addEventListener('click', (e) => {
+        e.preventDefault()
+        adminComponent.router.navigate(`/${this.currentNamespace}/${this.currentInstanceId}/${plugin.slug}`)
+      })
+
+      tabsContainer.appendChild(tab)
+    }
+  }
+
+  /**
+   * Show plugin content in the instance view
+   * @param {string} pluginSlug - The plugin slug to show
+   * @returns {void}
+   */
+  showPluginContent(pluginSlug) {
+    const contentContainer = this.container.querySelector('#instance-content')
+    if (!contentContainer) return
+
+    // Hide existing plugin content
+    contentContainer.querySelectorAll('.plugin-instance-content').forEach((content) => {
+      content.style.display = 'none'
+    })
+
+    // Show or create plugin content for this instance
+    let pluginContent = contentContainer.querySelector(`[data-plugin="${pluginSlug}"]`)
+    if (!pluginContent) {
+      // Create new plugin content container
+      const adminComponent = this.container.closest('admin-do')
+      if (adminComponent && adminComponent.pluginManager) {
+        const plugin = adminComponent.pluginManager.plugins.get(pluginSlug)
+        if (plugin) {
+          pluginContent = document.createElement('div')
+          pluginContent.className = 'plugin-instance-content'
+          pluginContent.dataset.plugin = pluginSlug
+
+          // Create plugin instance with context
+          const pluginInstance = plugin.render()
+          // Pass context if the plugin supports it
+          if (pluginInstance.setContext) {
+            pluginInstance.setContext({
+              namespace: this.currentNamespace,
+              instanceId: this.currentInstanceId,
+            })
+          }
+
+          pluginContent.appendChild(pluginInstance)
+          contentContainer.appendChild(pluginContent)
+        }
+      }
+    }
+
+    if (pluginContent) {
+      pluginContent.style.display = 'block'
+    }
   }
 
   /**
    * Update active navigation link
-   * @param {string} viewName - The view name to activate
+   * @param {Object} routeInfo - The parsed route information
    * @returns {void}
    */
-  updateActiveNavigation(viewName) {
+  updateActiveNavigation(routeInfo) {
+    // Update sidebar navigation
     this.container.querySelectorAll('.nav-link').forEach((link) => {
       link.classList.remove('active')
     })
 
-    const targetNav = this.container.querySelector(`[data-view="${viewName}"]`)
-    if (targetNav) {
-      targetNav.classList.add('active')
+    if (routeInfo.type === 'dashboard') {
+      const dashboardLink = this.container.querySelector('[data-view="dashboard"]')
+      if (dashboardLink) {
+        dashboardLink.classList.add('active')
+      }
+    } else if (routeInfo.type === 'plugin') {
+      const pluginLink = this.container.querySelector(`[data-view="${routeInfo.plugin}"]`)
+      if (pluginLink) {
+        pluginLink.classList.add('active')
+      }
+    }
+
+    // Update DOS instance highlighting
+    const adminComponent = this.container.closest('admin-do')
+    if (adminComponent && adminComponent.dosManager && routeInfo.type === 'instance') {
+      adminComponent.dosManager.updateActiveInstance(routeInfo.namespace, routeInfo.instanceId)
+    } else if (adminComponent && adminComponent.dosManager) {
+      // Clear active instance if not viewing an instance
+      adminComponent.dosManager.updateActiveInstance(null, null)
+    }
+
+    // Update plugin tabs
+    if (routeInfo.type === 'instance' && routeInfo.plugin) {
+      this.container.querySelectorAll('.plugin-tab').forEach((tab) => {
+        tab.classList.remove('active')
+      })
+
+      const activeTab = this.container.querySelector(`[data-plugin="${routeInfo.plugin}"]`)
+      if (activeTab) {
+        activeTab.classList.add('active')
+      }
+    }
+  }
+}
+
+/**
+ * Manages durable object navigation and UI integration
+ */
+class DOSManager {
+  /**
+   * @param {HTMLElement} container - The container element
+   * @param {AdminDORouter} router - The router instance
+   * @param {AdminDOComponent} adminComponent - The main admin component for API access
+   */
+  constructor(container, router, adminComponent) {
+    this.container = container
+    this.router = router
+    this.adminComponent = adminComponent
+    this.dosConfig = {}
+    this.instanceCache = new Map()
+  }
+
+  /**
+   * Initialize DOS sidebar
+   * @returns {Promise<void>}
+   */
+  async init() {
+    await this.loadDOSConfiguration()
+    await this.renderDOSSidebar()
+  }
+
+  /**
+   * Load DOS configuration from API
+   * @returns {Promise<void>}
+   */
+  async loadDOSConfiguration() {
+    try {
+      const response = await fetch(this.adminComponent.getApiUrl('/admindo/dos'), {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('admindo-auth-token')}`,
+        },
+      })
+
+      if (response.ok) {
+        this.dosConfig = await response.json()
+      } else {
+        console.error('Failed to load DOS configuration:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Failed to load DOS configuration:', error)
     }
   }
 
   /**
-   * Update active content view
-   * @param {string} viewName - The view name to show
+   * Render the DOS sidebar with namespaces and instances
+   * @returns {Promise<void>}
+   */
+  async renderDOSSidebar() {
+    const dosList = this.container.querySelector('#dos-list')
+    if (!dosList) return
+
+    // Show loading state
+    dosList.innerHTML = '<div class="dos-loading">Loading...</div>'
+
+    // Check if we have any DOS configurations
+    if (!this.dosConfig || Object.keys(this.dosConfig).length === 0) {
+      dosList.innerHTML = '<div class="dos-empty">No durable objects configured</div>'
+      return
+    }
+
+    dosList.innerHTML = ''
+
+    for (const [namespace, config] of Object.entries(this.dosConfig)) {
+      const dosItem = document.createElement('div')
+      dosItem.className = 'dos-item'
+
+      const namespaceElement = document.createElement('div')
+      namespaceElement.className = 'dos-namespace'
+      namespaceElement.textContent = config.name
+      dosItem.appendChild(namespaceElement)
+
+      const instancesContainer = document.createElement('div')
+      instancesContainer.className = 'dos-instances'
+
+      try {
+        const instances = await this.getInstances(namespace)
+        if (instances.length === 0) {
+          const noInstancesElement = document.createElement('div')
+          noInstancesElement.className = 'dos-instance'
+          noInstancesElement.textContent = 'No instances'
+          noInstancesElement.style.color = '#6e6e73'
+          noInstancesElement.style.fontStyle = 'italic'
+          instancesContainer.appendChild(noInstancesElement)
+        } else {
+          for (const instance of instances) {
+            const instanceElement = document.createElement('a')
+            instanceElement.className = 'dos-instance'
+            instanceElement.href = '#'
+            instanceElement.textContent = instance.name
+            instanceElement.dataset.namespace = namespace
+            instanceElement.dataset.instanceId = instance.slug
+
+            instanceElement.addEventListener('click', (e) => {
+              e.preventDefault()
+              this.router.navigate(`/${namespace}/${instance.slug}`)
+            })
+
+            instancesContainer.appendChild(instanceElement)
+          }
+        }
+      } catch (error) {
+        console.error(`Failed to load instances for ${namespace}:`, error)
+        const errorElement = document.createElement('div')
+        errorElement.className = 'dos-instance'
+        errorElement.textContent = 'Failed to load instances'
+        errorElement.style.color = '#dc3545'
+        instancesContainer.appendChild(errorElement)
+      }
+
+      dosItem.appendChild(instancesContainer)
+      dosList.appendChild(dosItem)
+    }
+  }
+
+  /**
+   * Get instances for a namespace, with caching
+   * @param {string} namespace - The namespace to get instances for
+   * @returns {Promise<Array>} Array of instances
+   */
+  async getInstances(namespace) {
+    if (this.instanceCache.has(namespace)) {
+      return this.instanceCache.get(namespace)
+    }
+
+    try {
+      const response = await fetch(this.adminComponent.getApiUrl(`/admindo/dos/${namespace}/instances`), {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('admindo-auth-token')}`,
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        const instances = data.instances || []
+        this.instanceCache.set(namespace, instances)
+        return instances
+      } else {
+        console.error(`Failed to load instances for ${namespace}:`, response.statusText)
+        return []
+      }
+    } catch (error) {
+      console.error(`Failed to get instances for ${namespace}:`, error)
+      return []
+    }
+  }
+
+  /**
+   * Update active instance in sidebar
+   * @param {string} namespace - The namespace
+   * @param {string} instanceId - The instance ID
    * @returns {void}
    */
-  updateActiveContent(viewName) {
-    this.container.querySelectorAll('.plugin-content').forEach((content) => {
-      content.classList.remove('active')
+  updateActiveInstance(namespace, instanceId) {
+    // Remove active class from all instances
+    this.container.querySelectorAll('.dos-instance').forEach((instance) => {
+      instance.classList.remove('active')
     })
 
-    const targetView = this.container.querySelector(`#${viewName}-view`)
-    if (targetView) {
-      targetView.classList.add('active')
+    // Add active class to selected instance
+    const activeInstance = this.container.querySelector(`[data-namespace="${namespace}"][data-instance-id="${instanceId}"]`)
+    if (activeInstance) {
+      activeInstance.classList.add('active')
     }
+  }
+
+  /**
+   * Get namespace configuration
+   * @param {string} namespace - The namespace
+   * @returns {Object|null} The namespace configuration
+   */
+  getNamespaceConfig(namespace) {
+    return this.dosConfig[namespace] || null
+  }
+
+  /**
+   * Refresh instances for a namespace
+   * @param {string} namespace - The namespace to refresh
+   * @returns {Promise<void>}
+   */
+  async refreshInstances(namespace) {
+    this.instanceCache.delete(namespace)
+    await this.getInstances(namespace)
+    await this.renderDOSSidebar()
   }
 }
 
@@ -386,6 +974,10 @@ class PluginManager {
   constructor(container, router) {
     /** @type {Map<string, Plugin>} */
     this.plugins = new Map()
+    /** @type {Map<string, Plugin>} */
+    this.globalPlugins = new Map()
+    /** @type {Map<string, Plugin>} */
+    this.instancePlugins = new Map()
     this.container = container
     this.router = router
   }
@@ -398,13 +990,25 @@ class PluginManager {
   registerPlugin(plugin) {
     this.plugins.set(plugin.slug, plugin)
 
+    // Determine plugin scope (default to 'instance' for backwards compatibility)
+    const scope = plugin.scope || 'instance'
+
+    if (scope === 'global') {
+      this.globalPlugins.set(plugin.slug, plugin)
+      this.addGlobalPluginToSidebar(plugin)
+      this.addPluginView(plugin)
+    } else {
+      this.instancePlugins.set(plugin.slug, plugin)
+      // Instance plugins don't get added to sidebar or dashboard grid
+      // They only appear as tabs when viewing instances
+    }
+
+    // Always add to dashboard grid for discovery
+    this.addPluginToGrid(plugin)
+
     // Register route for plugin
     const route = `/${plugin.slug}`
     this.router.addRoute(route, plugin)
-
-    this.addPluginToGrid(plugin)
-    this.addPluginToNav(plugin)
-    this.addPluginView(plugin)
   }
 
   /**
@@ -436,18 +1040,18 @@ class PluginManager {
   }
 
   /**
-   * Add plugin link to the sidebar navigation
+   * Add global plugin to the sidebar navigation
    * @param {Plugin} plugin - The plugin configuration
    * @returns {void}
    */
-  addPluginToNav(plugin) {
-    const nav = this.container.querySelector('#sidebar-nav')
-    if (!nav) return
+  addGlobalPluginToSidebar(plugin) {
+    const globalPluginsNav = this.container.querySelector('#global-plugins-nav')
+    if (!globalPluginsNav) return
 
     const li = document.createElement('li')
     const viewName = plugin.slug
     li.innerHTML = `<a href="#" class="nav-link" data-view="${viewName}">${plugin.title}</a>`
-    nav.appendChild(li)
+    globalPluginsNav.appendChild(li)
 
     // Add event listener to new nav item
     const newLink = li.querySelector('.nav-link')
@@ -479,6 +1083,22 @@ class PluginManager {
     view.appendChild(componentInstance)
     pluginViews.appendChild(view)
   }
+
+  /**
+   * Get instance-scoped plugins for tabs
+   * @returns {Map<string, Plugin>} Instance plugins
+   */
+  getInstancePlugins() {
+    return this.instancePlugins
+  }
+
+  /**
+   * Get global plugins
+   * @returns {Map<string, Plugin>} Global plugins
+   */
+  getGlobalPlugins() {
+    return this.globalPlugins
+  }
 }
 
 /**
@@ -508,6 +1128,8 @@ class AdminDOComponent extends HTMLElement {
     this.viewManager = undefined
     /** @type {PluginManager|undefined} */
     this.pluginManager = undefined
+    /** @type {DOSManager|undefined} */
+    this.dosManager = undefined
     /** @type {boolean} */
     this.isAuthenticated = false
     /** @type {Plugin[]} */
@@ -614,6 +1236,12 @@ class AdminDOComponent extends HTMLElement {
     // Initialize managers after rendering
     this.viewManager = new ViewManager(this)
     this.pluginManager = new PluginManager(this, this.router)
+
+    // Initialize DOS manager (it will check if DOS is available via API)
+    this.dosManager = new DOSManager(this, this.router, this)
+    this.dosManager.init().catch((error) => {
+      console.error('Failed to initialize DOS manager:', error)
+    })
 
     // Register any pending plugins that were waiting for authentication
     for (const plugin of this.pendingPlugins) {

@@ -251,6 +251,40 @@ export function admindo(config) {
   // Register AdminDO core auth routes under /api/admindo/auth
   api.route('/api/admindo/auth', createAuthRoutes())
 
+  // Add DOS endpoints under /api/admindo/dos
+  api.get('/api/admindo/dos', async (c) => {
+    const dosData = {}
+
+    // Transform the DOS configuration for the frontend
+    for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
+      dosData[namespace] = {
+        name: dosConfig.name,
+        // We'll just store the namespace here, instances will be fetched separately
+      }
+    }
+
+    return c.json(dosData)
+  })
+
+  // Get instances for a specific DOS namespace
+  api.get('/api/admindo/dos/:namespace/instances', async (c) => {
+    const namespace = c.req.param('namespace')
+    const page = parseInt(c.req.query('page') || '1')
+
+    const dosConfig = config.dos?.[namespace]
+    if (!dosConfig) {
+      return c.json({ error: 'DOS namespace not found' }, 404)
+    }
+
+    try {
+      const instances = await dosConfig.getInstances(page)
+      return c.json({ instances })
+    } catch (error) {
+      console.error(`Failed to get instances for ${namespace}:`, error)
+      return c.json({ error: 'Failed to load instances' }, 500)
+    }
+  })
+
   // Add authentication middleware for all other API routes
   api.use('/api/*', async (c, next) => {
     const path = c.req.path

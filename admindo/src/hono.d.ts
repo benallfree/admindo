@@ -20,6 +20,8 @@ export interface DurableObjectInstance {
 export interface Plugin {
   /** The unique slug identifier for the plugin */
   slug: string
+  /** Plugin scope - 'global' appears in sidebar, 'instance' appears only as tabs when viewing DO instances */
+  scope?: 'global' | 'instance'
   /** Function that creates a Hono app instance for the plugin */
   create: (config: any) => Hono
 }
