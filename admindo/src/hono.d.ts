@@ -24,8 +24,8 @@ export interface Plugin {
   scope: 'global' | 'instance'
   /** Function that creates a Hono app instance for the plugin */
   create: (config: any) => Hono
-  /** Function that checks if the plugin is compatible with the given DO stub */
-  isCompatible: (stub: DurableObjectStub) => Promise<boolean>
+  /** Function that checks if the plugin is compatible with the given DO class */
+  isCompatible: (DOClass: typeof DurableObject) => boolean
 }
 
 /**
@@ -34,8 +34,12 @@ export interface Plugin {
 export interface DurableObjectConfigItem {
   /** The name of the Durable Object */
   name: string
+  /** Reference to the Durable Object class for compatibility checking */
+  classRef: typeof DurableObject
   /** Function to get instances, optionally paginated */
   getInstances: (page?: number) => Promise<DurableObjectInstance[]>
+  /** List of compatible plugin slugs (populated at runtime) */
+  compatiblePlugins?: string[]
 }
 
 /**

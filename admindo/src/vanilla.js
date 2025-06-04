@@ -513,34 +513,46 @@ class ViewManager {
     if (!adminComponent) return
 
     try {
-      // Use the fetch helper which will automatically add the namespace/instanceId headers
-      const response = await window.AdminDO.fetch('/admindo/compat')
+      // Get compatible plugins from the DOS manager
+      const dosManager = adminComponent.dosManager
+      if (!dosManager) return
 
-      if (response.ok) {
-        const data = await response.json()
-        const compatiblePlugins = data.compatiblePlugins || []
+      const namespaceConfig = dosManager.getNamespaceConfig(namespace)
+      if (!namespaceConfig) {
+        console.error('Namespace configuration not found:', namespace)
+        this.renderPluginTabs(activePlugin)
+        return
+      }
 
-        // Update tabs with compatible plugins
-        this.renderCompatiblePluginTabs(compatiblePlugins, activePlugin)
+      const compatiblePluginSlugs = namespaceConfig.compatiblePlugins || []
 
-        // If no active plugin specified, auto-select the first compatible one
-        if (!activePlugin && compatiblePlugins.length > 0) {
-          const firstPlugin = compatiblePlugins[0]
-          adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, false)
-          return
-        }
-
-        // If current plugin is not compatible, redirect to first compatible one
-        if (activePlugin && !compatiblePlugins.find((p) => p.slug === activePlugin)) {
-          if (compatiblePlugins.length > 0) {
-            const firstPlugin = compatiblePlugins[0]
-            adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, true)
+      // Convert slugs to plugin objects with metadata from plugin manager
+      const compatiblePlugins = []
+      if (adminComponent.pluginManager) {
+        for (const slug of compatiblePluginSlugs) {
+          const plugin = adminComponent.pluginManager.plugins.get(slug)
+          if (plugin) {
+            compatiblePlugins.push(plugin)
           }
         }
-      } else {
-        console.error('Failed to load compatible plugins:', response.statusText)
-        // Fallback to showing all instance plugins
-        this.renderPluginTabs(activePlugin)
+      }
+
+      // Update tabs with compatible plugins
+      this.renderCompatiblePluginTabs(compatiblePlugins, activePlugin)
+
+      // If no active plugin specified, auto-select the first compatible one
+      if (!activePlugin && compatiblePlugins.length > 0) {
+        const firstPlugin = compatiblePlugins[0]
+        adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, false)
+        return
+      }
+
+      // If current plugin is not compatible, redirect to first compatible one
+      if (activePlugin && !compatiblePlugins.find((p) => p.slug === activePlugin)) {
+        if (compatiblePlugins.length > 0) {
+          const firstPlugin = compatiblePlugins[0]
+          adminComponent.router.navigate(`/${namespace}/${instanceId}/${firstPlugin.slug}`, true)
+        }
       }
     } catch (error) {
       console.error('Failed to load compatible plugins:', error)
@@ -1309,22 +1321,25 @@ class AdminDOComponent extends HTMLElement {
     this.viewManager = new ViewManager(this)
     this.pluginManager = new PluginManager(this, this.router)
 
-    // Initialize DOS manager (it will check if DOS is available via API)
+    // Initialize DOS manager and wait for it to complete before starting router
     this.dosManager = new DOSManager(this, this.router, this)
-    this.dosManager.init().catch((error) => {
-      console.error('Failed to initialize DOS manager:', error)
-    })
+    this.dosManager
+      .init()
+      .then(() => {
+        // Initialize router only after DOS manager is ready
+        this.router.init()
+      })
+      .catch((error) => {
+        console.error('Failed to initialize DOS manager:', error)
+        // Still initialize router even if DOS manager fails
+        this.router.init()
+      })
 
     // Register any pending plugins that were waiting for authentication
     for (const plugin of this.pendingPlugins) {
       this.pluginManager.registerPlugin(plugin)
     }
     this.pendingPlugins = []
-
-    // Initialize router after rendering
-    setTimeout(() => {
-      this.router.init()
-    }, 0)
   }
 
   /**

@@ -14,6 +14,10 @@
     "admindo": "workspace:*",
     "admindo-plugin-about": "workspace:*",
     "admindo-plugin-dofs": "workspace:*",
+    "admindo-plugin-dterm": "workspace:*",
+    "admindo-plugin-dorm": "workspace:*",
+    "admindo-plugin-dofs-browser": "workspace:*",
+    "admindo-plugin-stats": "workspace:*",
     "hono": "^4.7.11",
     "vite": "^6.3.5",
     "vite-plugin-unpkg": "^0.0.4"

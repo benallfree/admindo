@@ -1,11 +1,9 @@
 {
-  "name": "admindo-plugin-dterm",
+  "name": "admindo-plugin-stats",
   "version": "0.0.3",
   "type": "module",
-  "description": "Durable Objects File System terminal plugin for AdminDO dashboard",
-  "module": "src/index.js",
+  "description": "Statistics and analytics plugin for AdminDO dashboard",
   "exports": {
-    ".": "./src/index.js",
     "./hono": "./src/hono.js"
   },
   "scripts": {
@@ -14,10 +12,9 @@
   "keywords": [
     "admindo",
     "plugin",
-    "dterm",
-    "terminal",
-    "filesystem",
-    "web-components",
+    "stats",
+    "analytics",
+    "durable-objects",
     "esm"
   ],
   "authors": [

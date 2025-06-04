@@ -249,6 +249,28 @@ function authMiddleware(c, next) {
 export function admindo(config) {
   const api = new Hono()
 
+  // Calculate plugin compatibility for each DOS class at startup
+  for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
+    if (dosConfig.classRef) {
+      const compatiblePlugins = []
+
+      // Check each instance-scoped plugin's compatibility with this DO class
+      for (const plugin of config.plugins.filter((p) => p.scope === 'instance')) {
+        try {
+          const isCompatible = plugin.isCompatible(dosConfig.classRef)
+          if (isCompatible) {
+            compatiblePlugins.push(plugin.slug)
+          }
+        } catch (error) {
+          console.error(`Error checking compatibility for plugin ${plugin.slug} with ${namespace}:`, error)
+        }
+      }
+
+      // Store compatible plugin slugs in the DOS config
+      dosConfig.compatiblePlugins = compatiblePlugins
+    }
+  }
+
   // Add authentication middleware for all other API routes
   api.use('/api/*', async (c, next) => {
     const path = c.req.path
@@ -313,7 +335,7 @@ export function admindo(config) {
     for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
       dosData[namespace] = {
         name: dosConfig.name,
-        // We'll just store the namespace here, instances will be fetched separately
+        compatiblePlugins: dosConfig.compatiblePlugins || [],
       }
     }
 
@@ -339,38 +361,27 @@ export function admindo(config) {
     }
   })
 
-  // Check plugin compatibility with a specific DO instance
-  api.get('/api/admindo/compat', async (c) => {
-    try {
-      const compatiblePlugins = {}
-
-      const doStub = c.get('stub')
-
-      // Check each plugin's compatibility
-      for (const plugin of config.plugins.filter((plugin) => plugin.scope === 'instance')) {
-        try {
-          compatiblePlugins[plugin.slug] = await plugin.isCompatible(doStub)
-        } catch (error) {
-          console.error(`Error checking compatibility for plugin ${plugin.slug}:`, error)
-          compatiblePlugins[plugin.slug] = false
-        }
-      }
-
-      return c.json(compatiblePlugins)
-    } catch (error) {
-      console.error(`Failed to check compatibility for ${namespace}/${instanceId}:`, error)
-      return c.json({ error: 'Failed to check plugin compatibility' }, 500)
-    }
-  })
-
   // Register plugin routes under /api/ prefix (now protected by middleware)
   for (const plugin of config.plugins) {
     api.use(`/api/${plugin.slug}/*`, async (c, next) => {
-      const stub = c.get('stub')
-      const isCompatible = await plugin.isCompatible(stub)
+      const namespace = c.get('namespace')
+
+      // Skip compatibility check if no namespace context (shouldn't happen in practice)
+      if (!namespace) {
+        return next()
+      }
+
+      // Check if this plugin is compatible with the current namespace's DO class
+      const dosConfig = config.dos?.[namespace]
+      if (!dosConfig || !dosConfig.compatiblePlugins) {
+        return c.json({ error: 'Access denied: DOS namespace not found or not configured' }, 403)
+      }
+
+      const isCompatible = dosConfig.compatiblePlugins.includes(plugin.slug)
       if (!isCompatible) {
         return c.json({ error: 'Access denied: Plugin not compatible with this instance' }, 403)
       }
+
       return next()
     })
 

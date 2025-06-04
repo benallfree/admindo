@@ -7,7 +7,8 @@
     ".": {
       "import": "./src/server.js",
       "default": "./src/server.js"
-    }
+    },
+    "./hono": "./src/hono.js"
   },
   "main": "./src/server.js",
   "scripts": {
@@ -36,7 +37,8 @@
     "CHANGELOG.md"
   ],
   "peerDependencies": {
-    "dofs": "^0.0.1"
+    "dofs": "^0.0.1",
+    "hono": "^4.0.0"
   },
   "devDependencies": {
     "admindo": "workspace:*"

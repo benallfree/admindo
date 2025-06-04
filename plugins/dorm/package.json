@@ -5,7 +5,8 @@
   "description": "Durable Objects ORM plugin for AdminDO dashboard",
   "module": "src/index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./hono": "./src/hono.js"
   },
   "scripts": {
     "build": "echo 'No build step needed for pure web components'"
@@ -28,5 +29,8 @@
   "license": "MIT",
   "files": [
     "src"
-  ]
+  ],
+  "peerDependencies": {
+    "hono": "^4.0.0"
+  }
 }
