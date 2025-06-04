@@ -247,6 +247,7 @@ function authMiddleware(c, next) {
  * @returns {Hono} Hono app instance configured with AdminDO routes and middleware
  */
 export function admindo(config) {
+  const basePath = config.basePath || '/admin'
   const api = new Hono()
 
   // Calculate plugin compatibility for each DOS class at startup
@@ -276,7 +277,7 @@ export function admindo(config) {
     const path = c.req.path
 
     // Skip auth middleware for AdminDO auth routes
-    if (path.startsWith('/api/admindo/auth/')) {
+    if (path.startsWith(`${basePath}/api/admindo/auth/`)) {
       return next()
     }
 
@@ -404,7 +405,7 @@ export function admindo(config) {
       <title>AdminDO Dashboard</title>
     </head>
     <body>
-      <admin-do root="/admin"${demoAttr} />
+      <admin-do root="${basePath}"${demoAttr} />
       <script type="module">
         import 'https://unpkg.com/admindo'
         import 'https://unpkg.com/admindo-plugin-about'

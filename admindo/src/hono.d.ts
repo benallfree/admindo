@@ -51,6 +51,8 @@ export type DurableObjectConfig = Record<string, DurableObjectConfigItem>
  * Main AdminDO configuration object
  */
 export interface AdminDOConfig {
+  /** The base path for the AdminDO API */
+  basePath: string
   /** Whether to enable demo mode */
   demo: boolean
   /** Array of Durable Object configurations that will be registered with AdminDO */

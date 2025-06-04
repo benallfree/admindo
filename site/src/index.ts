@@ -41,6 +41,7 @@ const app = new Hono<{ Bindings: Env }>()
 app.route(
   '/admin',
   admindo({
+    basePath: '/admin',
     demo: true,
     dos: {
       MY_DURABLE_OBJECT: {
