@@ -1,5 +1,16 @@
 # admindo
 
+## 0.0.3
+
+### Patch Changes
+
+- 26581dd: Add global/local plugin scope support
+- c324adb: Add DO sidebar nav
+- db154d1: Add version specifier to plugin meta
+- 6260ba7: Add base path support
+- 16276fa: Add hono.js support to all plugins
+- 16276fa: add hono.js support and compatibility to plugins
+
 ## 0.0.2
 
 ### Patch Changes

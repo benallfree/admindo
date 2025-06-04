@@ -1,6 +1,6 @@
 {
   "name": "admindo-plugin-dorm",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "Durable Objects ORM plugin for AdminDO dashboard",
   "module": "src/index.js",
