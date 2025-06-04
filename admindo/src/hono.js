@@ -49,6 +49,52 @@ class SimpleAuth {
 }
 
 /**
+ * Symbol used to identify AdminDO instances on Durable Objects
+ */
+export const ADMIN_DO = Symbol('AdminDO')
+
+/**
+ * AdminDO class that provides plugin API access for Durable Objects
+ */
+export class AdminDO {
+  /**
+   * @param {DurableObjectState} ctx - The Durable Object state
+   * @param {any} env - Environment bindings
+   */
+  constructor(ctx, env) {
+    this.ctx = ctx
+    this.env = env
+  }
+
+  /**
+   * Execute SQL query against the Durable Object's storage
+   * @param {string} query - SQL query to execute
+   * @param {...any} bindings - Query parameters
+   * @returns {any} Query result
+   */
+  execSql(query, ...bindings) {
+    this.ctx.storage.sql.exec(query, ...bindings)
+  }
+
+  /**
+   * Get the current SQL storage size in bytes
+   * @returns {number} Storage size in bytes
+   */
+  sqlStorageSize() {
+    return this.ctx.storage.sql.databaseSize()
+  }
+
+  /**
+   * Check if an object has AdminDO functionality
+   * @param {any} obj - Object to check
+   * @returns {boolean} True if object has AdminDO functionality
+   */
+  static hasAdminDO(obj) {
+    return obj && typeof obj === 'object' && ADMIN_DO in obj
+  }
+}
+
+/**
  * Create AdminDO core auth routes
  * @returns {Hono} Hono app instance with auth routes
  */
@@ -423,16 +469,22 @@ export function admindo(config) {
 
 // Export for ES modules (if using module system)
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { admindo }
+  module.exports = { admindo, ADMIN_DO, AdminDO }
   module.exports.admindo = admindo
+  module.exports.ADMIN_DO = ADMIN_DO
+  module.exports.AdminDO = AdminDO
 }
 
 // Export for ES6 modules (if using import/export)
 if (typeof window !== 'undefined') {
   window.admindo = admindo
+  window.ADMIN_DO = ADMIN_DO
+  window.AdminDO = AdminDO
 }
 
 // Make available globally
 if (typeof globalThis !== 'undefined') {
   globalThis.admindo = admindo
+  globalThis.ADMIN_DO = ADMIN_DO
+  globalThis.AdminDO = AdminDO
 }

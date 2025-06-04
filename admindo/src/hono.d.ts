@@ -65,3 +65,31 @@ export interface AdminDOConfig {
  * Create AdminDO instance integrated with Hono
  */
 export declare function admindo(config: AdminDOConfig): Hono
+
+/**
+ * Symbol used to identify AdminDO instances on Durable Objects
+ */
+export declare const ADMIN_DO: unique symbol
+
+/**
+ * Interface for objects that expose AdminDO functionality
+ */
+export interface IAdminDO {
+  [ADMIN_DO]: AdminDO
+}
+
+/**
+ * AdminDO class that provides plugin API access for Durable Objects
+ */
+export declare class AdminDO {
+  constructor(ctx: DurableObjectState, env: any)
+
+  /** Execute SQL query against the Durable Object's storage */
+  execSql(query: string, ...bindings: any[]): any
+
+  /** Get the current SQL storage size in bytes */
+  sqlStorageSize(): number
+
+  /** Check if this DO has AdminDO functionality */
+  static hasAdminDO(obj: any): obj is IAdminDO
+}
