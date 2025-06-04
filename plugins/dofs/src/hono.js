@@ -1,5 +1,17 @@
-import { Hono } from 'hono'
+import { Fs, dofs as honoDofs } from 'dofs/hono'
 import pkg from '../package.json' with { type: 'json' }
+
+export const withDofs = (cls, options = {}) => {
+  return class extends cls {
+    constructor(ctx, env) {
+      super(ctx, env)
+      this.fs = new Fs(ctx, env, options)
+    }
+    getFs() {
+      return this.fs
+    }
+  }
+}
 
 /**
  * DOFS Plugin for AdminDO
@@ -7,13 +19,7 @@ import pkg from '../package.json' with { type: 'json' }
  */
 
 function create(config) {
-  const app = new Hono()
-
-  app.get('*', (c) => {
-    return c.text('not implemented')
-  })
-
-  return app
+  return honoDofs()
 }
 
 function isCompatible(DOClass) {

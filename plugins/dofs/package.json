@@ -4,13 +4,8 @@
   "type": "module",
   "description": "Durable Objects File System API plugin for AdminDO dashboard",
   "exports": {
-    ".": {
-      "import": "./src/server.js",
-      "default": "./src/server.js"
-    },
     "./hono": "./src/hono.js"
   },
-  "main": "./src/server.js",
   "scripts": {
     "test": "echo \"No tests specified\" && exit 0"
   },
