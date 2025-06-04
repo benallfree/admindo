@@ -1,40 +1,20 @@
 import about from 'admindo-plugin-about/hono'
 import dofsBrowser from 'admindo-plugin-dofs-browser/hono'
-import dofs from 'admindo-plugin-dofs/hono'
+import dofs, { withDofs } from 'admindo-plugin-dofs/hono'
 import dorm from 'admindo-plugin-dorm/hono'
 import dterm from 'admindo-plugin-dterm/hono'
 import stats from 'admindo-plugin-stats/hono'
-import { admindo,withAdminDO } from 'admindo/hono'
+import { admindo, withAdminDO } from 'admindo/hono'
 import { DurableObject } from 'cloudflare:workers'
-import { Fs } from 'dofs'
 import { Hono } from 'hono'
 
+export class MyDurableObject extends withAdminDO(
+  withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })
+) {}
 
-export class MyDurableObject extends withAdminDO(DurableObject<Env>) {
-  private fs: Fs
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env)
-    this.fs = new Fs(ctx, env, { chunkSize: 4 * 1024 })
-  }
-
-  public getFs() {
-    return this.fs
-  }
-}
-
-export class MyDurableObject2 extends withAdminDO(DurableObject<Env>) {
-  private fs: Fs
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env)
-    this.fs = new Fs(ctx, env, { chunkSize: 4 * 1024 })
-  }
-
-  public getFs() {
-    return this.fs
-  }
-}
+export class MyDurableObject2 extends withAdminDO(
+  withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })
+) {}
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -66,6 +46,7 @@ app.route(
         },
       },
     },
+    // @ts-expect-error
     plugins: [dofs, about, stats, dorm, dterm, dofsBrowser],
   })
 )
