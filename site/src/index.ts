@@ -4,12 +4,13 @@ import dofs from 'admindo-plugin-dofs/hono'
 import dorm from 'admindo-plugin-dorm/hono'
 import dterm from 'admindo-plugin-dterm/hono'
 import stats from 'admindo-plugin-stats/hono'
-import { admindo } from 'admindo/hono'
+import { admindo,withAdminDO } from 'admindo/hono'
 import { DurableObject } from 'cloudflare:workers'
 import { Fs } from 'dofs'
 import { Hono } from 'hono'
 
-export class MyDurableObject extends DurableObject<Env> {
+
+export class MyDurableObject extends withAdminDO(DurableObject<Env>) {
   private fs: Fs
 
   constructor(ctx: DurableObjectState, env: Env) {
@@ -22,7 +23,7 @@ export class MyDurableObject extends DurableObject<Env> {
   }
 }
 
-export class MyDurableObject2 extends DurableObject<Env> {
+export class MyDurableObject2 extends withAdminDO(DurableObject<Env>) {
   private fs: Fs
 
   constructor(ctx: DurableObjectState, env: Env) {

@@ -93,3 +93,5 @@ export declare class AdminDO {
   /** Check if this DO has AdminDO functionality */
   static hasAdminDO(obj: any): obj is IAdminDO
 }
+
+export declare function withAdminDO(cls: any): any

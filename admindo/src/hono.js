@@ -89,8 +89,21 @@ export class AdminDO {
    * @param {any} obj - Object to check
    * @returns {boolean} True if object has AdminDO functionality
    */
-  static hasAdminDO(obj) {
-    return obj && typeof obj === 'object' && ADMIN_DO in obj
+  static hasAdminDO(classRef) {
+    return  'getAdminDO' in classRef?.prototype
+  }
+}
+
+export const withAdminDO = (cls) => {
+  return class extends cls {
+    constructor(ctx, env) {
+      super(ctx, env)
+      this[ADMIN_DO] = new AdminDO(ctx, env)
+    }
+
+    getAdminDO() {
+      return this[ADMIN_DO]
+    }
   }
 }
 
@@ -380,9 +393,13 @@ export function admindo(config) {
 
     // Transform the DOS configuration for the frontend
     for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
-      dosData[namespace] = {
-        name: dosConfig.name,
-        compatiblePlugins: dosConfig.compatiblePlugins || [],
+      // Check if the Durable Object class has AdminDO functionality
+      // This could be indicated by having the ADMIN_DO symbol on the prototype or constructor
+      if (AdminDO.hasAdminDO(dosConfig.classRef)) {
+        dosData[namespace] = {
+          name: dosConfig.name,
+          compatiblePlugins: dosConfig.compatiblePlugins || [],
+        }
       }
     }
 
