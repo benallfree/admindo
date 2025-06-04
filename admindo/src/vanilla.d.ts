@@ -44,6 +44,8 @@ export interface AdminDOAPI {
   create: (targetElement: string | Element) => AdminDOComponent | null
   /** Register a plugin globally */
   registerPlugin: (pluginConfig: Plugin) => boolean
+  /** Get all registered plugins */
+  getAllPlugins: () => Plugin[]
   /** Fetch helper with automatic root prefix and auth */
   fetch: (path: string, options?: RequestInit) => Promise<Response>
 }

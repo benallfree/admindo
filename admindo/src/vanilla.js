@@ -1093,6 +1093,16 @@ class PluginManager {
     // Register route for plugin
     const route = `/${plugin.slug}`
     this.router.addRoute(route, plugin)
+
+    // Dispatch plugin registered event
+    const adminComponent = this.container.closest('admin-do')
+    if (adminComponent) {
+      adminComponent.dispatchEvent(
+        new CustomEvent('plugin-registered', {
+          detail: { plugin, totalCount: this.plugins.size },
+        })
+      )
+    }
   }
 
   /**
@@ -1702,6 +1712,26 @@ window.AdminDO = {
       console.warn('AdminDO: Main component not found. Plugin will be registered when component is available.')
       return false
     }
+  },
+
+  /**
+   * Get all registered plugins
+   * @returns {Plugin[]} Array of all registered plugins
+   */
+  getAllPlugins() {
+    const adminDoElement = document.querySelector('admin-do')
+    if (adminDoElement && adminDoElement.pluginManager && adminDoElement.pluginManager.plugins) {
+      const pluginsMap = adminDoElement.pluginManager.plugins
+
+      // Convert Map to array more explicitly
+      const pluginsArray = []
+      for (const [key, plugin] of pluginsMap) {
+        pluginsArray.push(plugin)
+      }
+
+      return pluginsArray
+    }
+    return []
   },
 
   /**
