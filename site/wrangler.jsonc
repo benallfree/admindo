@@ -12,6 +12,10 @@
       "new_sqlite_classes": ["MyDurableObject"],
       "tag": "v1",
     },
+    {
+      "new_sqlite_classes": ["MyDurableObject2"],
+      "tag": "v2",
+    },
   ],
   "durable_objects": {
     "bindings": [
