@@ -12,6 +12,8 @@ export interface Plugin {
   description: string
   /** The unique slug identifier for the plugin (used for routing and component naming) */
   slug: string
+  /** The version of the plugin */
+  version: string
   /** Optional icon for the plugin (emoji or HTML) */
   icon?: string
   /** Optional color for the plugin icon background */
