@@ -19,7 +19,7 @@
     "plugins": [
       "prettier-plugin-organize-imports"
     ],
-    "printWidth": 140,
+    "printWidth": 80,
     "singleQuote": true,
     "semi": false,
     "trailingComma": "es5",
