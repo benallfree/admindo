@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import pkg from '../package.json' with { type: 'json' }
 
 /**
  * DORM Plugin for AdminDO
@@ -21,7 +22,7 @@ function isCompatible(DOClass) {
 }
 
 export const plugin = {
-  slug: 'dorm',
+  slug: pkg.name,
   scope: 'instance',
   create,
   isCompatible,

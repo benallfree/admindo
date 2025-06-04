@@ -1,4 +1,5 @@
 import { dofs as honoDofs } from 'dofs/hono'
+import pkg from '../package.json' with { type: 'json' }
 
 function createDofsApp(cfg) {
   // Note: This assumes dofs/hono is available in the environment
@@ -12,6 +13,6 @@ function createDofsApp(cfg) {
  * @type {import('admindo/hono').Plugin}
  */
 export const dofs = {
-  slug: 'dofs',
+  slug: pkg.name,
   create: createDofsApp,
 }

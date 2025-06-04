@@ -32,5 +32,8 @@
   ],
   "peerDependencies": {
     "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "admindo": "workspace:*"
   }
 }

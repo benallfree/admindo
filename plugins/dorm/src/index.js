@@ -1,3 +1,4 @@
+import pkg from '../package.json' with { type: 'json' }
 /**
  * AdminDO DORM Plugin
  * A web component plugin that provides a Durable Objects ORM interface
@@ -316,10 +317,10 @@ customElements.define('admindo-dorm', DormComponent)
 
 // Plugin configuration
 const dormPlugin = {
-  slug: 'dorm',
+  slug: pkg.name,
   title: 'ORM',
-  description: 'Durable Objects ORM',
-  version: '0.0.1',
+  description: pkg.description,
+  version: pkg.version,
   icon: '🗃️',
   color: '#5856D6',
   render: () => document.createElement('admindo-dorm'),

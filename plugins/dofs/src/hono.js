@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import pkg from '../package.json' with { type: 'json' }
 
 /**
  * DOFS Plugin for AdminDO
@@ -22,7 +23,7 @@ function isCompatible(DOClass) {
 }
 
 export const plugin = {
-  slug: 'dofs',
+  slug: pkg.name,
   scope: 'instance',
   create,
   isCompatible,

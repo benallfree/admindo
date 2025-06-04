@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import pkg from '../package.json' with { type: 'json' }
 
 /**
  * Stats Plugin for AdminDO
@@ -22,7 +23,7 @@ function isCompatible(DOClass) {
 }
 
 export const plugin = {
-  slug: 'stats',
+  slug: pkg.name,
   scope: 'global',
   create,
   isCompatible,

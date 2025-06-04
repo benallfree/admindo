@@ -1,3 +1,4 @@
+import pkg from '../package.json' with { type: 'json' }
 /**
  * AdminDO DOFS Browser Plugin
  * A web component plugin that provides a Durable Objects File System GUI
@@ -186,10 +187,10 @@ customElements.define('admindo-dofs-browser', DofsBrowserComponent)
 
 // Plugin configuration
 const dofsBrowserPlugin = {
-  slug: 'dofs-browser',
+  slug: pkg.name,
   title: 'File Browser',
-  description: 'Durable Objects File System GUI',
-  version: '0.0.1',
+  description: pkg.description,
+  version: pkg.version,
   icon: '📁',
   color: '#FF9500',
   render: () => document.createElement('admindo-dofs-browser'),

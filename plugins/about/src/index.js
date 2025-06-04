@@ -1,3 +1,4 @@
+import pkg from '../package.json' with { type: 'json' }
 /**
  * AdminDO About Plugin
  * A web component plugin that displays about information
@@ -165,11 +166,12 @@ class AboutComponent extends HTMLElement {
 customElements.define('admindo-about', AboutComponent)
 
 // Plugin configuration
+/** @type {import('admindo').Plugin} */
 const aboutPlugin = {
-  slug: 'about',
+  slug: pkg.name,
+  version: pkg.version,
+  description: pkg.description,
   title: 'About',
-  description: 'About AdminDO',
-  version: '0.0.1',
   scope: 'global',
   icon: '👥',
   color: '#34C759',
@@ -178,3 +180,5 @@ const aboutPlugin = {
 
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(aboutPlugin)
+
+console.log('aboutPlugin', aboutPlugin)

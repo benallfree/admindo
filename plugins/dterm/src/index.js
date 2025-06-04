@@ -1,3 +1,4 @@
+import pkg from '../package.json' with { type: 'json' }
 /**
  * AdminDO DTerm Plugin
  * A web component plugin that provides a Durable Objects File System terminal
@@ -208,10 +209,10 @@ customElements.define('admindo-dterm', DtermComponent)
  * @type {import('admindo').Plugin}
  */
 const dtermPlugin = {
-  slug: 'dterm',
+  slug: pkg.name,
   title: 'Terminal',
-  description: 'Durable Objects File System terminal',
-  version: '0.0.1',
+  description: pkg.description,
+  version: pkg.version,
   icon: '💻',
   color: '#00FF00',
   render: () => document.createElement('admindo-dterm'),
