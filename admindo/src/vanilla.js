@@ -880,41 +880,24 @@ class ViewManager {
     const contentContainer = this.container.querySelector('#instance-content')
     if (!contentContainer) return
 
-    // Hide existing plugin content
-    contentContainer.querySelectorAll('.plugin-instance-content').forEach((content) => {
-      content.style.display = 'none'
-    })
+    // Remove all existing plugin content
+    contentContainer.innerHTML = ''
 
-    // Show or create plugin content for this instance
-    let pluginContent = contentContainer.querySelector(`[data-plugin="${pluginSlug}"]`)
-    if (!pluginContent) {
-      // Create new plugin content container
-      const adminComponent = this.container.closest('admin-do')
-      if (adminComponent && adminComponent.pluginManager) {
-        const plugin = adminComponent.pluginManager.plugins.get(pluginSlug)
-        if (plugin) {
-          pluginContent = document.createElement('div')
-          pluginContent.className = 'plugin-instance-content'
-          pluginContent.dataset.plugin = pluginSlug
+    // Create new plugin content container
+    const adminComponent = this.container.closest('admin-do')
+    if (adminComponent && adminComponent.pluginManager) {
+      const plugin = adminComponent.pluginManager.plugins.get(pluginSlug)
+      if (plugin) {
+        const pluginContent = document.createElement('div')
+        pluginContent.className = 'plugin-instance-content'
+        pluginContent.dataset.plugin = pluginSlug
 
-          // Create plugin instance with context
-          const pluginInstance = plugin.render()
-          // Pass context if the plugin supports it
-          if (pluginInstance.setContext) {
-            pluginInstance.setContext({
-              namespace: this.currentNamespace,
-              instanceId: this.currentInstanceId,
-            })
-          }
+        // Create fresh plugin instance with context
+        const pluginInstance = plugin.render()
 
-          pluginContent.appendChild(pluginInstance)
-          contentContainer.appendChild(pluginContent)
-        }
+        pluginContent.appendChild(pluginInstance)
+        contentContainer.appendChild(pluginContent)
       }
-    }
-
-    if (pluginContent) {
-      pluginContent.style.display = 'block'
     }
   }
 
