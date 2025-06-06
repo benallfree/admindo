@@ -4,7 +4,8 @@
   "type": "module",
   "description": "Statistics and analytics plugin for AdminDO dashboard",
   "exports": {
-    "./hono": "./src/hono.js"
+    "./hono": "./src/hono.js",
+    ".": "./src/index.js"
   },
   "scripts": {
     "build": "echo 'No build step needed for pure web components'"

@@ -9,9 +9,20 @@ import pkg from '../package.json' with { type: 'json' }
 function create(config) {
   const app = new Hono()
 
-  app.get('*', (c) => {
-    const stats = c.get('stub').getStats()
-    return c.json(stats)
+  app.get('*', async (c) => {
+    const stats = c.get('stub').getAdminDO()
+    const sqlStorageSize = await stats.sqlStorageSize()
+    return c.json([
+      {
+        name: 'SQL Storage Size',
+        type: 'progress',
+        value: sqlStorageSize * 100000,
+        max: 10 * 1024 * 1024 * 1024, // 10GB in bytes
+        color: 'blue',
+        icon: '💾',
+        description: 'The size of the SQL database in bytes',
+      },
+    ])
   })
 
   return app
@@ -19,12 +30,12 @@ function create(config) {
 
 function isCompatible(DOClass) {
   // Stats plugin is compatible with all Durable Objects
-  return !!DOClass.prototype.getStats
+  return !!DOClass.prototype.getAdminDO
 }
 
 export const plugin = {
   slug: pkg.name,
-  scope: 'global',
+  scope: 'instance',
   create,
   isCompatible,
 }
