@@ -520,5 +520,3 @@ export function admindo(config) {
 
   return app
 }
-
-export { admindo, AdminDO, withAdminDO }
