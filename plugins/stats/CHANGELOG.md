@@ -1,5 +1,11 @@
 # admindo-plugin-stats
 
+## 0.0.5
+
+### Patch Changes
+
+- adc7ec3: Frontend
+
 ## 0.0.4
 
 ### Patch Changes

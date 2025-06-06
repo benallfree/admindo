@@ -1,5 +1,12 @@
 # admindo-plugin-about
 
+## 0.0.5
+
+### Patch Changes
+
+- 766e770: update custom element registration to use pkg.name for consistency across plugins
+- deab471: Add plugin listing to About plugin
+
 ## 0.0.4
 
 ### Patch Changes

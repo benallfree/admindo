@@ -1,6 +1,6 @@
 {
   "name": "admindo-plugin-dofs",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "type": "module",
   "description": "Durable Objects File System API plugin for AdminDO dashboard",
   "exports": {

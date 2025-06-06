@@ -1,5 +1,11 @@
 # admindo-plugin-dofs-browser
 
+## 0.0.5
+
+### Patch Changes
+
+- 766e770: update custom element registration to use pkg.name for consistency across plugins
+
 ## 0.0.4
 
 ### Patch Changes

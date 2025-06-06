@@ -1,5 +1,15 @@
 # admindo-plugin-dofs
 
+## 0.1.0
+
+### Minor Changes
+
+- 5546006: remove unused Fs import and simplify withDofs function
+
+### Patch Changes
+
+- 08d8456: streamline DOFS plugin structure
+
 ## 0.0.4
 
 ### Patch Changes

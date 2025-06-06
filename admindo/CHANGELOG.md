@@ -1,5 +1,18 @@
 # admindo
 
+## 0.0.4
+
+### Patch Changes
+
+- 133f24a: fix: extend AdminDO class to inherit from RpcTarget and update sqlStorageSize method
+- deab471: Add plugin listing to About plugin
+- cee9170: Add theme support
+- 80edbb4: implement AdminDO class
+- 7656044: update admindo core to use full secret in JWT signature
+- 4f26bf3: add withAdminDO functio
+- 211dff4: fix: disallow API calls if durable object cannot be resolved
+- 788baef: enhance HTML template to dynamically import plugins for AdminDO dashboard
+
 ## 0.0.3
 
 ### Patch Changes
