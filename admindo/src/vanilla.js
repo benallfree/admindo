@@ -7,15 +7,8 @@
 import pkg from '../package.json' with { type: 'json' }
 const { version } = pkg
 
-/**
- * Attaches AdminDO styles to the document head
- * @returns {void}
- */
-function attachAdminDOStyles() {
-  if (!document.getElementById('admindo-styles')) {
-    const style = document.createElement('style')
-    style.id = 'admindo-styles'
-    style.textContent = `
+// AdminDO CSS styles
+const ADMINDO_STYLES = `
       * {
         margin: 0;
         padding: 0;
@@ -308,6 +301,16 @@ function attachAdminDOStyles() {
         color: #1d1d1f;
       }
     `
+
+/**
+ * Attaches AdminDO styles to the document head
+ * @returns {void}
+ */
+function attachAdminDOStyles() {
+  if (!document.getElementById('admindo-styles')) {
+    const style = document.createElement('style')
+    style.id = 'admindo-styles'
+    style.textContent = ADMINDO_STYLES
     document.head.appendChild(style)
   }
 }
