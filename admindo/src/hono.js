@@ -15,7 +15,7 @@ class SimpleAuth {
   static generateToken(payload, secret) {
     const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
     const payloadStr = btoa(JSON.stringify({ ...payload, exp: Date.now() + 24 * 60 * 60 * 1000 })) // 24h expiry
-    const signature = btoa(JSON.stringify({ secret: secret.slice(0, 8) })) // Simple signature
+    const signature = btoa(JSON.stringify({ secret })) // Use full secret
     return `${header}.${payloadStr}.${signature}`
   }
 
@@ -36,7 +36,7 @@ class SimpleAuth {
       }
 
       // Simple signature verification
-      const expectedSig = btoa(JSON.stringify({ secret: secret.slice(0, 8) }))
+      const expectedSig = btoa(JSON.stringify({ secret })) // Use full secret
       if (signature !== expectedSig) {
         return null
       }
@@ -272,7 +272,7 @@ function createAuthRoutes() {
  * @param {Function} next - Next middleware function
  * @returns {Response|Promise<void>} Response if unauthorized, otherwise continues
  */
-function authMiddleware(c, next) {
+export function auth(c, next) {
   const username = c.env?.ADMINDO_SUPERUSER_USERNAME
   const password = c.env?.ADMINDO_SUPERUSER_PASSWORD
 
@@ -301,51 +301,13 @@ function authMiddleware(c, next) {
 }
 
 /**
- * Creates an AdminDO instance integrated with Hono
- * @param {import('./hono').AdminDOConfig} config - Configuration object for AdminDO
- * @returns {Hono} Hono app instance configured with AdminDO routes and middleware
+ * DO context middleware - sets up Durable Object stub and context
+ * @param {Context} c - Hono context
+ * @param {Function} next - Next middleware function
+ * @returns {Response|Promise<void>} Response if error, otherwise continues
  */
-export function admindo(config) {
-  const basePath = config.basePath || '/admin'
-  const api = new Hono()
-
-  // Calculate plugin compatibility for each DOS class at startup
-  for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
-    if (dosConfig.classRef) {
-      const compatiblePlugins = []
-
-      // Check each instance-scoped plugin's compatibility with this DO class
-      for (const plugin of config.plugins.filter((p) => p.scope === 'instance')) {
-        try {
-          const isCompatible = plugin.isCompatible(dosConfig.classRef)
-          if (isCompatible) {
-            compatiblePlugins.push(plugin.slug)
-          }
-        } catch (error) {
-          console.error(`Error checking compatibility for plugin ${plugin.slug} with ${namespace}:`, error)
-        }
-      }
-
-      // Store compatible plugin slugs in the DOS config
-      dosConfig.compatiblePlugins = compatiblePlugins
-    }
-  }
-
-  // Add authentication middleware for all other API routes
-  api.use('/api/*', async (c, next) => {
-    const path = c.req.path
-
-    // Skip auth middleware for AdminDO auth routes
-    if (path.startsWith(`${basePath}/api/admindo/auth/`)) {
-      return next()
-    }
-
-    // Apply auth middleware for all other API routes
-    return authMiddleware(c, next)
-  })
-
-  // Add DO context middleware for plugin routes
-  api.use('/api/*', async (c, next) => {
+export function doContext(config) {
+  return async (c, next) => {
     // Check for namespace and instanceId headers
     const namespace = c.req.header('X-AdminDO-Namespace')
     const instanceId = c.req.header('X-AdminDO-InstanceId')
@@ -382,13 +344,82 @@ export function admindo(config) {
     }
 
     return next()
-  })
+  }
+}
 
-  // Register AdminDO core auth routes under /api/admindo/auth
-  api.route('/api/admindo/auth', createAuthRoutes())
+/**
+ * Plugin compatibility middleware - checks if plugin is compatible with current DO
+ * @param {string} pluginSlug - The plugin slug to check compatibility for
+ * @param {Object} config - AdminDO configuration
+ * @returns {Function} Middleware function
+ */
+export function pluginCompatibility(pluginSlug, config) {
+  return async (c, next) => {
+    const namespace = c.get('namespace')
 
-  // Add DOS endpoints under /api/admindo/dos
-  api.get('/api/admindo/dos', async (c) => {
+    // Skip compatibility check if no namespace context (shouldn't happen in practice)
+    if (!namespace) {
+      return next()
+    }
+
+    // Check if this plugin is compatible with the current namespace's DO class
+    const dosConfig = config.dos?.[namespace]
+    if (!dosConfig || !dosConfig.compatiblePlugins) {
+      return c.json({ error: 'Access denied: DOS namespace not found or not configured' }, 403)
+    }
+
+    const isCompatible = dosConfig.compatiblePlugins.includes(pluginSlug)
+    if (!isCompatible) {
+      return c.json({ error: 'Access denied: Plugin not compatible with this instance' }, 403)
+    }
+
+    console.log(`plugin ${pluginSlug} is compatible with ${c.req.url}`)
+
+    return next()
+  }
+}
+
+/**
+ * Creates an AdminDO instance integrated with Hono
+ * @param {import('./hono').AdminDOConfig} config - Configuration object for AdminDO
+ * @returns {Hono} Hono app instance configured with AdminDO routes and middleware
+ */
+export function admindo(config) {
+  const basePath = config.basePath || '/admin'
+
+  // Create separate Hono apps for different route groups
+  const admindoApi = new Hono()
+  const api = new Hono()
+
+  // Calculate plugin compatibility for each DOS class at startup
+  for (const [namespace, dosConfig] of Object.entries(config.dos || {})) {
+    if (dosConfig.classRef) {
+      const compatiblePlugins = []
+
+      // Check each instance-scoped plugin's compatibility with this DO class
+      for (const plugin of config.plugins.filter((p) => p.scope === 'instance')) {
+        try {
+          const isCompatible = plugin.isCompatible(dosConfig.classRef)
+          if (isCompatible) {
+            compatiblePlugins.push(plugin.slug)
+          }
+        } catch (error) {
+          console.error(`Error checking compatibility for plugin ${plugin.slug} with ${namespace}:`, error)
+        }
+      }
+
+      // Store compatible plugin slugs in the DOS config
+      dosConfig.compatiblePlugins = compatiblePlugins
+    }
+  }
+
+  // AdminDO API Routes (/api/admindo)
+
+  // Register AdminDO core auth routes under /auth (no auth middleware needed)
+  admindoApi.route('/auth', createAuthRoutes())
+
+  // Add DOS endpoints under /dos (with auth middleware)
+  admindoApi.get('/dos', auth, async (c) => {
     const dosData = {}
 
     // Transform the DOS configuration for the frontend
@@ -406,8 +437,8 @@ export function admindo(config) {
     return c.json(dosData)
   })
 
-  // Get instances for a specific DOS namespace
-  api.get('/api/admindo/dos/:namespace/instances', async (c) => {
+  // Get instances for a specific DOS namespace (with auth middleware)
+  admindoApi.get('/dos/:namespace/instances', auth, async (c) => {
     const namespace = c.req.param('namespace')
     const page = parseInt(c.req.query('page') || '1')
 
@@ -425,35 +456,29 @@ export function admindo(config) {
     }
   })
 
-  // Register plugin routes under /api/ prefix (now protected by middleware)
+  // Main API Routes (/api)
+
+  // Mount the AdminDO API under /admindo
+  api.route('/admindo', admindoApi)
+
+  // Register plugin routes with explicit middleware
   for (const plugin of config.plugins) {
-    api.use(`/api/${plugin.slug}/*`, async (c, next) => {
-      const namespace = c.get('namespace')
+    console.log(`mounting plugin ${plugin.slug}`)
 
-      // Skip compatibility check if no namespace context (shouldn't happen in practice)
-      if (!namespace) {
-        return next()
-      }
+    // Apply explicit middleware to plugin routes
+    api.use(`/${plugin.slug}/*`, auth, doContext(config), pluginCompatibility(plugin.slug, config))
 
-      // Check if this plugin is compatible with the current namespace's DO class
-      const dosConfig = config.dos?.[namespace]
-      if (!dosConfig || !dosConfig.compatiblePlugins) {
-        return c.json({ error: 'Access denied: DOS namespace not found or not configured' }, 403)
-      }
-
-      const isCompatible = dosConfig.compatiblePlugins.includes(plugin.slug)
-      if (!isCompatible) {
-        return c.json({ error: 'Access denied: Plugin not compatible with this instance' }, 403)
-      }
-
-      return next()
-    })
-
-    api.route(`/api/${plugin.slug}`, plugin.create(config))
+    api.route(`/${plugin.slug}`, plugin.create(config))
   }
 
+  // Create main app that mounts the API and serves the dashboard
+  const app = new Hono()
+
+  // Mount the API under /api
+  app.route('/api', api)
+
   // Serve the AdminDO dashboard on all other routes
-  api.get('/*', (c) => {
+  app.get('/*', (c) => {
     // Generate demo credentials if demo mode is enabled
     const demoAttr = config.demo
       ? ` demo='{"username": "${c.env?.ADMINDO_SUPERUSER_USERNAME || 'admin'}", "password": "${c.env?.ADMINDO_SUPERUSER_PASSWORD || 'password'}"}'`
@@ -462,7 +487,9 @@ export function admindo(config) {
     // Generate dynamic plugin imports based on loaded plugins
     const pluginImports = config.plugins
       .map(
-        (plugin) => `import('/@unpkg/${plugin.slug}').catch(err => {
+        (plugin) => `import('/@unpkg/${plugin.slug}').then(module => {
+          console.log('Loaded plugin ${plugin.slug}')
+        }).catch(err => {
       console.warn('Failed to load plugin ${plugin.slug}:', err)
     })`
       )
@@ -488,27 +515,7 @@ export function admindo(config) {
     `)
   })
 
-  return api
+  return app
 }
 
-// Export for ES modules (if using module system)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { admindo, ADMIN_DO, AdminDO }
-  module.exports.admindo = admindo
-  module.exports.ADMIN_DO = ADMIN_DO
-  module.exports.AdminDO = AdminDO
-}
-
-// Export for ES6 modules (if using import/export)
-if (typeof window !== 'undefined') {
-  window.admindo = admindo
-  window.ADMIN_DO = ADMIN_DO
-  window.AdminDO = AdminDO
-}
-
-// Make available globally
-if (typeof globalThis !== 'undefined') {
-  globalThis.admindo = admindo
-  globalThis.ADMIN_DO = ADMIN_DO
-  globalThis.AdminDO = AdminDO
-}
+export { admindo, AdminDO, withAdminDO }
