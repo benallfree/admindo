@@ -340,6 +340,7 @@ export function doContext(config) {
         c.set('instanceId', instanceId)
       } catch (error) {
         console.error(`Failed to get DO stub for ${namespace}/${instanceId}:`, error)
+        return c.json({ error: 'Failed to initialize Durable Object' }, 500)
       }
     }
 
