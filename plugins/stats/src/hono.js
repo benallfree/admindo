@@ -16,7 +16,7 @@ function create(config) {
       {
         name: 'SQL Storage Size',
         type: 'progress',
-        value: sqlStorageSize * 100000,
+        value: sqlStorageSize,
         max: 10 * 1024 * 1024 * 1024, // 10GB in bytes
         color: 'blue',
         icon: '💾',
