@@ -20,9 +20,7 @@
     "admindo-plugin-stats": "workspace:*",
     "hono": "^4.7.11",
     "vite": "^6.3.5",
-    "vite-plugin-unpkg": "^0.0.6"
-  },
-  "dependencies": {
-    "dofs": "^0.0.1"
+    "vite-plugin-unpkg": "^0.1.0",
+    "dofs": "^0.0.2"
   }
 }

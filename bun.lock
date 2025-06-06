@@ -4,9 +4,9 @@
     "": {
       "name": "admindo",
       "devDependencies": {
-        "@changesets/cli": "^2.29.4",
-        "prettier": "^3.5.3",
-        "prettier-plugin-organize-imports": "^4.1.0",
+        "@changesets/cli": "latest",
+        "prettier": "latest",
+        "prettier-plugin-organize-imports": "latest",
       },
     },
     "admindo": {
@@ -91,11 +91,8 @@
     "site": {
       "name": "admindo-site",
       "version": "0.0.1",
-      "dependencies": {
-        "dofs": "latest",
-      },
       "devDependencies": {
-        "@cloudflare/vite-plugin": "latest",
+        "@cloudflare/vite-plugin": "^1.5.0",
         "admindo": "workspace:*",
         "admindo-plugin-about": "workspace:*",
         "admindo-plugin-dofs": "workspace:*",
@@ -103,9 +100,10 @@
         "admindo-plugin-dorm": "workspace:*",
         "admindo-plugin-dterm": "workspace:*",
         "admindo-plugin-stats": "workspace:*",
-        "hono": "latest",
-        "vite": "latest",
-        "vite-plugin-unpkg": "latest",
+        "dofs": "^0.0.2",
+        "hono": "^4.7.11",
+        "vite": "^6.3.5",
+        "vite-plugin-unpkg": "^0.1.0",
       },
     },
   },
@@ -696,7 +694,7 @@
 
     "vite": ["vite@6.3.5", "", { "dependencies": { "esbuild": "^0.25.0", "fdir": "^6.4.4", "picomatch": "^4.0.2", "postcss": "^8.5.3", "rollup": "^4.34.9", "tinyglobby": "^0.2.13" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^18.0.0 || ^20.0.0 || >=22.0.0", "jiti": ">=1.21.0", "less": "*", "lightningcss": "^1.21.0", "sass": "*", "sass-embedded": "*", "stylus": "*", "sugarss": "*", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "jiti", "less", "lightningcss", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ=="],
 
-    "vite-plugin-unpkg": ["vite-plugin-unpkg@0.0.6", "", { "dependencies": { "find-workspaces": "^0.3.1", "resolve.exports": "^2.0.3" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-W07Jc07r7yiQrsHTkL0+o8AnMVeiYBxD0ohGdJ64C9UOqfZgLKmpgzj+cUt7u35GFNgH/x4N1OOS8NJs4mtF2g=="],
+    "vite-plugin-unpkg": ["vite-plugin-unpkg@0.1.0", "", { "dependencies": { "find-workspaces": "^0.3.1", "resolve.exports": "^2.0.3" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-brN4tk05rssQDGii2+c0kTlt2rerbDGzzS+TZqPH8l/SO1j97PwLh2qEny0FC0SzskZzeLGx0WNWb55Bys/5Rw=="],
 
     "webidl-conversions": ["webidl-conversions@4.0.2", "", {}, "sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg=="],
 
@@ -735,6 +733,8 @@
     "@manypkg/get-packages/@changesets/types": ["@changesets/types@4.1.0", "", {}, "sha512-LDQvVDv5Kb50ny2s25Fhm3d9QSZimsoUGBsUioj6MC3qbMUCuC8GPIvk/M6IvXx3lYhAs0lwWUQLb+VIEUCECw=="],
 
     "@manypkg/get-packages/fs-extra": ["fs-extra@8.1.0", "", { "dependencies": { "graceful-fs": "^4.2.0", "jsonfile": "^4.0.0", "universalify": "^0.1.0" } }, "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g=="],
+
+    "admindo-site/dofs": ["dofs@0.0.2", "", { "peerDependencies": { "hono": "^4.7.10" } }, "sha512-4wrAldiKHEjnwBPjbMkmcwfur01jm7wt0MOsZJYzfgVR3U0SpmZ11HnQRy8rux3xRje9LyYJ/Vn6IskM+5L5tw=="],
 
     "get-source/source-map": ["source-map@0.6.1", "", {}, "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="],
 

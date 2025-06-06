@@ -1,20 +1,17 @@
 import about from 'admindo-plugin-about/hono'
 import dofsBrowser from 'admindo-plugin-dofs-browser/hono'
-import dofs, { withDofs } from 'admindo-plugin-dofs/hono'
+import dofs from 'admindo-plugin-dofs/hono'
 import dorm from 'admindo-plugin-dorm/hono'
 import dterm from 'admindo-plugin-dterm/hono'
 import stats from 'admindo-plugin-stats/hono'
 import { admindo, withAdminDO } from 'admindo/hono'
 import { DurableObject } from 'cloudflare:workers'
+import { withDofs } from 'dofs'
 import { Hono } from 'hono'
 
-export class MyDurableObject extends withAdminDO(
-  withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })
-) {}
+export class MyDurableObject extends withAdminDO(withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })) {}
 
-export class MyDurableObject2 extends withAdminDO(
-  withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })
-) {}
+export class MyDurableObject2 extends withAdminDO(withDofs(DurableObject<Env>, { chunkSize: 4 * 1024 })) {}
 
 const app = new Hono<{ Bindings: Env }>()
 
