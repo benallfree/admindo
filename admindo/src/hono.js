@@ -1,5 +1,6 @@
 /// <reference path="./hono.d.ts" />
 
+import { RpcTarget } from 'cloudflare:workers'
 import { Context, Hono } from 'hono'
 
 /**
@@ -56,12 +57,13 @@ export const ADMIN_DO = Symbol('AdminDO')
 /**
  * AdminDO class that provides plugin API access for Durable Objects
  */
-export class AdminDO {
+export class AdminDO extends RpcTarget {
   /**
    * @param {DurableObjectState} ctx - The Durable Object state
    * @param {any} env - Environment bindings
    */
   constructor(ctx, env) {
+    super()
     this.ctx = ctx
     this.env = env
   }
@@ -81,7 +83,7 @@ export class AdminDO {
    * @returns {number} Storage size in bytes
    */
   sqlStorageSize() {
-    return this.ctx.storage.sql.databaseSize()
+    return this.ctx.storage.sql.databaseSize
   }
 
   /**
