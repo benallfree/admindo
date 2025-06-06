@@ -254,7 +254,7 @@ class AboutComponent extends HTMLElement {
 }
 
 // Register the custom element
-customElements.define('admindo-about', AboutComponent)
+customElements.define(pkg.name, AboutComponent)
 
 // Plugin configuration
 /** @type {import('admindo').Plugin} */
@@ -266,10 +266,8 @@ const aboutPlugin = {
   scope: 'global',
   icon: '👥',
   color: '#34C759',
-  render: () => document.createElement('admindo-about'),
+  render: () => document.createElement(pkg.name),
 }
 
 // Auto-register plugin if AdminDO is available
 window.AdminDO?.registerPlugin?.(aboutPlugin)
-
-console.log('aboutPlugin', aboutPlugin)

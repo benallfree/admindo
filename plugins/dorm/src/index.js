@@ -313,7 +313,7 @@ class DormComponent extends HTMLElement {
 }
 
 // Register the custom element
-customElements.define('admindo-dorm', DormComponent)
+customElements.define(pkg.name, DormComponent)
 
 // Plugin configuration
 const dormPlugin = {
@@ -323,7 +323,7 @@ const dormPlugin = {
   version: pkg.version,
   icon: '🗃️',
   color: '#5856D6',
-  render: () => document.createElement('admindo-dorm'),
+  render: () => document.createElement(pkg.name),
 }
 
 // Auto-register plugin if AdminDO is available

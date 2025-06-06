@@ -183,7 +183,7 @@ class DofsBrowserComponent extends HTMLElement {
 }
 
 // Register the custom element
-customElements.define('admindo-dofs-browser', DofsBrowserComponent)
+customElements.define(pkg.name, DofsBrowserComponent)
 
 // Plugin configuration
 const dofsBrowserPlugin = {
@@ -193,7 +193,7 @@ const dofsBrowserPlugin = {
   version: pkg.version,
   icon: '📁',
   color: '#FF9500',
-  render: () => document.createElement('admindo-dofs-browser'),
+  render: () => document.createElement(pkg.name),
 }
 
 // Auto-register plugin if AdminDO is available
