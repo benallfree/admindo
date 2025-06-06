@@ -4,7 +4,8 @@
  */
 
 // Version constant
-const version = '0.0.1-rc.3'
+import pkg from '../package.json' with { type: 'json' }
+const { version } = pkg
 
 /**
  * Attaches AdminDO styles to the document head
