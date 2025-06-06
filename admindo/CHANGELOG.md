@@ -1,5 +1,12 @@
 # admindo
 
+## 0.0.5
+
+### Patch Changes
+
+- 4bab31b: fix: plugin content rendering
+- ef347e8: remove unused export statements from hono.js
+
 ## 0.0.4
 
 ### Patch Changes

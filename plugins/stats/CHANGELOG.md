@@ -1,5 +1,11 @@
 # admindo-plugin-stats
 
+## 0.0.6
+
+### Patch Changes
+
+- 496bc12: fix: correct SQL Storage Size calculation in hono.js
+
 ## 0.0.5
 
 ### Patch Changes

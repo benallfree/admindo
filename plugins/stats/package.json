@@ -1,6 +1,6 @@
 {
   "name": "admindo-plugin-stats",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "description": "Statistics and analytics plugin for AdminDO dashboard",
   "exports": {
