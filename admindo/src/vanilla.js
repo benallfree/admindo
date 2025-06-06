@@ -7,21 +7,43 @@
 import pkg from '../package.json' with { type: 'json' }
 const { version } = pkg
 
-// AdminDO color scheme
-const COLORS = {
-  primary: '#007AFF',
-  primaryHover: '#0056b3',
-  text: '#1d1d1f',
-  textSecondary: '#6e6e73',
-  background: '#f5f5f7',
-  surface: '#ffffff',
-  border: '#e5e5e7',
-  borderHover: '#d0d0d0',
-  error: '#dc3545',
-  demoBlue: '#2196f3',
-  demoBlueDark: '#1976d2',
-  demoBlueLight: '#e3f2fd',
-  fallbackBg: '#f8f9fa',
+// AdminDO theme configuration
+const THEME = {
+  colors: {
+    primary: '#007AFF',
+    primaryHover: '#0056b3',
+    text: '#1d1d1f',
+    textSecondary: '#6e6e73',
+    background: '#f5f5f7',
+    surface: '#ffffff',
+    border: '#e5e5e7',
+    borderHover: '#d0d0d0',
+    error: '#dc3545',
+    demoBlue: '#2196f3',
+    demoBlueDark: '#1976d2',
+    demoBlueLight: '#e3f2fd',
+    fallbackBg: '#f8f9fa',
+  },
+  styles: {
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    borderRadius: {
+      small: '6px',
+      medium: '8px',
+      large: '12px',
+    },
+    spacing: {
+      xs: '0.25rem',
+      sm: '0.5rem',
+      md: '1rem',
+      lg: '1.5rem',
+      xl: '2rem',
+    },
+    shadows: {
+      small: '0 1px 3px rgba(0,0,0,0.1)',
+      medium: '0 2px 8px rgba(0,0,0,0.04)',
+      large: '0 4px 20px rgba(0,0,0,0.1)',
+    },
+  },
 }
 
 // AdminDO constants
@@ -40,22 +62,22 @@ const ADMINDO_STYLES = `
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: ${COLORS.background};
-    color: ${COLORS.text};
+    font-family: ${THEME.styles.fontFamily};
+    background: ${THEME.colors.background};
+    color: ${THEME.colors.text};
   }
   
   .admin-header {
-    background: ${COLORS.surface};
-    border-bottom: 1px solid ${COLORS.border};
-    padding: 1.5rem 2rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: ${THEME.colors.surface};
+    border-bottom: 1px solid ${THEME.colors.border};
+    padding: ${THEME.styles.spacing.lg} ${THEME.styles.spacing.xl};
+    box-shadow: ${THEME.styles.shadows.small};
   }
   
   .admin-header-content {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${THEME.styles.spacing.md};
   }
   
   .admin-logo {
@@ -72,7 +94,7 @@ const ADMINDO_STYLES = `
   .admin-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: ${COLORS.text};
+    color: ${THEME.colors.text};
     margin: 0;
   }
   
@@ -83,42 +105,42 @@ const ADMINDO_STYLES = `
   }
   
   .admin-sidebar {
-    background: ${COLORS.surface};
-    border-right: 1px solid ${COLORS.border};
-    padding: 2rem 1rem;
+    background: ${THEME.colors.surface};
+    border-right: 1px solid ${THEME.colors.border};
+    padding: ${THEME.styles.spacing.xl} ${THEME.styles.spacing.md};
   }
   
   .admin-content {
-    padding: 2rem;
+    padding: ${THEME.styles.spacing.xl};
   }
   
   .plugin-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: ${THEME.styles.spacing.lg};
+    margin-top: ${THEME.styles.spacing.xl};
   }
   
   .plugin-tile {
-    background: ${COLORS.surface};
-    border: 1px solid ${COLORS.border};
-    border-radius: 12px;
-    padding: 1.5rem;
+    background: ${THEME.colors.surface};
+    border: 1px solid ${THEME.colors.border};
+    border-radius: ${THEME.styles.borderRadius.large};
+    padding: ${THEME.styles.spacing.lg};
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: ${THEME.styles.shadows.medium};
   }
   
   .plugin-tile:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: ${THEME.styles.shadows.large};
   }
   
   .plugin-icon {
     width: 48px;
     height: 48px;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+    margin-bottom: ${THEME.styles.spacing.md};
+    border-radius: ${THEME.styles.borderRadius.medium};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -128,11 +150,11 @@ const ADMINDO_STYLES = `
   .plugin-title {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
   }
   
   .plugin-description {
-    color: ${COLORS.textSecondary};
+    color: ${THEME.colors.textSecondary};
     font-size: 0.9rem;
     line-height: 1.4;
   }
@@ -142,22 +164,22 @@ const ADMINDO_STYLES = `
   }
   
   .sidebar-nav li {
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
   }
   
   .sidebar-nav a {
     display: block;
-    padding: 0.75rem 1rem;
-    color: ${COLORS.textSecondary};
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.md};
+    color: ${THEME.colors.textSecondary};
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: ${THEME.styles.borderRadius.medium};
     transition: background-color 0.2s ease;
   }
   
   .sidebar-nav a:hover,
   .sidebar-nav a.active {
-    background: ${COLORS.background};
-    color: ${COLORS.text};
+    background: ${THEME.colors.background};
+    color: ${THEME.colors.text};
   }
   
   .plugin-content {
@@ -171,97 +193,97 @@ const ADMINDO_STYLES = `
   .dos-section {
     /* margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid ${COLORS.border}; */
+    border-top: 1px solid ${THEME.colors.border}; */
   }
   
   .dos-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: ${COLORS.text};
-    margin-bottom: 1rem;
-    padding: 0 1rem;
+    color: ${THEME.colors.text};
+    margin-bottom: ${THEME.styles.spacing.md};
+    padding: 0 ${THEME.styles.spacing.md};
   }
   
   .dos-item {
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
   }
   
   .dos-namespace {
     display: block;
-    padding: 0.5rem 1rem;
-    color: ${COLORS.text};
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.md};
+    color: ${THEME.colors.text};
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
-    border-radius: 6px;
+    border-radius: ${THEME.styles.borderRadius.small};
     cursor: pointer;
     transition: background-color 0.2s ease;
   }
   
   .dos-namespace:hover {
-    background: ${COLORS.background};
+    background: ${THEME.colors.background};
   }
   
   .dos-instances {
-    margin-left: 1rem;
-    margin-top: 0.25rem;
+    margin-left: ${THEME.styles.spacing.md};
+    margin-top: ${THEME.styles.spacing.xs};
   }
   
   .dos-instance {
     display: block;
-    padding: 0.5rem 1rem;
-    color: ${COLORS.textSecondary};
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.md};
+    color: ${THEME.colors.textSecondary};
     text-decoration: none;
     font-size: 0.85rem;
-    border-radius: 6px;
+    border-radius: ${THEME.styles.borderRadius.small};
     cursor: pointer;
     transition: all 0.2s ease;
   }
   
   .dos-instance:hover,
   .dos-instance.active {
-    background: ${COLORS.primary};
+    background: ${THEME.colors.primary};
     color: white;
   }
   
   .instance-header {
-    margin-bottom: 2rem;
+    margin-bottom: ${THEME.styles.spacing.xl};
   }
   
   #instance-title {
-    margin-bottom: 1.5rem;
+    margin-bottom: ${THEME.styles.spacing.lg};
   }
   
   .plugin-tabs {
     display: flex;
-    gap: 0.5rem;
-    border-bottom: 1px solid ${COLORS.border};
-    padding-bottom: 0.5rem;
+    gap: ${THEME.styles.spacing.sm};
+    border-bottom: 1px solid ${THEME.colors.border};
+    padding-bottom: ${THEME.styles.spacing.sm};
   }
   
   .plugin-tab {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: ${COLORS.background};
-    border: 1px solid ${COLORS.border};
-    border-radius: 8px;
+    gap: ${THEME.styles.spacing.sm};
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.md};
+    background: ${THEME.colors.background};
+    border: 1px solid ${THEME.colors.border};
+    border-radius: ${THEME.styles.borderRadius.medium};
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
-    color: ${COLORS.textSecondary};
+    color: ${THEME.colors.textSecondary};
     font-size: 0.9rem;
   }
   
   .plugin-tab:hover {
-    background: ${COLORS.border};
+    background: ${THEME.colors.border};
   }
   
   .plugin-tab.active {
-    background: ${COLORS.primary};
+    background: ${THEME.colors.primary};
     color: white;
-    border-color: ${COLORS.primary};
+    border-color: ${THEME.colors.primary};
   }
   
   .plugin-tab-icon {
@@ -269,14 +291,14 @@ const ADMINDO_STYLES = `
   }
   
   .instance-content {
-    margin-top: 2rem;
+    margin-top: ${THEME.styles.spacing.xl};
   }
   
   .dos-loading,
   .dos-empty {
-    padding: 1rem;
+    padding: ${THEME.styles.spacing.md};
     text-align: center;
-    color: ${COLORS.textSecondary};
+    color: ${THEME.colors.textSecondary};
     font-size: 0.85rem;
   }
   
@@ -289,17 +311,17 @@ const ADMINDO_STYLES = `
   }
   
   .global-plugins-section {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid ${COLORS.border};
+    margin-top: ${THEME.styles.spacing.xl};
+    padding-top: ${THEME.styles.spacing.lg};
+    border-top: 1px solid ${THEME.colors.border};
   }
   
   .global-plugins-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: ${COLORS.text};
-    margin-bottom: 1rem;
-    padding: 0 1rem;
+    color: ${THEME.colors.text};
+    margin-bottom: ${THEME.styles.spacing.md};
+    padding: 0 ${THEME.styles.spacing.md};
   }
   
   .global-plugins-nav {
@@ -307,22 +329,22 @@ const ADMINDO_STYLES = `
   }
   
   .global-plugins-nav li {
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
   }
   
   .global-plugins-nav a {
     display: block;
-    padding: 0.75rem 1rem;
-    color: ${COLORS.textSecondary};
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.md};
+    color: ${THEME.colors.textSecondary};
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: ${THEME.styles.borderRadius.medium};
     transition: background-color 0.2s ease;
   }
   
   .global-plugins-nav a:hover,
   .global-plugins-nav a.active {
-    background: ${COLORS.background};
-    color: ${COLORS.text};
+    background: ${THEME.colors.background};
+    color: ${THEME.colors.text};
   }
 `
 
@@ -347,7 +369,7 @@ const LOGIN_STYLES = `
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${COLORS.background};
+    background: ${THEME.colors.background};
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -355,56 +377,56 @@ const LOGIN_STYLES = `
   }
   
   .login-container {
-    background: ${COLORS.surface};
-    padding: 3rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid ${COLORS.border};
+    background: ${THEME.colors.surface};
+    padding: ${THEME.styles.spacing.xl};
+    border-radius: ${THEME.styles.borderRadius.large};
+    box-shadow: ${THEME.styles.shadows.large};
+    border: 1px solid ${THEME.colors.border};
     min-width: 400px;
     text-align: center;
   }
   
   .demo-section {
-    background: ${COLORS.demoBlueLight};
-    border: 1px solid ${COLORS.demoBlue};
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 2rem;
+    background: ${THEME.colors.demoBlueLight};
+    border: 1px solid ${THEME.colors.demoBlue};
+    border-radius: ${THEME.styles.borderRadius.medium};
+    padding: ${THEME.styles.spacing.md};
+    margin-bottom: ${THEME.styles.spacing.xl};
     text-align: center;
   }
   
   .demo-badge {
-    background: ${COLORS.demoBlue};
+    background: ${THEME.colors.demoBlue};
     color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
+    padding: ${THEME.styles.spacing.xs} ${THEME.styles.spacing.sm};
+    border-radius: ${THEME.styles.borderRadius.medium};
     font-size: 0.7rem;
     font-weight: 600;
     display: inline-block;
-    margin-bottom: 0.75rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
   
   .demo-label {
     font-weight: 600;
-    color: ${COLORS.demoBlueDark};
-    margin-bottom: 0.5rem;
+    color: ${THEME.colors.demoBlueDark};
+    margin-bottom: ${THEME.styles.spacing.sm};
     font-size: 0.9rem;
   }
   
   .demo-creds {
     font-family: monospace;
-    background: ${COLORS.fallbackBg};
-    padding: 0.75rem;
-    border-radius: 4px;
+    background: ${THEME.colors.fallbackBg};
+    padding: ${THEME.styles.spacing.sm};
+    border-radius: ${THEME.styles.borderRadius.small};
     font-size: 0.85rem;
     line-height: 1.4;
     color: #333;
   }
   
   .logo {
-    margin-bottom: 2rem;
+    margin-bottom: ${THEME.styles.spacing.xl};
   }
   
   .logo img {
@@ -415,18 +437,18 @@ const LOGIN_STYLES = `
   .login-title {
     font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
   }
   
   .login-subtitle {
-    color: ${COLORS.textSecondary};
-    margin-bottom: 2rem;
+    color: ${THEME.colors.textSecondary};
+    margin-bottom: ${THEME.styles.spacing.xl};
   }
   
   .login-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${THEME.styles.spacing.md};
   }
   
   .form-group {
@@ -435,39 +457,39 @@ const LOGIN_STYLES = `
   
   .form-label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${THEME.styles.spacing.sm};
     font-weight: 500;
-    color: ${COLORS.text};
+    color: ${THEME.colors.text};
   }
   
   .form-input {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid ${COLORS.border};
-    border-radius: 6px;
+    padding: ${THEME.styles.spacing.sm};
+    border: 1px solid ${THEME.colors.border};
+    border-radius: ${THEME.styles.borderRadius.small};
     font-size: 0.9rem;
     box-sizing: border-box;
   }
   
   .form-input:focus {
     outline: none;
-    border-color: ${COLORS.primary};
+    border-color: ${THEME.colors.primary};
   }
   
   .login-btn {
-    background: ${COLORS.primary};
+    background: ${THEME.colors.primary};
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
+    padding: ${THEME.styles.spacing.sm} ${THEME.styles.spacing.lg};
+    border-radius: ${THEME.styles.borderRadius.small};
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
-    margin-top: 1rem;
+    margin-top: ${THEME.styles.spacing.md};
   }
   
   .login-btn:hover {
-    background: ${COLORS.primaryHover};
+    background: ${THEME.colors.primaryHover};
   }
   
   .login-btn:disabled {
@@ -476,9 +498,9 @@ const LOGIN_STYLES = `
   }
   
   .error-message {
-    color: ${COLORS.error};
+    color: ${THEME.colors.error};
     font-size: 0.8rem;
-    margin-top: 0.5rem;
+    margin-top: ${THEME.styles.spacing.sm};
     display: none;
   }
 `
@@ -1027,7 +1049,7 @@ class DOSManager {
           const noInstancesElement = document.createElement('div')
           noInstancesElement.className = 'dos-instance'
           noInstancesElement.textContent = 'No instances'
-          noInstancesElement.style.color = COLORS.textSecondary
+          noInstancesElement.style.color = THEME.colors.textSecondary
           noInstancesElement.style.fontStyle = 'italic'
           instancesContainer.appendChild(noInstancesElement)
         } else {
@@ -1052,7 +1074,7 @@ class DOSManager {
         const errorElement = document.createElement('div')
         errorElement.className = 'dos-instance'
         errorElement.textContent = 'Failed to load instances'
-        errorElement.style.color = COLORS.error
+        errorElement.style.color = THEME.colors.error
         instancesContainer.appendChild(errorElement)
       }
 
@@ -1303,7 +1325,7 @@ class PluginManager {
     const tile = document.createElement('div')
     tile.className = 'plugin-tile'
     tile.innerHTML = `
-      <div class="plugin-icon" style="background: ${plugin.color || COLORS.primary}">
+      <div class="plugin-icon" style="background: ${plugin.color || THEME.colors.primary}">
           ${plugin.icon || '📦'}
       </div>
       <div class="plugin-title">${plugin.title}</div>
