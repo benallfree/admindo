@@ -1,17 +1,5 @@
-import { Fs, dofs as honoDofs } from 'dofs/hono'
+import { dofs as honoDofs } from 'dofs/hono'
 import pkg from '../package.json' with { type: 'json' }
-
-export const withDofs = (cls, options = {}) => {
-  return class extends cls {
-    constructor(ctx, env) {
-      super(ctx, env)
-      this.fs = new Fs(ctx, env, options)
-    }
-    getFs() {
-      return this.fs
-    }
-  }
-}
 
 /**
  * DOFS Plugin for AdminDO
