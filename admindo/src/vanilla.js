@@ -7,6 +7,26 @@
 import pkg from '../package.json' with { type: 'json' }
 const { version } = pkg
 
+// AdminDO color scheme
+const COLORS = {
+  primary: '#007AFF',
+  primaryHover: '#0056b3',
+  text: '#1d1d1f',
+  textSecondary: '#6e6e73',
+  background: '#f5f5f7',
+  surface: '#ffffff',
+  border: '#e5e5e7',
+  borderHover: '#d0d0d0',
+  error: '#dc3545',
+  demoBlue: '#2196f3',
+  demoBlueDark: '#1976d2',
+  demoBlueLight: '#e3f2fd',
+  fallbackBg: '#f8f9fa',
+}
+
+// AdminDO constants
+const AUTH_TOKEN_KEY = 'admindo-auth-token'
+
 // AdminDO logo using import.meta.url
 const logoUrl = new URL('./logo.svg', import.meta.url)
 const ADMINDO_LOGO_SVG = `<img src="${logoUrl}" alt="AdminDO Logo">`
@@ -21,13 +41,13 @@ const ADMINDO_STYLES = `
   
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #f5f5f7;
-    color: #1d1d1f;
+    background: ${COLORS.background};
+    color: ${COLORS.text};
   }
   
   .admin-header {
-    background: #ffffff;
-    border-bottom: 1px solid #e5e5e7;
+    background: ${COLORS.surface};
+    border-bottom: 1px solid ${COLORS.border};
     padding: 1.5rem 2rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
@@ -52,7 +72,7 @@ const ADMINDO_STYLES = `
   .admin-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1d1d1f;
+    color: ${COLORS.text};
     margin: 0;
   }
   
@@ -63,8 +83,8 @@ const ADMINDO_STYLES = `
   }
   
   .admin-sidebar {
-    background: #ffffff;
-    border-right: 1px solid #e5e5e7;
+    background: ${COLORS.surface};
+    border-right: 1px solid ${COLORS.border};
     padding: 2rem 1rem;
   }
   
@@ -80,8 +100,8 @@ const ADMINDO_STYLES = `
   }
   
   .plugin-tile {
-    background: #ffffff;
-    border: 1px solid #e5e5e7;
+    background: ${COLORS.surface};
+    border: 1px solid ${COLORS.border};
     border-radius: 12px;
     padding: 1.5rem;
     cursor: pointer;
@@ -112,7 +132,7 @@ const ADMINDO_STYLES = `
   }
   
   .plugin-description {
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     font-size: 0.9rem;
     line-height: 1.4;
   }
@@ -128,7 +148,7 @@ const ADMINDO_STYLES = `
   .sidebar-nav a {
     display: block;
     padding: 0.75rem 1rem;
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     text-decoration: none;
     border-radius: 8px;
     transition: background-color 0.2s ease;
@@ -136,8 +156,8 @@ const ADMINDO_STYLES = `
   
   .sidebar-nav a:hover,
   .sidebar-nav a.active {
-    background: #f5f5f7;
-    color: #1d1d1f;
+    background: ${COLORS.background};
+    color: ${COLORS.text};
   }
   
   .plugin-content {
@@ -151,13 +171,13 @@ const ADMINDO_STYLES = `
   .dos-section {
     /* margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid #e5e5e7; */
+    border-top: 1px solid ${COLORS.border}; */
   }
   
   .dos-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #1d1d1f;
+    color: ${COLORS.text};
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -169,7 +189,7 @@ const ADMINDO_STYLES = `
   .dos-namespace {
     display: block;
     padding: 0.5rem 1rem;
-    color: #1d1d1f;
+    color: ${COLORS.text};
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -179,7 +199,7 @@ const ADMINDO_STYLES = `
   }
   
   .dos-namespace:hover {
-    background: #f5f5f7;
+    background: ${COLORS.background};
   }
   
   .dos-instances {
@@ -190,7 +210,7 @@ const ADMINDO_STYLES = `
   .dos-instance {
     display: block;
     padding: 0.5rem 1rem;
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     text-decoration: none;
     font-size: 0.85rem;
     border-radius: 6px;
@@ -200,7 +220,7 @@ const ADMINDO_STYLES = `
   
   .dos-instance:hover,
   .dos-instance.active {
-    background: #007AFF;
+    background: ${COLORS.primary};
     color: white;
   }
   
@@ -215,7 +235,7 @@ const ADMINDO_STYLES = `
   .plugin-tabs {
     display: flex;
     gap: 0.5rem;
-    border-bottom: 1px solid #e5e5e7;
+    border-bottom: 1px solid ${COLORS.border};
     padding-bottom: 0.5rem;
   }
   
@@ -224,24 +244,24 @@ const ADMINDO_STYLES = `
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: #f5f5f7;
-    border: 1px solid #e5e5e7;
+    background: ${COLORS.background};
+    border: 1px solid ${COLORS.border};
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     font-size: 0.9rem;
   }
   
   .plugin-tab:hover {
-    background: #e5e5e7;
+    background: ${COLORS.border};
   }
   
   .plugin-tab.active {
-    background: #007AFF;
+    background: ${COLORS.primary};
     color: white;
-    border-color: #007AFF;
+    border-color: ${COLORS.primary};
   }
   
   .plugin-tab-icon {
@@ -256,7 +276,7 @@ const ADMINDO_STYLES = `
   .dos-empty {
     padding: 1rem;
     text-align: center;
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     font-size: 0.85rem;
   }
   
@@ -271,13 +291,13 @@ const ADMINDO_STYLES = `
   .global-plugins-section {
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid #e5e5e7;
+    border-top: 1px solid ${COLORS.border};
   }
   
   .global-plugins-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #1d1d1f;
+    color: ${COLORS.text};
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -293,7 +313,7 @@ const ADMINDO_STYLES = `
   .global-plugins-nav a {
     display: block;
     padding: 0.75rem 1rem;
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     text-decoration: none;
     border-radius: 8px;
     transition: background-color 0.2s ease;
@@ -301,8 +321,8 @@ const ADMINDO_STYLES = `
   
   .global-plugins-nav a:hover,
   .global-plugins-nav a.active {
-    background: #f5f5f7;
-    color: #1d1d1f;
+    background: ${COLORS.background};
+    color: ${COLORS.text};
   }
 `
 
@@ -327,7 +347,7 @@ const LOGIN_STYLES = `
     left: 0;
     right: 0;
     bottom: 0;
-    background: #f5f5f7;
+    background: ${COLORS.background};
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -335,18 +355,18 @@ const LOGIN_STYLES = `
   }
   
   .login-container {
-    background: white;
+    background: ${COLORS.surface};
     padding: 3rem;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e5e7;
+    border: 1px solid ${COLORS.border};
     min-width: 400px;
     text-align: center;
   }
   
   .demo-section {
-    background: #e3f2fd;
-    border: 1px solid #2196f3;
+    background: ${COLORS.demoBlueLight};
+    border: 1px solid ${COLORS.demoBlue};
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 2rem;
@@ -354,7 +374,7 @@ const LOGIN_STYLES = `
   }
   
   .demo-badge {
-    background: #2196f3;
+    background: ${COLORS.demoBlue};
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
@@ -368,14 +388,14 @@ const LOGIN_STYLES = `
   
   .demo-label {
     font-weight: 600;
-    color: #1976d2;
+    color: ${COLORS.demoBlueDark};
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
   }
   
   .demo-creds {
     font-family: monospace;
-    background: #f8f9fa;
+    background: ${COLORS.fallbackBg};
     padding: 0.75rem;
     border-radius: 4px;
     font-size: 0.85rem;
@@ -399,7 +419,7 @@ const LOGIN_STYLES = `
   }
   
   .login-subtitle {
-    color: #6e6e73;
+    color: ${COLORS.textSecondary};
     margin-bottom: 2rem;
   }
   
@@ -417,13 +437,13 @@ const LOGIN_STYLES = `
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: #1d1d1f;
+    color: ${COLORS.text};
   }
   
   .form-input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #e5e5e7;
+    border: 1px solid ${COLORS.border};
     border-radius: 6px;
     font-size: 0.9rem;
     box-sizing: border-box;
@@ -431,11 +451,11 @@ const LOGIN_STYLES = `
   
   .form-input:focus {
     outline: none;
-    border-color: #007AFF;
+    border-color: ${COLORS.primary};
   }
   
   .login-btn {
-    background: #007AFF;
+    background: ${COLORS.primary};
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -447,7 +467,7 @@ const LOGIN_STYLES = `
   }
   
   .login-btn:hover {
-    background: #0056b3;
+    background: ${COLORS.primaryHover};
   }
   
   .login-btn:disabled {
@@ -456,7 +476,7 @@ const LOGIN_STYLES = `
   }
   
   .error-message {
-    color: #dc3545;
+    color: ${COLORS.error};
     font-size: 0.8rem;
     margin-top: 0.5rem;
     display: none;
@@ -956,7 +976,7 @@ class DOSManager {
     try {
       const response = await fetch(this.adminComponent.getApiUrl('/admindo/dos'), {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('admindo-auth-token')}`,
+          Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN_KEY)}`,
         },
       })
 
@@ -1007,7 +1027,7 @@ class DOSManager {
           const noInstancesElement = document.createElement('div')
           noInstancesElement.className = 'dos-instance'
           noInstancesElement.textContent = 'No instances'
-          noInstancesElement.style.color = '#6e6e73'
+          noInstancesElement.style.color = COLORS.textSecondary
           noInstancesElement.style.fontStyle = 'italic'
           instancesContainer.appendChild(noInstancesElement)
         } else {
@@ -1032,7 +1052,7 @@ class DOSManager {
         const errorElement = document.createElement('div')
         errorElement.className = 'dos-instance'
         errorElement.textContent = 'Failed to load instances'
-        errorElement.style.color = '#dc3545'
+        errorElement.style.color = COLORS.error
         instancesContainer.appendChild(errorElement)
       }
 
@@ -1054,7 +1074,7 @@ class DOSManager {
     try {
       const response = await fetch(this.adminComponent.getApiUrl(`/admindo/dos/${namespace}/instances`), {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('admindo-auth-token')}`,
+          Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN_KEY)}`,
         },
       })
 
@@ -1283,7 +1303,7 @@ class PluginManager {
     const tile = document.createElement('div')
     tile.className = 'plugin-tile'
     tile.innerHTML = `
-      <div class="plugin-icon" style="background: ${plugin.color || '#007AFF'}">
+      <div class="plugin-icon" style="background: ${plugin.color || COLORS.primary}">
           ${plugin.icon || '📦'}
       </div>
       <div class="plugin-title">${plugin.title}</div>
@@ -1421,7 +1441,7 @@ class AdminDOComponent extends HTMLElement {
    * @returns {Promise<boolean>} Whether the user is authenticated
    */
   async checkAuthStatus() {
-    const token = localStorage.getItem('admindo-auth-token')
+    const token = localStorage.getItem(AUTH_TOKEN_KEY)
     if (!token) {
       return false
     }
@@ -1463,7 +1483,7 @@ class AdminDOComponent extends HTMLElement {
       const data = await response.json()
 
       if (data.success) {
-        localStorage.setItem('admindo-auth-token', data.token)
+        localStorage.setItem(AUTH_TOKEN_KEY, data.token)
         this.isAuthenticated = true
         this.render()
         this.initializeDashboard()
@@ -1481,7 +1501,7 @@ class AdminDOComponent extends HTMLElement {
    * @returns {void}
    */
   handleLogout() {
-    localStorage.removeItem('admindo-auth-token')
+    localStorage.removeItem(AUTH_TOKEN_KEY)
     this.isAuthenticated = false
     this.render()
   }
@@ -1764,7 +1784,7 @@ window.AdminDO = {
     const headers = { ...options.headers }
 
     // Automatically add auth token if available
-    const token = localStorage.getItem('admindo-auth-token')
+    const token = localStorage.getItem(AUTH_TOKEN_KEY)
     if (token && !headers.Authorization && !headers.authorization) {
       headers.Authorization = `Bearer ${token}`
     }
