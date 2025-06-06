@@ -90,7 +90,7 @@ export class AdminDO {
    * @returns {boolean} True if object has AdminDO functionality
    */
   static hasAdminDO(classRef) {
-    return  'getAdminDO' in classRef?.prototype
+    return 'getAdminDO' in classRef?.prototype
   }
 }
 
@@ -459,26 +459,33 @@ export function admindo(config) {
       ? ` demo='{"username": "${c.env?.ADMINDO_SUPERUSER_USERNAME || 'admin'}", "password": "${c.env?.ADMINDO_SUPERUSER_PASSWORD || 'password'}"}'`
       : ''
 
+    // Generate dynamic plugin imports based on loaded plugins
+    const pluginImports = config.plugins
+      .map(
+        (plugin) => `import('/@unpkg/${plugin.slug}').catch(err => {
+      console.warn('Failed to load plugin ${plugin.slug}:', err)
+    })`
+      )
+      .join('\n')
+
     return c.html(`
       <!doctype html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>AdminDO Dashboard</title>
-    </head>
-    <body>
-      <admin-do root="${basePath}"${demoAttr} />
-      <script type="module">
-        import 'https://unpkg.com/admindo'
-        import 'https://unpkg.com/admindo-plugin-about'
-        import 'https://unpkg.com/admindo-plugin-dterm'
-        import 'https://unpkg.com/admindo-plugin-dorm'
-        import 'https://unpkg.com/admindo-plugin-dofs-browser'
-      </script>
-    </body>
-  </html>
-`)
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>AdminDO Dashboard</title>
+            <script type="module">
+            import '/@unpkg/admindo'
+            ${pluginImports}
+          </script>
+        </head>
+        <body>
+          <admin-do root="${basePath}"${demoAttr} />
+        
+        </body>
+      </html>
+    `)
   })
 
   return api
